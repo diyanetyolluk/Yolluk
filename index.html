@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" id="viewportMeta" content="width=device-width, initial-scale=1.0">
 <title>Yolluk Hesaplama - Diyanet İşleri Başkanlığı</title>
 
 <!-- ===== Paylaşım önizlemesi (WhatsApp, Telegram, Facebook, X...) =====
@@ -39,7 +39,7 @@
     --border-strong:#666666;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;background:#e9edf1;font-family:Arial, Helvetica, sans-serif;font-size:12px;color:#111;min-height:100%;}
+  html,body{-webkit-text-size-adjust:100%;text-size-adjust:100%;margin:0;padding:0;background:#e9edf1;font-family:Arial, Helvetica, sans-serif;font-size:12px;color:#111;min-height:100%;}
   html{height:100%;}
   body{min-height:100vh;}
   .app{max-width:1500px;margin:0 auto;padding:14px;position:relative;z-index:1;}
@@ -62,6 +62,11 @@
   #btnOnizle:hover{background:#276749;}
   #btnYazdir{background:#2b6cb0;color:#fff;}
   #btnYazdir:hover{background:#245a94;}
+  /* Görünüm düğmesi yalnızca dar ekranlarda (telefon/tablet) görünür */
+  #btnGorunum{display:none;background:#6b46c1;}
+  #btnGorunum:hover{background:#553c9a;}
+  @media (max-width:900px){ #btnGorunum{display:inline-flex;} }
+  body.masaustu-gorunum #btnGorunum{display:inline-flex;}
   .kayit-bildirim{position:fixed;left:50%;transform:translateX(-50%);top:14px;z-index:200;
     background:#2f855a;color:#fff;padding:8px 16px;border-radius:6px;font-size:12.5px;font-weight:bold;
     box-shadow:0 3px 10px rgba(0,0,0,.25);}
@@ -519,6 +524,7 @@
     <div style="flex:1"></div>
     <div class="tabbtn tabbtn-islem" id="btnYeniHesaplama"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Yeni Hesaplama</div>
     <div class="tabbtn tabbtn-islem" id="btnOnizle"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Önizle</div>
+    <div class="tabbtn tabbtn-islem" id="btnGorunum" title="Telefonda bilgisayardaki düzeni göster">🖥 Bilgisayar görünümü</div>
     <div class="tabbtn tabbtn-islem" id="btnYazdir"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Yazdır</div>
   </div>
   <div id="draftBanner" class="draft-banner no-print" style="display:none;"></div>
@@ -5796,6 +5802,7 @@ function renderSheet5(){
     <h3 class="kg-h3">7. Üstteki Butonlar</h3>
     <table class="kg-table">
       <tr><th style="width:22%;">Buton</th><th>Ne yapar</th></tr>
+      <tr><td><b>🖥 Bilgisayar görünümü</b></td><td>Sadece <b>telefon/tablette</b> görünür (mor renkli). Basınca sayfa, bilgisayardaki düzenin aynısıyla çizilir — sol veri girişi ve belge yan yana durur; parmakla yakınlaştırıp kaydırarak kullanırsın. Tekrar basınca <b>📱 Telefon görünümü</b>'ne döner (alanlar alt alta, büyük ve okunaklı). Tercihin hatırlanır, her açılışta seçtiğin görünüm gelir.</td></tr>
       <tr><td><b>💾 Hesaplamayı Kaydet</b></td><td>O anki hesaplamayı <b>Geçmiş Hesaplamalar</b> listesine kaydeder/günceller. Kaydedince üstte "✔ Kaydedildi" yazısı belirir.</td></tr>
       <tr><td><b>Yeni Hesaplama</b></td><td>Kişiye özel alanları temizler (isim, ünvan, mesafe, aile fertleri vb.) ama <b>Harcama Birimi / Harcama Yetkilisi gibi kurum bilgilerini korur</b>. Önceki hesaplama otomatik olarak kaydedilir.</td></tr>
       <tr><td><b>Önizle</b></td><td>Çıktının kağıtta nasıl görüneceğini ekranda gösterir (A4 sayfa + kenar boşlukları ile birlikte). Oradan doğrudan yazdırabilir, <b>Esc</b> ile çıkabilirsiniz.</td></tr>
@@ -5810,6 +5817,7 @@ function renderSheet5(){
     <div class="kg-qa"><b>S: Yanlışlıkla "Tümünü Temizle" dedim, geri gelir mi?</b><br>Hayır, bu işlem geri alınamaz. Silmeden önce onay sorusu çıkar.</div>
     <div class="kg-qa"><b>S: Yeni yılın gündelik tutarları açıklandı, ne yapmalıyım?</b><br>Referans Veriler → Gündelik ve Damga Vergisi Oranları sekmesine girin; ilgili yılın satırı (örn. 01.01.2027) zaten boş olarak hazır bekler, tutarları yazmanız yeterlidir. Dosyayı değiştirmenize veya yeni sürüm beklemenize gerek yoktur.</div>
     <div class="kg-qa"><b>S: Personel listesinde bir kişi seçtim ama Ünvanı boş kaldı, hesap yanlış mı?</b><br>Hayır. Ek gösterge personel listesinden geldiyse hesaplama eksiksizdir. Ünvan yalnızca yazdırılan belgede görünecek metindir; turuncu uyarıdaki adaylardan doğru olanı seçebilirsiniz.</div>
+    <div class="kg-qa"><b>S: Telefonda sayfa bilgisayardakinden farklı görünüyor, normal mi?</b><br>Evet. Telefon ekranı dar olduğu için alanlar okunaklı olsun diye alt alta dizilir. Bilgisayardaki düzeni istiyorsanız üstteki mor <b>"🖥 Bilgisayar görünümü"</b> düğmesine basın — sayfa birebir aynı görünür, parmakla yakınlaştırarak kullanırsınız. Tercihiniz hatırlanır.</div>
     <div class="kg-qa"><b>S: Elimdeki dosya güncel mi, nasıl anlarım?</b><br>Sağ alt köşedeki <b>Sürüm</b> rozetine tıklayın; çevrimiçi sürüm açılır. Oradaki rozetin tarihi sizinkinden yeniyse dosyanız eskimiş demektir. En pratiği, <a href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener">diyanetyolluk.github.io/Yolluk</a> adresini sık kullanılanlara ekleyip her zaman oradan açmaktır — böylece güncelleme derdi olmaz.</div>
     <div class="kg-qa"><b>S: Linki WhatsApp'tan gönderdiğimde ne görünüyor?</b><br>Başlık ("Yolluk Hesaplama — Diyanet İşleri Başkanlığı"), kısa bir açıklama ve bir görsel çıkar; karşı taraf tıklamadan ne olduğunu anlar. Bu bilgiler dosyanın içinde görünmez etiketler olarak durur, sayfanın görüntüsünü etkilemez.</div>
     <div class="kg-qa"><b>S: Avanstan damga vergisi kesilir mi?</b><br>Evet. 488 sayılı Damga Vergisi Kanunu'na ekli (1) sayılı tablonun <b>IV/1-b</b> bendinde "…<b>harcırah</b>… ve benzeri her ne adla olursa olsun hizmet karşılığı alınan paralar <b>(avans olarak ödenenler dahil)</b>" denilmektedir. Bu yüzden avans ödenirken de damga vergisi kesilir. Mükerrer vergi olmaması için, kesin ödemede (mahsupta) damga vergisi <b>avans düşüldükten sonra kalan tutar</b> üzerinden hesaplanır. Program da böyle çalışır: avans girdiğinizde belgede "Önceden Alınan Avans (−)" satırı çıkar, damga vergisi kalan tutardan hesaplanır.</div>
@@ -5871,6 +5879,34 @@ function bildirimGoster(mesaj, hataMi){
   document.body.appendChild(el);
   setTimeout(()=>{ el.remove(); }, 2200);
 }
+
+/* ------------------------------------------------------------
+   TELEFONDA BİLGİSAYAR GÖRÜNÜMÜ
+   Telefon ekranı dar olduğu için sayfa normalde alt alta dizilir.
+   Bu düğme, sayfayı 1500 piksel genişliğindeymiş gibi çizdirir —
+   yani bilgisayardaki düzenin aynısı görünür, kullanıcı parmakla
+   yakınlaştırıp kaydırarak kullanır. Tercih hatırlanır.
+   ------------------------------------------------------------ */
+const GORUNUM_KEY = 'yolluk_gorunum_v1';
+const VP_TELEFON  = 'width=device-width, initial-scale=1.0';
+const VP_MASAUSTU = 'width=1500';
+
+function gorunumUygula(masaustu){
+  const meta = document.getElementById('viewportMeta');
+  if(meta) meta.setAttribute('content', masaustu ? VP_MASAUSTU : VP_TELEFON);
+  document.body.classList.toggle('masaustu-gorunum', masaustu);
+  const b = document.getElementById('btnGorunum');
+  if(b) b.textContent = masaustu ? '📱 Telefon görünümü' : '🖥 Bilgisayar görünümü';
+  try{ localStorage.setItem(GORUNUM_KEY, masaustu ? '1' : '0'); }catch(e){}
+}
+
+const btnGorunum = document.getElementById('btnGorunum');
+if(btnGorunum) btnGorunum.addEventListener('click', ()=>{
+  gorunumUygula(!document.body.classList.contains('masaustu-gorunum'));
+});
+try{
+  if(localStorage.getItem(GORUNUM_KEY) === '1') gorunumUygula(true);
+}catch(e){}
 
 const btnKaydet = document.getElementById('btnKaydet');
 if(btnKaydet) btnKaydet.addEventListener('click', ()=>{
