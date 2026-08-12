@@ -4,6 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Yolluk Hesaplama - Diyanet İşleri Başkanlığı</title>
+
+<!-- ===== Paylaşım önizlemesi (WhatsApp, Telegram, Facebook, X...) =====
+     Bu etiketler sayfada görünmez; yalnızca link paylaşıldığında altta
+     çıkan başlık/açıklama/görsel için kullanılır. -->
+<meta name="description" content="Diyanet İşleri Başkanlığı Sürekli Görev Yolluğu Bildirimi ve Ödeme Emri Belgesi hesaplama programı. Ünvan ve ek göstergeye göre gündelik, yer değiştirme gideri ve damga vergisi otomatik hesaplanır; belge doğrudan yazdırılabilir. Kurulum gerektirmez, veriler yalnızca kendi cihazınızda kalır.">
+<meta name="author" content="Diyanet Yolluk">
+<meta name="theme-color" content="#2b6cb0">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Yolluk Hesaplama">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:url" content="https://diyanetyolluk.github.io/Yolluk/">
+<meta property="og:title" content="Yolluk Hesaplama — Diyanet İşleri Başkanlığı">
+<meta property="og:description" content="Diyanet İşleri Başkanlığı Sürekli Görev Yolluğu Bildirimi ve Ödeme Emri Belgesi hesaplama programı. Ünvan ve ek göstergeye göre gündelik, yer değiştirme gideri ve damga vergisi otomatik hesaplanır; belge doğrudan yazdırılabilir. Kurulum gerektirmez, veriler yalnızca kendi cihazınızda kalır.">
+<meta property="og:image" content="https://diyanetyolluk.github.io/Yolluk/onizleme.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Yolluk Hesaplama — Sürekli Görev Yolluğu ve Ödeme Emri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Yolluk Hesaplama — Diyanet İşleri Başkanlığı">
+<meta name="twitter:description" content="Diyanet İşleri Başkanlığı Sürekli Görev Yolluğu Bildirimi ve Ödeme Emri Belgesi hesaplama programı. Ünvan ve ek göstergeye göre gündelik, yer değiştirme gideri ve damga vergisi otomatik hesaplanır; belge doğrudan yazdırılabilir. Kurulum gerektirmez, veriler yalnızca kendi cihazınızda kalır.">
+<meta name="twitter:image" content="https://diyanetyolluk.github.io/Yolluk/onizleme.png">
+<link rel="canonical" href="https://diyanetyolluk.github.io/Yolluk/">
 <style id="dynamic-page-style"></style>
 <style>
   :root{
@@ -387,6 +409,7 @@
     box-shadow:0 1px 4px rgba(0,0,0,.25); transition:opacity .15s;
     user-select:text; cursor:default;
   }
+  .surum-rozet{text-decoration:none;}
   .surum-rozet:hover{opacity:1;}
   @media print{ .surum-rozet{display:none!important;} }
 
@@ -5686,6 +5709,13 @@ function renderSheet5(){
   root.dataset.built = '1';
   root.innerHTML = `
     <h2 class="section-title" style="margin-top:0;">Kullanım Kılavuzu</h2>
+    <div class="ref-note" style="background:#e8f1fc;border-color:#a9c9ef;">
+      <b>Bu programın güncel sürümü:</b>
+      <a href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener">diyanetyolluk.github.io/Yolluk</a><br>
+      Elindeki dosya eskimiş olabilir — gündelik tutarları ve ek gösterge cetveli yıl içinde değişir.
+      Tutarlarda şüpheye düşersen bu adresi aç, sağ alttaki <b>Sürüm</b> tarihini kendi dosyandakiyle karşılaştır.
+      Adresi kaydedip her seferinde oradan açman en sağlıklısıdır.
+    </div>
     <div class="ref-note">Bu sayfa, Diyanet "Sürekli Görev Yolluğu" Excel dosyasındaki hesaplama mantığının birebir aynısıyla çalışır. Tek dosyadır; kuruluma, internete veya Excel'e ihtiyaç duymaz. Girdiğin veriler sadece bu bilgisayarın tarayıcısında kalır.</div>
 
     <h3 class="kg-h3">1. Genel Bilgiler</h3>
@@ -5695,7 +5725,8 @@ function renderSheet5(){
       <li><b>Sarı alanlar</b> = elle veri gireceğin yerler. Boşken içlerinde soluk yazıyla ne yazman gerektiği yazar, sen yazmaya başlayınca kaybolur.</li>
       <li>Üstte 6 sekme vardır: <b>Sürekli Görev Yolluğu</b>, <b>Ödeme Emri</b>, <b>Referans Veriler</b>, <b>Personel</b>, <b>Geçmiş Hesaplamalar</b> ve <b>Kılavuz</b> (bu sayfa). Sekme çubuğu <b>sayfayı kaydırsan da üstte sabit kalır</b>; açık olan sekmenin zemini mavidir.</li>
       <li><b>Tutar kutuları:</b> "10000" yazıp başka bir yere tıkladığında kendiliğinden <b>10.000</b> biçimine döner. İstersen doğrudan "10.000,50" diye de yazabilirsin; program iki yazımı da anlar.</li>
-      <li>Sağ alt köşedeki soluk <b>Sürüm</b> rozeti, elindeki dosyanın tarihini gösterir. Bir arkadaşınla tutar farkı çıkarsa ilk bakılacak yer burasıdır. Kağıda basılmaz.</li>
+      <li>Sağ alt köşedeki soluk <b>Sürüm</b> rozeti, elindeki dosyanın tarihini gösterir. Bir arkadaşınla tutar farkı çıkarsa ilk bakılacak yer burasıdır. <b>Üzerine tıklarsan güncel sürüm yeni sekmede açılır.</b> Kağıda basılmaz.</li>
+      <li><b>Çevrimiçi adres:</b> <a href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener">diyanetyolluk.github.io/Yolluk</a> — buradan açarsan her zaman en güncel hâlini kullanmış olursun; dosya indirmene gerek kalmaz. İnternetsiz çalışman gerekiyorsa dosyayı bilgisayarına kaydedip çift tıklayarak da açabilirsin, program çevrimdışı da tam çalışır.</li>
     </ul>
 
     <h3 class="kg-h3">2. Sürekli Görev Yolluğu Sekmesi</h3>
@@ -5779,6 +5810,8 @@ function renderSheet5(){
     <div class="kg-qa"><b>S: Yanlışlıkla "Tümünü Temizle" dedim, geri gelir mi?</b><br>Hayır, bu işlem geri alınamaz. Silmeden önce onay sorusu çıkar.</div>
     <div class="kg-qa"><b>S: Yeni yılın gündelik tutarları açıklandı, ne yapmalıyım?</b><br>Referans Veriler → Gündelik ve Damga Vergisi Oranları sekmesine girin; ilgili yılın satırı (örn. 01.01.2027) zaten boş olarak hazır bekler, tutarları yazmanız yeterlidir. Dosyayı değiştirmenize veya yeni sürüm beklemenize gerek yoktur.</div>
     <div class="kg-qa"><b>S: Personel listesinde bir kişi seçtim ama Ünvanı boş kaldı, hesap yanlış mı?</b><br>Hayır. Ek gösterge personel listesinden geldiyse hesaplama eksiksizdir. Ünvan yalnızca yazdırılan belgede görünecek metindir; turuncu uyarıdaki adaylardan doğru olanı seçebilirsiniz.</div>
+    <div class="kg-qa"><b>S: Elimdeki dosya güncel mi, nasıl anlarım?</b><br>Sağ alt köşedeki <b>Sürüm</b> rozetine tıklayın; çevrimiçi sürüm açılır. Oradaki rozetin tarihi sizinkinden yeniyse dosyanız eskimiş demektir. En pratiği, <a href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener">diyanetyolluk.github.io/Yolluk</a> adresini sık kullanılanlara ekleyip her zaman oradan açmaktır — böylece güncelleme derdi olmaz.</div>
+    <div class="kg-qa"><b>S: Linki WhatsApp'tan gönderdiğimde ne görünüyor?</b><br>Başlık ("Yolluk Hesaplama — Diyanet İşleri Başkanlığı"), kısa bir açıklama ve bir görsel çıkar; karşı taraf tıklamadan ne olduğunu anlar. Bu bilgiler dosyanın içinde görünmez etiketler olarak durur, sayfanın görüntüsünü etkilemez.</div>
     <div class="kg-qa"><b>S: Avanstan damga vergisi kesilir mi?</b><br>Evet. 488 sayılı Damga Vergisi Kanunu'na ekli (1) sayılı tablonun <b>IV/1-b</b> bendinde "…<b>harcırah</b>… ve benzeri her ne adla olursa olsun hizmet karşılığı alınan paralar <b>(avans olarak ödenenler dahil)</b>" denilmektedir. Bu yüzden avans ödenirken de damga vergisi kesilir. Mükerrer vergi olmaması için, kesin ödemede (mahsupta) damga vergisi <b>avans düşüldükten sonra kalan tutar</b> üzerinden hesaplanır. Program da böyle çalışır: avans girdiğinizde belgede "Önceden Alınan Avans (−)" satırı çıkar, damga vergisi kalan tutardan hesaplanır.</div>
     <div class="kg-qa"><b>S: Kırmızı "NET ÖDENEN" bandı neyi gösteriyor?</b><br>Damga vergisi düşülmüş, <b>kişinin eline geçecek net tutarı</b>. Varsa avans da düşülmüştür. Brüt (genel toplam) tutarı tablonun "GENEL TOPLAM" satırında görürsünüz.</div>
     <div class="kg-qa"><b>S: Ünvan seçtim ama belgeye eksik yazıldı, hata mı?</b><br>Hayır. Ek gösterge tablosundaki "Memur Yükseköğrenim", "İmam Hatip Diğer Öğrenim" gibi adların sonundaki ek <b>öğrenim durumudur, ünvanın parçası değildir</b>. Belgeye kişinin ünvanı yazılır: "Memur", "İmam Hatip". Hesaplama seçtiğiniz tam satıra göre yapılır.</div>
@@ -5908,6 +5941,7 @@ checkDraftBanner();
 
 </script>
 <!-- Sürüm rozeti: programı her güncellediğinde AŞAĞIDAKİ TARİHİ değiştir. -->
-<div class="surum-rozet no-print">Sürüm: 12.08.2026</div>
+<a class="surum-rozet no-print" href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener"
+   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 12.08.2026 · Güncel sürüm ↗</a>
 </body>
 </html>
