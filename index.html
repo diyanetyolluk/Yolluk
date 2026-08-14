@@ -318,6 +318,12 @@
   .calc td.dh-atama .dh-sayi{display:inline-block;width:52%;vertical-align:middle;box-sizing:border-box;
                              border:none;border-left:1px solid var(--border);border-radius:0;
                              background:var(--yellow);text-align:center;font-size:11px;padding:4px 2px;}
+  /* Muhasebe hücresi: solda elle girilen muhasebe birimi, sağda muhasebe tarihi */
+  .calc td.dh-muhasebe{padding:0;white-space:nowrap;}
+  .calc td.dh-muhasebe .dh-birim{display:inline-block;width:52%;vertical-align:middle;box-sizing:border-box;
+                             border:none;border-right:1px solid var(--border);border-radius:0;
+                             background:var(--yellow);text-align:center;font-size:11px;padding:4px 2px;}
+  .calc td.dh-muhasebe .dh-mtarih{display:inline-block;width:47%;text-align:center;font-size:11.5px;vertical-align:middle;}
   .calc td.dh-bot{border-bottom:1px solid var(--border-strong);}
   .doc-grid .f{border:1px solid var(--border);padding:5px;}
   .doc-grid .f .l{font-size:10px;color:#444;font-weight:bold;}
@@ -4115,6 +4121,7 @@ function makeDefaultState(){
   // belgede görünen ama formülsüz (elle doldurulan) iki bilgi alanı
   oncedenAvans: '',
   muhasebeBirimiTarihi: '',
+  muhasebeGiris: '',   // sol paneldeki ham metin: "Anadolu Muhasebe Müdürlüğü-15.08.2026"
   // Belgenin altına elle yazılan serbest not
   notMetni: '',
   // Birimdeki görevliler ve yetkileri (aşağıdaki tablo)
@@ -4387,7 +4394,11 @@ function docHeadRows(c){
       <td class="dh-v" colspan="2">${c.ekGosterge}</td>
       <td class="dh-mid" colspan="8"></td>
       <td class="dh-l" colspan="2">Muhasebe Birimi ve Tarihi</td>
-      <td class="dh-v">${state.muhasebeBirimiTarihi || bos}</td>
+      <td class="dh-v dh-muhasebe">
+        <input type="text" class="dh-birim"
+               data-k="muhasebeBirimiTarihi" value="${escapeHtml(state.muhasebeBirimiTarihi||'')}"
+               placeholder="Muhasebe Birimi yazınız" title="Muhasebe biriminin adı"><span class="dh-mtarih">${fmtDateTR(state.muhasebeTarihi) || bos}</span>
+      </td>
     </tr>
     <tr>
       <td class="dh-l">Gündeliği</td>
@@ -4402,11 +4413,37 @@ function docHeadRows(c){
     </tr>`;
 }
 
+/* "Anadolu Muhasebe Müdürlüğü-15.08.2026" gibi tek bir metni ikiye ayırır:
+   içindeki gg.aa.yyyy (veya gg/aa/yyyy, gg-aa-yyyy, yyyy-aa-gg) tarihi belgenin
+   SAĞ yarısına, geriye kalan metin ise SOL sarı yarısına yazılır.
+   Tarih yoksa metnin tamamı birim adı sayılır. */
+function muhasebeAyristir(metin){
+  const s = String(metin || '');
+  const re = /(\d{4})-(\d{1,2})-(\d{1,2})|(\d{1,2})\s*[.\/-]\s*(\d{1,2})\s*[.\/-]\s*(\d{4})/;
+  const m = s.match(re);
+  let tarih = '', kalan = s;
+  if(m){
+    let y, a, g;
+    if(m[1]){ y = m[1]; a = m[2]; g = m[3]; }
+    else     { g = m[4]; a = m[5]; y = m[6]; }
+    a = String(a).padStart(2,'0'); g = String(g).padStart(2,'0');
+    if(+a >= 1 && +a <= 12 && +g >= 1 && +g <= 31){
+      tarih = y + '-' + a + '-' + g;
+      kalan = s.slice(0, m.index) + s.slice(m.index + m[0].length);
+    }
+  }
+  kalan = kalan.replace(/^[\s\-–—,;:\/]+/, '').replace(/[\s\-–—,;:\/]+$/, '').trim();
+  return { birim: kalan, tarih: tarih };
+}
+
 function fieldRow(labelText, innerHTML){
   return `<div class="field-row"><label>${labelText}</label><div class="in-wrap">${innerHTML}</div></div>`;
 }
 
 let sheet1ShellBuilt = false;
+/* Belge başlığı yeniden çizilirken, DOM'dan kopan kutuların ürettiği
+   blur/change olayları hesabı yeniden tetiklemesin diye kullanılır. */
+let basliktaCizimVar = false;
 
 function buildSheet1Shell(){
   const root = document.getElementById('s1-root');
@@ -4425,7 +4462,17 @@ function buildSheet1Shell(){
           <div class="panel-body">
             ${fieldRow('Atama Tarihi', `<input type="date" data-k="atamaTarihi" value="${state.atamaTarihi}">`)}
             ${fieldRow('Ayrılma / Hesaplama', `<input type="date" data-k="tarih" value="${state.tarih}">`)}
-            ${fieldRow('Muhasebe Tarihi', `<input type="date" data-k="muhasebeTarihi" value="${state.muhasebeTarihi}">`)}
+            ${fieldRow('Muhasebe Birimi ve Tarihi', `<div class="tarih-kutu" id="mbtKutu">
+                 <input type="text" data-k="muhasebeGiris" value="${escapeHtml(state.muhasebeGiris||'')}"
+                        placeholder="Örn: Anadolu Muhasebe Müdürlüğü-15.08.2026"
+                        title="Birim adını ve tarihi birlikte yazabilirsiniz. Program tarihi ayırıp belgenin sağ yarısına, birim adını sol sarı yarısına yazar.">
+                 <button type="button" class="tarih-btn" title="Takvimden tarih seç" aria-label="Takvimden tarih seç">
+                   <svg viewBox="0 0 24 24" class="ikon" style="margin:0;width:14px;height:14px;">
+                     <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>
+                   </svg>
+                 </button>
+                 <input type="date" class="tarih-gizli" tabindex="-1" aria-hidden="true">
+               </div>`)}
             ${fieldRow('Tayin Türü', `<select data-k="tayinTuru">${tayinOpts}</select>`)}
             ${fieldRow('Unvanı', `<div class="combo" id="unvanCombo">
                  <input type="text" data-k="unvan" autocomplete="off" value="${state.unvan}" placeholder="Unvan seçiniz veya yazınız">
@@ -4497,15 +4544,6 @@ function buildSheet1Shell(){
             ${fieldRow('Harcama Yetkilisi Unvanı', `<input type="text" data-k="harcamaYetkilisiUnvan" value="${state.harcamaYetkilisiUnvan}" placeholder="Harcama Yetkilisi Unvanı giriniz">`)}
             ${fieldRow('Bilgi İçin', `<span class="fixed-val">${BILGI_ICIN}</span>`)}
             ${fieldRow('Önceden Avans Almışsa Aldığı', `<input type="text" inputmode="decimal" data-tutar="1" data-k="oncedenAvans" value="${state.oncedenAvans}" placeholder="Avans alındıysa tutarını giriniz" title="Girilen tutar toplamdan düşülür; damga vergisi kalan tutar üzerinden hesaplanır.">`)}
-            ${fieldRow('Muhasebe Birimi ve Tarihi', `<div class="tarih-kutu" id="mbtKutu">
-                 <input type="text" data-k="muhasebeBirimiTarihi" value="${escapeHtml(state.muhasebeBirimiTarihi||'')}" placeholder="Muhasebe birimini yazınız, tarihi takvimden seçiniz">
-                 <button type="button" class="tarih-btn" title="Takvimden tarih seç" aria-label="Takvimden tarih seç">
-                   <svg viewBox="0 0 24 24" class="ikon" style="margin:0;width:14px;height:14px;">
-                     <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>
-                   </svg>
-                 </button>
-                 <input type="date" class="tarih-gizli" tabindex="-1" aria-hidden="true">
-               </div>`)}
             ${fieldRow('Not (elle girilir)', `<textarea data-k="notMetni" rows="2" placeholder="Belgenin altında (**) Not: olarak görünür">${state.notMetni}</textarea>`)}
           </div>
         </div>
@@ -4568,9 +4606,10 @@ function buildSheet1Shell(){
   bindOkGezinme(root);
 
   comboKur('#birimCombo', ()=> MUFTULUK_LISTESI.map(m => ({deger:m.ad, etiket:m.il})), root);
-  /* Takvim düğmesi: seçilen tarihi metin kutusuna yazar. Metinde zaten
-     gg.aa.yyyy varsa onu değiştirir, yoksa sonuna ekler. Kullanıcı istediği
-     gibi elle de yazabilir; kutu normal metin kutusudur. */
+
+  /* Muhasebe kutusunun takvim düğmesi: seçilen tarihi metnin içine yazar.
+     Metinde zaten bir gg.aa.yyyy varsa onun yerine geçer, yoksa sonuna eklenir.
+     Kutu normal metin kutusu olduğu için istersen tamamını elle de yazabilirsin. */
   const mbt = root.querySelector('#mbtKutu');
   if(mbt){
     const metin = mbt.querySelector('input[type="text"]');
@@ -4578,6 +4617,7 @@ function buildSheet1Shell(){
     const dugme = mbt.querySelector('.tarih-btn');
     dugme.addEventListener('click', ()=>{
       try{
+        gizli.value = state.muhasebeTarihi || todayISO(0);
         if(gizli.showPicker) gizli.showPicker();
         else { gizli.style.pointerEvents='auto'; gizli.click(); }
       }catch(e){ gizli.click(); }
@@ -4586,24 +4626,36 @@ function buildSheet1Shell(){
       if(!gizli.value) return;
       const t = fmtDateTR(gizli.value);
       const eski = String(metin.value || '').trim();
-      const yeni = /\d{2}\.\d{2}\.\d{4}/.test(eski)
-        ? eski.replace(/\d{2}\.\d{2}\.\d{4}/, t)
-        : (eski ? eski + ' ' + t : t);
-      metin.value = yeni;
+      const ay = muhasebeAyristir(eski);
+      metin.value = ay.birim ? (ay.birim + ' - ' + t) : t;
       metin.dispatchEvent(new Event('input', {bubbles:true}));
     });
   }
 
+  /* Belge başlığı içindeki sarı kutular (Atama Sayısı ve Muhasebe Birimi).
+     Başlık her hesaplamada yeniden çizildiği için dinleyici kapsayıcıya
+     bağlanır; içerideki kutulara yazarken başlık yeniden çizilmez. */
   const theadKap = root.querySelector('#s1Thead');
   if(theadKap){
-    const uygulaAtama = (e)=>{
-      const el = e.target.closest && e.target.closest('[data-k="atamaSayisi"]');
-      if(!el) return;
-      state.atamaSayisi = el.value;
+    const BASLIK_ALANLARI = ['atamaSayisi','muhasebeBirimiTarihi'];
+    const uygulaBaslik = (e)=>{
+      if(basliktaCizimVar) return;
+      const el = e.target.closest && e.target.closest('[data-k]');
+      if(!el || !el.isConnected) return;
+      const k = el.dataset.k;
+      if(BASLIK_ALANLARI.indexOf(k) < 0) return;
+      state[k] = el.value;
+      /* Belge üzerindeki sarı kutuya elle yazıldığında sol paneldeki
+         tek satırlık kutu da aynı bilgiyi göstersin. */
+      if(k === 'muhasebeBirimiTarihi'){
+        const t = fmtDateTR(state.muhasebeTarihi);
+        const v = String(el.value || '').trim();
+        state.muhasebeGiris = v ? (t ? v + ' - ' + t : v) : t;
+      }
       renderAll();
     };
-    theadKap.addEventListener('input', uygulaAtama);
-    theadKap.addEventListener('change', uygulaAtama);
+    theadKap.addEventListener('input', uygulaBaslik);
+    theadKap.addEventListener('change', uygulaBaslik);
   }
 
   gorevlileriYukle();
@@ -4679,13 +4731,29 @@ function updateSheet1Dynamic(c){
   updateFamilyVisibility(); // dolu satır sayısına göre boş satırları gizle
 
   // Belge başlığı (Excel 1-5. satırlar) + sabit sütun başlıkları
+  /* Başlık her hesapta yeniden çizilir. İçindeki sarı kutulardan birine
+     yazılıyorsa, çizimden sonra odak ve imleç konumu aynen geri konur —
+     böylece yazı kesilmez ama Bütçe Yılı / Muhasebe Tarihi gibi diğer
+     hücreler de anında tazelenir. */
   const theadEl = document.getElementById('s1Thead');
-  if(theadEl && !theadEl.contains(document.activeElement)){
-    theadEl.innerHTML = docHeadRows(c) + CALC_STATIC_HEAD;
-  } else if(theadEl){
-    // Atama sayısı kutusuna yazılırken yalnızca etiketi güncelle
-    const etiket = theadEl.querySelector('td.dh-atama')?.previousElementSibling;
-    if(etiket) etiket.textContent = state.atamaSayisi ? 'Atama Tarihi ve Sayısı' : 'Atama Tarihi';
+  if(theadEl){
+    const aktif = theadEl.contains(document.activeElement) ? document.activeElement : null;
+    const aktifK = (aktif && aktif.dataset) ? aktif.dataset.k : null;
+    let selB = null, selS = null;
+    if(aktif){ try{ selB = aktif.selectionStart; selS = aktif.selectionEnd; }catch(e){} }
+    basliktaCizimVar = true;
+    try{
+      theadEl.innerHTML = docHeadRows(c) + CALC_STATIC_HEAD;
+    } finally {
+      basliktaCizimVar = false;
+    }
+    if(aktifK){
+      const yeni = theadEl.querySelector('[data-k="' + aktifK + '"]');
+      if(yeni){
+        try{ yeni.focus({preventScroll:true}); }catch(e){ yeni.focus(); }
+        if(selB !== null){ try{ yeni.setSelectionRange(selB, selS); }catch(e){} }
+      }
+    }
   }
 
   document.getElementById('mpUnvan').textContent = c.unvanTam || '-';
@@ -5219,6 +5287,14 @@ function bindInputs(root){
         state.personelKademe = '';
         state.unvanUyari = '';
       }
+      /* "Muhasebe Birimi ve Tarihi": tek kutuya yazılan metin ikiye ayrılır —
+         tarih belgenin sağ yarısına, birim adı sol sarı yarısına gider. */
+      if(el.dataset.k === 'muhasebeGiris'){
+        const ay = muhasebeAyristir(el.value);
+        state.muhasebeBirimiTarihi = ay.birim;
+        if(ay.tarih) state.muhasebeTarihi = ay.tarih;
+        else if(!String(el.value).trim()) state.muhasebeTarihi = todayISO(0);
+      }
       // Harcama Yetkilisi seçilince ünvanı görevli tablosundan gelsin
       if(el.dataset.k === 'harcamaYetkilisi'){
         const u = gorevliUnvani(el.value);
@@ -5424,7 +5500,7 @@ function renderPrintView(c){
       <td class="bx pv-c" colspan="2">${c.ekGosterge}</td>
       <td class="bl br" colspan="8"></td>
       <td class="bx pv-l" colspan="2">Muhasebe Birimi ve Tarihi</td>
-      <td class="bx pv-c">${escapeHtml(state.muhasebeBirimiTarihi || '')}</td>
+      <td class="bx pv-c">${escapeHtml(state.muhasebeBirimiTarihi || '')}${state.muhasebeBirimiTarihi ? ' - ' : ''}${fmtDateTR(state.muhasebeTarihi)}</td>
     </tr>
     <!-- ===== satır 5 ===== -->
     <tr>
@@ -7055,7 +7131,7 @@ const HISTORY_MAX = 300; // depoda tutulan en fazla kayıt
 // bunları SIFIRLAMAZ, aynı oturumda art arda birçok kişi girerken tekrar
 // tekrar yazmayasın diye.
 const OFFICE_FIELDS = [
-  'birimAdi','harcamaYetkilisi','harcamaYetkilisiUnvan','bilgiIcin','muhasebeBirimiTarihi',
+  'birimAdi','harcamaYetkilisi','harcamaYetkilisiUnvan','bilgiIcin','muhasebeBirimiTarihi','muhasebeGiris',
   'baskanlikAdi','gerceklestirmeGorevlisi','vkn','kurumsalKod'
 ];
 
@@ -7160,6 +7236,11 @@ function resetForNewCalculation(){
   Object.keys(state).forEach(k => { delete state[k]; });
   Object.assign(state, makeDefaultState());
   OFFICE_FIELDS.forEach(k => { state[k] = officeBackup[k]; });
+  /* Kurum bilgisi olarak korunan "Muhasebe Birimi ve Tarihi" metninde tarih
+     varsa, muhasebe tarihi de onunla uyumlu kalsın (aksi hâlde kutuda başka,
+     belgede başka tarih görünürdü). */
+  const mAy = muhasebeAyristir(state.muhasebeGiris);
+  if(mAy.tarih) state.muhasebeTarihi = mAy.tarih;
   state._calcId = newCalcId();
 
   syncInputsFromState();
@@ -7339,7 +7420,7 @@ function renderSheet5(){
     <h3 class="kg-h3">2. Sürekli Görev Yolluğu Sekmesi</h3>
     <table class="kg-table">
       <tr><th style="width:30%;">Alan</th><th>Açıklama</th></tr>
-      <tr><td>Atama / Ayrılma-Hesaplama / Muhasebe Tarihi</td><td>Otomatik bugüne göre dolar, istersen değiştirebilirsin</td></tr>
+      <tr><td>Atama Tarihi / Ayrılma-Hesaplama</td><td>Takvimli tarih kutusudur, otomatik bugüne göre dolar, istersen değiştirebilirsin</td></tr>
       <tr><td>Tayin Türü</td><td>Normal Tayin / Eş Durumu Tayini / Gündelik + Yol</td></tr>
       <tr><td><b>Unvanı</b></td><td>Kutuya tıklayınca <b>tüm unvanlar listelenir</b> (kaç kez değiştirirsen değiştir). Yazmaya başlayınca süzülür; <b>↑ ↓</b> ile gez, <b>Enter</b> ile seç, <b>Esc</b> ile kapat. Liste <b>Ayrılma / Hesaplama tarihinin yılına</b> göre değişir. Personel listesi yüklüyse Adı Soyadı'ndan isim seçtiğinde <b>otomatik gelir</b></td></tr>
       <tr><td>Aylık Kadro Der. / Poz.</td><td>Derece (1-15) veya "4B Sözleşmeli"</td></tr>
@@ -7354,11 +7435,20 @@ function renderSheet5(){
       <tr><td><b>Düzenleyen (Mutemet)</b><br><b>Gerçekleştirme Görevlisi</b></td><td>Sayfanın altındaki <b>Görevli Tanımlamaları</b> tablosunda ilgili kutucuğu işaretli olan kişiler burada listelenir. <b>Seçersen belgeye imza sütunu olarak eklenir, seçmezsen belge Örnek No: 28'in aslıyla birebir aynı kalır</b></td></tr>
       <tr><td><b>Harcama Yetkilisi Adı Soyadı</b></td><td>Görevli tablosunda "Harcama Yetkilisi" işaretli kişiler arasından seçilir. Seçince <b>unvanı da otomatik gelir</b> — kişinin <b>vekâlet unvanı</b> doluysa belgeye o yazılır (örn. "İlçe Müftü V."), boşsa normal unvanı</td></tr>
       <tr><td><b>Atama Tarihi ve Sayısı</b></td><td>Belge başlığındaki <b>Atama Tarihi</b> hücresi ikiye bölünmüştür: solda tarih, sağda <b>sarı alan</b>. Sarı alana atama onayının sayısını yazarsanız etiket kendiliğinden <b>"Atama Tarihi ve Sayısı"</b> olur ve belgeye <i>09.08.2026 - E-12345</i> biçiminde basılır. Boş bırakırsanız sadece <b>"Atama Tarihi"</b> yazar</td></tr>
-      <tr><td><b>Muhasebe Birimi ve Tarihi</b></td><td>Birim adını elle yazarsınız; yanındaki <b>takvim düğmesine</b> basarak tarihi seçebilirsiniz. Seçilen tarih metnin sonuna eklenir, metinde zaten bir tarih varsa onun yerine yazılır. İsterseniz tamamını elle de yazabilirsiniz</td></tr>
+      <tr><td><b>Muhasebe Birimi ve Tarihi</b></td><td>Buraya <b>birim adını ve tarihi tek satırda</b> yazarsınız — örn. <i>Anadolu Muhasebe Müdürlüğü-15.08.2026</i>. Program metni <b>kendisi ikiye ayırır</b>: <b>tarih</b> belgedeki hücrenin <b>sağ yarısına</b>, <b>birim adı</b> ise <b>sol sarı yarısına</b> yazılır. Sadece tarih yazarsanız (<i>15.08.2026</i>) yalnız sağ yarı dolar; sadece birim adı yazarsanız tarih bugün olarak kalır. Tarihi elle yazmak istemezseniz kutunun sağındaki <b>takvim düğmesine</b> basın — seçtiğiniz tarih metnin içine yerleşir, zaten bir tarih varsa onun yerine geçer. <b>Belge üzerindeki sol sarı yarıya doğrudan da yazabilirsiniz</b>; iki kutu birbirini günceller. Belgeye <i>Anadolu Muhasebe Müdürlüğü - 15.08.2026</i> biçiminde basılır. <b>Not:</b> Buraya yazdığınız tarih aynı zamanda <b>Bütçe Yılı</b>nı ve imza bloğundaki tarihleri belirler</td></tr>
       <tr><td>Bilgi İçin</td><td><b>Sabittir</b> (Mehmet TOKTAŞ), değiştirilemez. Belgenin altında görünür</td></tr>
       <tr><td>Not (elle girilir)</td><td>Belgenin altına <b>(**) Not:</b> olarak basılır. İmza altındaki <b>(*)</b> açıklamasıyla karışmaması için iki yıldızlıdır</td></tr>
     </table>
     <div class="unvan-uyari" style="display:block;">⚠️ Bazı unvanlar (İmam Hatip, Müezzin Kayyım, Kur'an Kursu Öğreticisi, Memur, Murakıp, Şef, Şoför, V.H.K.İ.) öğrenim durumuna göre farklı ek göstergeye ayrılır. Program bu durumda doğru olanı <b>kendisi bulur:</b> önce <b>ek gösterge + derece</b> ikilisinin tabloda hangi unvana birebir uyduğuna bakar; olmazsa raporun <b>"Öğrenim Durumu"</b> hücresine göre seçer (Lisans/Fakülte → Yükseköğrenim, İmam Hatip Lisesi → İmam Hatip Lisesi, diğerleri → Diğer Öğrenim). İkisi de tek bir sonuca varmazsa turuncu uyarı çıkar ve adaylar listelenir; o zaman elle seçersin. Öğrenime bakılarak seçildiyse uyarıda bunu belirtir — yanlışsa değiştirebilirsin.</div>
+
+    <div class="ref-note" style="background:#e8f1fc;border-color:#a9c9ef;color:#1F3864;">
+      <b>Bu alanlar neden var?</b> <b>Not (elle girilir)</b>, <b>Düzenleyen (Mutemet)</b>, <b>Gerçekleştirme Görevlisi</b>
+      ve <b>Muhasebe Birimi ve Tarihi</b> gibi alanlar M.Y.H.B.Y. Örnek No: 28'in aslında zorunlu değildir; ancak
+      <b>bazı muhasebe müdürlükleri bunların belgede yer almasını istiyor</b> — evrak bu yüzden iade edilebiliyor.
+      Bu alanlar programa <b>isteğe bağlı</b> olarak eklendi:
+      <b>doldurursanız belgeye çıkar, boş bırakırsanız belge Örnek No: 28'in aslıyla birebir aynı kalır.</b>
+      Yani kendi muhasebe biriminiz istiyorsa doldurun, istemiyorsa hiç dokunmayın — iki durumda da belge geçerlidir.
+    </div>
 
     <h3 class="kg-h3">2.1. Unvan listesi neden yıla göre değişiyor?</h3>
     <ul class="kg-ul">
@@ -7373,7 +7463,7 @@ function renderSheet5(){
     <p class="kg-p">Sayfanın en altındaki <b>Görevli Tanımlamaları</b> tablosuna biriminizdeki kişileri bir kez yazarsınız: adı soyadı, unvanı, varsa vekâlet unvanı ve hangi yetkilere sahip olduğu (Düzenleyen/Mutemet · Gerçekleştirme Görevlisi · Harcama Yetkilisi · Muhasebe Yetkilisi). Bu liste tarayıcıda saklanır, "Yeni Hesaplama" ile silinmez ve <b>kağıda basılmaz</b>.</p>
     <ul class="kg-ul">
       <li><b>Belgenin aslı korunur:</b> Düzenleyen ve Gerçekleştirme Görevlisi seçilmediği sürece imza bloğunda yalnızca <b>Birim Harcama Yetkilisi</b> ve <b>Bildirim Sahibi</b> görünür — yani M.Y.H.B.Y. Örnek No: 28'in aynısı.</li>
-      <li><b>Ekleyen ekler:</b> Bazı müftülükler bildirime mutemedi ve gerçekleştirme görevlisini de koyuyor. Onları seçtiğinde imza bloğuna <b>yeni sütun açılır</b>. Sıralama soldan sağa: Düzenleyen (Mutemet) → Gerçekleştirme Görevlisi → Birim Harcama Yetkilisi → Bildirim Sahibi.</li>
+      <li><b>Ekleyen ekler:</b> <b>Bazı muhasebe müdürlükleri</b> bildirimde mutemedin ve gerçekleştirme görevlisinin de yer almasını istiyor; bu yüzden bu seçim programa eklendi. Onları seçtiğinde imza bloğuna <b>yeni sütun açılır</b>. Sıralama soldan sağa: Düzenleyen (Mutemet) → Gerçekleştirme Görevlisi → Birim Harcama Yetkilisi → Bildirim Sahibi.</li>
       <li><b>Vekâlet unvanı:</b> Bir kişi vekâleten bakıyorsa tabloya vekâlet unvanını yaz (örn. "İlçe Müftü V."). Belgeye <b>vekâlet unvanı</b> yazılır; boş bırakırsan normal unvanı yazılır.</li>
       <li>Sütun sayısı 2'den 4'e çıkınca sütunlar otomatik daralır, hepsi tek sırada kalır ve sayfa taşmaz.</li>
     </ul>
@@ -7444,6 +7534,9 @@ function renderSheet5(){
     <div class="kg-qa"><b>S: Kırmızı "NET ÖDENEN" bandı neyi gösteriyor?</b><br>Damga vergisi düşülmüş, <b>kişinin eline geçecek net tutarı</b>. Varsa avans da düşülmüştür. Brüt (genel toplam) tutarı tablonun "GENEL TOPLAM" satırında görürsünüz.</div>
     <div class="kg-qa"><b>S: Unvan seçtim ama belgeye eksik yazıldı, hata mı?</b><br>Hayır. Ek gösterge tablosundaki "Memur Yükseköğrenim", "İmam Hatip Diğer Öğrenim" gibi adların sonundaki ek <b>öğrenim durumudur, unvanın parçası değildir</b>. Belgeye kişinin unvanı yazılır: "Memur", "İmam Hatip". Hesaplama seçtiğiniz tam satıra göre yapılır.</div>
     <div class="kg-qa"><b>S: Gündelik yıl ortasında değişti, tabloya nasıl işlerim?</b><br>Referans Veriler → Gündelik ve Damga Vergisi Oranları'nda <b>"+ Satır Ekle"</b> deyip yeni satırın tarihini değişikliğin yürürlük tarihi yapın (örn. 07.07.2027) ve tutarları girin. Program, hesaplama tarihine göre <b>o tarihe eşit veya ondan önceki en yakın satırı</b> kullanır.</div>
+    <div class="kg-qa"><b>S: Not, Düzenleyen (Mutemet), Gerçekleştirme Görevlisi, Muhasebe Birimi — bunlar Örnek No: 28'de yok, neden ekli?</b><br>Çünkü <b>bazı muhasebe müdürlükleri bu bilgilerin belgede yer almasını istiyor</b>; yoksa evrakı iade edebiliyorlar. Örnek No: 28'in aslında bu alanlar zorunlu değildir, bu yüzden programa <b>isteğe bağlı</b> olarak konuldu: <b>doldurursanız belgeye çıkar, boş bırakırsanız belge yönetmelik ekindeki aslıyla birebir aynı kalır.</b> Kendi muhasebe biriminiz istemiyorsa bu alanlara hiç dokunmayın.</div>
+    <div class="kg-qa"><b>S: Muhasebe Birimi'ni ve tarihini nereye yazıyorum?</b><br>Sol paneldeki <b>Muhasebe Birimi ve Tarihi</b> kutusuna <b>ikisini birden</b> yazın: <i>Anadolu Muhasebe Müdürlüğü-15.08.2026</i>. Program tarihi ayırıp belgedeki hücrenin <b>sağ yarısına</b>, birim adını <b>sol sarı yarısına</b> koyar. Tarihi yazmakla uğraşmak istemezseniz kutunun sağındaki <b>takvim düğmesine</b> basmanız yeterli. İsterseniz belgenin üstündeki <b>sol sarı yarıya doğrudan</b> da yazabilirsiniz — iki kutu birbirini günceller. Birim adını hiç yazmazsanız yalnız tarih basılır.</div>
+    
     <div class="kg-qa"><b>S: Excel dosyasını güncellersem bu araç da güncellenir mi?</b><br>Hayır, bu araç Excel'den bağımsız çalışır. Ancak oran/katsayı güncellemelerini yukarıdaki gibi doğrudan sayfadan yapabilirsiniz.</div>
 
     <div class="footnote" style="margin-top:16px;">Bu araç, <b>M.Y.H.B.Y. Örnek No: 28</b> (Merkezî Yönetim Harcama Belgeleri Yönetmeliği eki) ve "Yolluk Hesaplama" Excel dosyasındaki hesaplama mantığı esas alınarak hazırlanmıştır.</div>
@@ -7669,6 +7762,6 @@ checkDraftBanner();
 </div>
 
 <a class="surum-rozet no-print" href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener"
-   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 12.08.2026 · Güncel sürüm ↗</a>
+   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 14.08.2026 · Güncel sürüm ↗</a>
 </body>
 </html>
