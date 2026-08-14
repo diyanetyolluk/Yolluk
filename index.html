@@ -8,7 +8,7 @@
 <!-- ===== Paylaşım önizlemesi (WhatsApp, Telegram, Facebook, X...) =====
      Bu etiketler sayfada görünmez; yalnızca link paylaşıldığında altta
      çıkan başlık/açıklama/görsel için kullanılır. -->
-<meta name="description" content="Diyanet İşleri Başkanlığı Sürekli Görev Yolluğu Bildirimi ve Ödeme Emri Belgesi hesaplama programı. Ünvan ve ek göstergeye göre gündelik, yer değiştirme gideri ve damga vergisi otomatik hesaplanır; belge doğrudan yazdırılabilir. Kurulum gerektirmez, veriler yalnızca kendi cihazınızda kalır.">
+<meta name="description" content="Sürekli Görev Yolluğu Bildirimi ve Ödeme Emri Belgesi hesaplama programı. Unvan ve ek göstergeye göre gündelik, yer değiştirme gideri ve damga vergisi otomatik hesaplanır; belge doğrudan yazdırılabilir. Kurulum gerektirmez, veriler yalnızca kendi cihazınızda kalır.">
 <meta name="author" content="Diyanet Yolluk">
 <meta name="theme-color" content="#2b6cb0">
 <meta property="og:type" content="website">
@@ -16,14 +16,14 @@
 <meta property="og:locale" content="tr_TR">
 <meta property="og:url" content="https://diyanetyolluk.github.io/Yolluk/">
 <meta property="og:title" content="Yolluk Hesaplama — Diyanet İşleri Başkanlığı">
-<meta property="og:description" content="Diyanet İşleri Başkanlığı Sürekli Görev Yolluğu Bildirimi ve Ödeme Emri Belgesi hesaplama programı. Ünvan ve ek göstergeye göre gündelik, yer değiştirme gideri ve damga vergisi otomatik hesaplanır; belge doğrudan yazdırılabilir. Kurulum gerektirmez, veriler yalnızca kendi cihazınızda kalır.">
+<meta property="og:description" content="Sürekli Görev Yolluğu Bildirimi ve Ödeme Emri Belgesi hesaplama programı. Unvan ve ek göstergeye göre gündelik, yer değiştirme gideri ve damga vergisi otomatik hesaplanır; belge doğrudan yazdırılabilir. Kurulum gerektirmez, veriler yalnızca kendi cihazınızda kalır.">
 <meta property="og:image" content="https://diyanetyolluk.github.io/Yolluk/onizleme.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Yolluk Hesaplama — Sürekli Görev Yolluğu ve Ödeme Emri">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Yolluk Hesaplama — Diyanet İşleri Başkanlığı">
-<meta name="twitter:description" content="Diyanet İşleri Başkanlığı Sürekli Görev Yolluğu Bildirimi ve Ödeme Emri Belgesi hesaplama programı. Ünvan ve ek göstergeye göre gündelik, yer değiştirme gideri ve damga vergisi otomatik hesaplanır; belge doğrudan yazdırılabilir. Kurulum gerektirmez, veriler yalnızca kendi cihazınızda kalır.">
+<meta name="twitter:description" content="Sürekli Görev Yolluğu Bildirimi ve Ödeme Emri Belgesi hesaplama programı. Unvan ve ek göstergeye göre gündelik, yer değiştirme gideri ve damga vergisi otomatik hesaplanır; belge doğrudan yazdırılabilir. Kurulum gerektirmez, veriler yalnızca kendi cihazınızda kalır.">
 <meta name="twitter:image" content="https://diyanetyolluk.github.io/Yolluk/onizleme.png">
 <link rel="canonical" href="https://diyanetyolluk.github.io/Yolluk/">
 <style id="dynamic-page-style"></style>
@@ -108,6 +108,14 @@
   .field-row label{flex:0 0 168px;font-size:11.5px;color:#222;padding-right:6px;}
   .field-row .in-wrap{flex:1;}
   /* ---- Ünvan açılır listesi (tarayıcının datalist'i yerine kendi listemiz) ---- */
+  /* Metin + takvim düğmesi olan alan */
+  .tarih-kutu{position:relative;display:flex;align-items:center;gap:0;}
+  .tarih-kutu input[type="text"]{flex:1;min-width:0;border-top-right-radius:0;border-bottom-right-radius:0;}
+  .tarih-kutu .tarih-btn{flex:0 0 auto;border:1px solid var(--border);border-left:none;background:#eef3f8;
+     color:#2b6cb0;cursor:pointer;padding:3px 7px;border-radius:0 3px 3px 0;line-height:0;height:100%;}
+  .tarih-kutu .tarih-btn:hover{background:#dbe8f5;}
+  .tarih-kutu .tarih-gizli{position:absolute;right:0;bottom:0;width:1px;height:1px;opacity:0;
+     pointer-events:none;border:none;padding:0;}
   .combo{position:relative;}
   .combo input{padding-right:20px;}
   .combo-ok{position:absolute;right:5px;top:50%;transform:translateY(-50%);
@@ -136,7 +144,10 @@
   :-ms-input-placeholder{color:#8c8c72;opacity:.65;font-style:italic;}
   input:disabled{background:var(--gray-light);color:#555;}
   .readonly{background:var(--gray-mid)!important;}
-  .note-manual{margin-top:3px;font-weight:bold;color:#1F3864;}   /* lacivert */
+  /* Parlamento mavisi — elle girilen not, hem ekranda hem kağıtta aynı renk */
+  :root{ --parlamento:#1F4E9C; }
+  .note-manual{margin-top:3px;font-weight:bold;color:var(--parlamento);}
+  textarea[data-k="notMetni"]{color:var(--parlamento);font-weight:bold;}
   .unvan-uyari{margin-top:6px;font-size:10.5px;line-height:1.4;color:#8a4b00;background:#fff4e0;
     border:1px solid #f0c98a;border-left:3px solid #e08a00;padding:6px 8px;border-radius:3px;}
   /* İstisna Girişi kutularından biri doldurulduğunda zemin kırmızıya döner —
@@ -232,7 +243,10 @@
   .summary-box .cell .val{font-weight:bold;padding-left:8px;}
 
   .words-row{border:1px solid var(--border-strong);padding:6px 8px;font-style:italic;font-size:11.5px;background:#fff;}
-  .sentence-row{border:1px solid var(--border-strong);border-top:none;padding:6px 8px;font-size:11.5px;background:#fff;}
+  /* Tahakkuk cümlesi TEK SATIR olur, alt satıra kaymaz. Sığmazsa yazı
+     boyutu kendiliğinden küçültülür (bkz. cumleyiSigdir). */
+  .sentence-row{border:1px solid var(--border-strong);border-top:none;padding:6px 8px;
+                font-size:11.5px;background:#fff;white-space:nowrap;overflow:hidden;}
 
   .ref-tarih{white-space:nowrap;}
   .ref-tarih-ic{display:flex;align-items:center;gap:4px;}
@@ -249,6 +263,22 @@
     .sign-box .imza-ad-baski{display:block!important;}
   }
   .netpaid-banner{background:var(--red);color:#fff;font-weight:bold;text-align:center;padding:10px;font-size:16px;margin-top:10px;}
+  /* ---- Görevli Tanımlama Tablosu ---- */
+  .gorevli-blok{margin-top:16px;border:1px solid var(--border-strong);background:#fff;}
+  .gorevli-blok .panel-head{background:var(--blue);}
+  .gorevli-tablo{width:100%;border-collapse:collapse;font-size:11px;}
+  .gorevli-tablo th{background:#F2F2F2;border:1px solid var(--border);padding:5px 4px;
+                    font-size:10.5px;line-height:1.25;text-align:center;font-weight:bold;}
+  .gorevli-tablo th .alt{display:block;font-weight:normal;font-size:9px;color:#555;}
+  .gorevli-tablo td{border:1px solid var(--border);padding:2px 3px;text-align:center;}
+  .gorevli-tablo td.sira{width:28px;background:#F7F7F7;font-weight:bold;}
+  .gorevli-tablo input[type="text"]{width:100%;text-align:left;}
+  .gorevli-tablo input.vekalet{background:#EAF7EE;border-color:#9ecdae;}
+  .gorevli-tablo input[type="checkbox"]{width:16px;height:16px;cursor:pointer;accent-color:#2b6cb0;}
+  .gorevli-tablo .sil-btn{background:#fff;border:1px solid #e2b3b3;color:#c0392b;border-radius:4px;
+                          cursor:pointer;padding:3px 6px;line-height:1;}
+  .gorevli-tablo .sil-btn:hover{background:#fdecea;}
+  .gorevli-alt{padding:8px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
   .excel-notlar{color:var(--red);font-weight:bold;font-size:10.5px;line-height:1.45;margin:8px 2px 4px;}
 
   .sign-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
@@ -282,6 +312,12 @@
                   border-left:1px solid var(--border-strong);
                   border-right:1px solid var(--border-strong);background:#fff;}
   .calc td.dh-top{border-top:1px solid var(--border-strong);}
+  /* Atama Tarihi hücresi: solda tarih, sağda elle girilen atama sayısı */
+  .calc td.dh-atama{padding:0;white-space:nowrap;}
+  .calc td.dh-atama .dh-tarih{display:inline-block;width:47%;text-align:center;font-size:11.5px;vertical-align:middle;}
+  .calc td.dh-atama .dh-sayi{display:inline-block;width:52%;vertical-align:middle;box-sizing:border-box;
+                             border:none;border-left:1px solid var(--border);border-radius:0;
+                             background:var(--yellow);text-align:center;font-size:11px;padding:4px 2px;}
   .calc td.dh-bot{border-bottom:1px solid var(--border-strong);}
   .doc-grid .f{border:1px solid var(--border);padding:5px;}
   .doc-grid .f .l{font-size:10px;color:#444;font-weight:bold;}
@@ -344,7 +380,11 @@
   .pv-sp{letter-spacing:1.4px;}
   .pv-tot{background:#DBEEF4;font-weight:bold;}
   .pv-foot{font-size:7.5px;line-height:1.25;}
-  .pv-not{color:#1F3864;font-weight:bold;}   /* "(*) Not:" satırı — lacivert */
+  .pv-not{color:#1F4E9C;font-weight:bold;}   /* "(**) Not:" satırı — parlamento mavisi */
+  .pv-kirmizi{color:#FF0000;font-weight:bold;}
+  /* Tahakkuk cümlesi: satır yüksekliği metne göre büyür, kırpılmaz */
+  .pv-table td.pv-cumle{height:auto;overflow:hidden;white-space:nowrap;
+                        line-height:1.5;padding:3px 4px;}
 
   /* ---- Ödeme Emri Belgesi yazdırma görünümü (Excel A1:U41 birebir) ---- */
   .oeb{width:100%;border-collapse:collapse;table-layout:fixed;
@@ -406,16 +446,38 @@
   @media print{ .onizle-bar{display:none!important;} }
 
   /* ---- sürüm rozeti (sağ alt köşe, kağıda basılmaz) ---- */
+  /* ---- İlk açılış karşılama penceresi ---- */
+  .karsilama-perde{position:fixed;inset:0;background:rgba(15,25,40,.55);z-index:300;
+    display:flex;align-items:center;justify-content:center;padding:16px;}
+  .karsilama{background:#fff;max-width:600px;width:100%;border-radius:8px;overflow:hidden;
+    box-shadow:0 12px 40px rgba(0,0,0,.35);animation:karsilamaAc .18s ease-out;}
+  @keyframes karsilamaAc{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:none;}}
+  .karsilama-bas{background:#2b6cb0;color:#fff;font-weight:bold;font-size:15px;padding:12px 16px;}
+  .karsilama-govde{padding:14px 16px;font-size:12.5px;line-height:1.55;color:#222;}
+  .karsilama-govde p{margin:0 0 10px;}
+  .karsilama-govde ul{margin:0;padding-left:18px;}
+  .karsilama-govde li{margin-bottom:4px;}
+  .karsilama-uyari{background:#fff4e0;border-left:4px solid #e0a800;padding:8px 10px;border-radius:3px;}
+  .karsilama-alt{display:flex;align-items:center;gap:8px;padding:10px 16px;background:#f4f6f8;
+    border-top:1px solid #dde3e9;}
+  .karsilama-onay{font-size:11.5px;color:#444;display:flex;align-items:center;gap:5px;cursor:pointer;}
+  .k-vurgu{color:#B71C1C;font-weight:bold;}
+  .karsilama-govde a{color:#1F4E9C;font-weight:bold;}
+  @media print{ .karsilama-perde{display:none!important;} }
   .surum-rozet{
     position:fixed; right:10px; bottom:10px; z-index:60;
-    background:#2d3748; color:#fff; font-size:10.5px; line-height:1.2;
-    padding:4px 9px; border-radius:11px; opacity:.45;
+    background:#1a202c; color:#fff; font-size:11px; font-weight:bold; line-height:1.2;
+    padding:5px 11px; border-radius:11px; opacity:.92;
     font-family:Arial,Helvetica,sans-serif; white-space:nowrap;
-    box-shadow:0 1px 4px rgba(0,0,0,.25); transition:opacity .15s;
-    user-select:text; cursor:default;
+    box-shadow:0 2px 6px rgba(0,0,0,.35); transition:opacity .15s, background .15s;
+    user-select:text; cursor:pointer; border:1px solid #4a5568;
   }
+  .surum-rozet:hover{background:#2b6cb0;border-color:#2b6cb0;}
+  /* Rozet en alttaki tabloyu kapatmasın diye sayfa altına boşluk */
+  .app{padding-bottom:52px;}
   .surum-rozet{text-decoration:none;}
   .surum-rozet:hover{opacity:1;}
+  .gorevli-blok{margin-bottom:6px;}
   @media print{ .surum-rozet{display:none!important;} }
 
   /* ================= DAR EKRAN UYUMU (responsive) =================
@@ -532,7 +594,7 @@
     ⚠️ Lütfen verileri <b>sarı alanlara</b> giriniz.
   </div>
   <div class="no-print" style="font-size:10.5px;color:#666;margin:-4px 0 10px;">
-    Bu sayfa, Diyanet "Yolluk Hesaplama" Excel dosyasındaki hesaplama mantığı ve referans verileri (ünvan/ek gösterge tablosu, yıllara göre gündelik ve damga vergisi oranları) birebir aktarılarak hazırlanmıştır. Sonuçlar otomatik hesaplanır. Yazdır'a bastığınızda sadece o an açık olan sekme basılır.
+    Bu sayfa, Diyanet "Yolluk Hesaplama" Excel dosyasındaki hesaplama mantığı ve referans verileri (unvan/ek gösterge tablosu, yıllara göre gündelik ve damga vergisi oranları) birebir aktarılarak hazırlanmıştır. Sonuçlar otomatik hesaplanır. Yazdır'a bastığınızda sadece o an açık olan sekme basılır.
   </div>
 
   <!-- ============ SHEET 1 ============ -->
@@ -2480,6 +2542,43 @@ const OGRENIM_EKLERI = [
   ' Yükseköğrenim',
   ' EML',
 ];
+/* ------------------------------------------------------------
+   YÖNELME EKİ ("-e / -a")
+   Belgedeki cümle "... atanan ..." diye devam ettiği için görev yerinin
+   sonuna yönelme eki gelmelidir: "Merkez'e atanan", "Mamak'a atanan".
+   Ek, Türkçe büyük/küçük ünlü uyumuna göre seçilir; sesliyle biten
+   kelimelerde araya kaynaştırma "y" girer (Ankara'ya, Kırıkkale'ye).
+   Yer adları özel isim sayıldığı için kesme işareti kullanılır ve
+   ünsüz yumuşaması UYGULANMAZ (Sinop'a, Sinob'a değil).
+   ------------------------------------------------------------ */
+function yonelmeEki(kelime){
+  const k = String(kelime || '').replace(/[^\wÇĞİÖŞÜçğıöşü]+$/u, '').trim();
+  if(!k) return "'e";
+  const sesli = 'aeıioöuüAEIİOÖUÜ';
+  let sonSesli = '';
+  for(let i = k.length - 1; i >= 0; i--){
+    if(sesli.indexOf(k[i]) >= 0){ sonSesli = k[i].toLocaleLowerCase('tr'); break; }
+  }
+  if(!sonSesli) return "'e";
+  const kalin = 'aıou'.indexOf(sonSesli) >= 0;
+  const sonHarfSesli = sesli.indexOf(k[k.length-1]) >= 0;
+  return "'" + (sonHarfSesli ? (kalin ? 'ya' : 'ye') : (kalin ? 'a' : 'e'));
+}
+
+/* Görev yeri metnine gerekiyorsa yönelme ekini ekler.
+   Metin zaten "…'dan …'ya" gibi tam bir ifadeyse veya sonunda ek varsa
+   hiç dokunulmaz. */
+function yonelmeEkle(metin){
+  const t = String(metin || '').trim();
+  if(!t) return '';
+  // 1) Sonunda zaten kesmeli yönelme eki var mı?  (…'a  …'e  …'ya  …'ye)
+  if(/['’]\s*y?[ae]$/i.test(t)) return t;
+  // 2) "…dan/…den/…tan/…ten" (ayrılma eki) geçiyorsa cümle zaten tamamdır
+  if(/(^|[\s'’])\S*(dan|den|tan|ten)(\s|$)/i.test(t)) return t;
+  // 3) Değilse son kelimeye ek getir
+  return t + yonelmeEki(t.split(/[\s\/\-]+/).pop());
+}
+
 function belgeUnvani(unvan){
   let u = String(unvan || '').trim();
   for(const ek of OGRENIM_EKLERI){
@@ -2489,6 +2588,1021 @@ function belgeUnvani(unvan){
   }
   return u;
 }
+
+/* ------------------------------------------------------------
+   TÜRKİYE'DEKİ İL VE İLÇE MÜFTÜLÜKLERİ
+   "Ad|Bağlı olduğu il" biçiminde tutulur. Listede il adı yalnızca
+   aynı adlı ilçeleri ayırt etmek için gösterilir (örn. Gölbaşı),
+   kutuya yalnızca müftülük adı yazılır.
+   ------------------------------------------------------------ */
+const MUFTULUK_HAM = [
+"Adana İl Müftülüğü|Adana",
+"Aladağ İlçe Müftülüğü|Adana",
+"Ceyhan İlçe Müftülüğü|Adana",
+"Çukurova İlçe Müftülüğü|Adana",
+"Feke İlçe Müftülüğü|Adana",
+"İmamoğlu İlçe Müftülüğü|Adana",
+"Karaisalı İlçe Müftülüğü|Adana",
+"Karataş İlçe Müftülüğü|Adana",
+"Kozan İlçe Müftülüğü|Adana",
+"Pozantı İlçe Müftülüğü|Adana",
+"Saimbeyli İlçe Müftülüğü|Adana",
+"Sarıçam İlçe Müftülüğü|Adana",
+"Seyhan İlçe Müftülüğü|Adana",
+"Tufanbeyli İlçe Müftülüğü|Adana",
+"Yumurtalık İlçe Müftülüğü|Adana",
+"Yüreğir İlçe Müftülüğü|Adana",
+"Adıyaman İl Müftülüğü|Adıyaman",
+"Besni İlçe Müftülüğü|Adıyaman",
+"Çelikhan İlçe Müftülüğü|Adıyaman",
+"Gerger İlçe Müftülüğü|Adıyaman",
+"Gölbaşı İlçe Müftülüğü|Adıyaman",
+"Kahta İlçe Müftülüğü|Adıyaman",
+"Samsat İlçe Müftülüğü|Adıyaman",
+"Sincik İlçe Müftülüğü|Adıyaman",
+"Tut İlçe Müftülüğü|Adıyaman",
+"Afyonkarahisar İl Müftülüğü|Afyonkarahisar",
+"Başmakçı İlçe Müftülüğü|Afyonkarahisar",
+"Bayat İlçe Müftülüğü|Afyonkarahisar",
+"Bolvadin İlçe Müftülüğü|Afyonkarahisar",
+"Çay İlçe Müftülüğü|Afyonkarahisar",
+"Çobanlar İlçe Müftülüğü|Afyonkarahisar",
+"Dazkırı İlçe Müftülüğü|Afyonkarahisar",
+"Dinar İlçe Müftülüğü|Afyonkarahisar",
+"Emirdağ İlçe Müftülüğü|Afyonkarahisar",
+"Evciler İlçe Müftülüğü|Afyonkarahisar",
+"Hocalar İlçe Müftülüğü|Afyonkarahisar",
+"İhsaniye İlçe Müftülüğü|Afyonkarahisar",
+"İscehisar İlçe Müftülüğü|Afyonkarahisar",
+"Kızılören İlçe Müftülüğü|Afyonkarahisar",
+"Sandıklı İlçe Müftülüğü|Afyonkarahisar",
+"Sinanpaşa İlçe Müftülüğü|Afyonkarahisar",
+"Sultandağı İlçe Müftülüğü|Afyonkarahisar",
+"Şuhut İlçe Müftülüğü|Afyonkarahisar",
+"Ağrı İl Müftülüğü|Ağrı",
+"Diyadin İlçe Müftülüğü|Ağrı",
+"Doğubayazıt İlçe Müftülüğü|Ağrı",
+"Eleşkirt İlçe Müftülüğü|Ağrı",
+"Hamur İlçe Müftülüğü|Ağrı",
+"Patnos İlçe Müftülüğü|Ağrı",
+"Taşlıçay İlçe Müftülüğü|Ağrı",
+"Tutak İlçe Müftülüğü|Ağrı",
+"Amasya İl Müftülüğü|Amasya",
+"Göynücek İlçe Müftülüğü|Amasya",
+"Gümüşhacıköy İlçe Müftülüğü|Amasya",
+"Hamamözü İlçe Müftülüğü|Amasya",
+"Merzifon İlçe Müftülüğü|Amasya",
+"Suluova İlçe Müftülüğü|Amasya",
+"Taşova İlçe Müftülüğü|Amasya",
+"Ankara İl Müftülüğü|Ankara",
+"Akyurt İlçe Müftülüğü|Ankara",
+"Altındağ İlçe Müftülüğü|Ankara",
+"Ayaş İlçe Müftülüğü|Ankara",
+"Bala İlçe Müftülüğü|Ankara",
+"Beypazarı İlçe Müftülüğü|Ankara",
+"Çamlıdere İlçe Müftülüğü|Ankara",
+"Çankaya İlçe Müftülüğü|Ankara",
+"Çubuk İlçe Müftülüğü|Ankara",
+"Elmadağ İlçe Müftülüğü|Ankara",
+"Etimesgut İlçe Müftülüğü|Ankara",
+"Evren İlçe Müftülüğü|Ankara",
+"Gölbaşı İlçe Müftülüğü|Ankara",
+"Güdül İlçe Müftülüğü|Ankara",
+"Haymana İlçe Müftülüğü|Ankara",
+"Kahramankazan İlçe Müftülüğü|Ankara",
+"Kalecik İlçe Müftülüğü|Ankara",
+"Keçiören İlçe Müftülüğü|Ankara",
+"Kızılcahamam İlçe Müftülüğü|Ankara",
+"Mamak İlçe Müftülüğü|Ankara",
+"Nallıhan İlçe Müftülüğü|Ankara",
+"Polatlı İlçe Müftülüğü|Ankara",
+"Pursaklar İlçe Müftülüğü|Ankara",
+"Sincan İlçe Müftülüğü|Ankara",
+"Şereflikoçhisar İlçe Müftülüğü|Ankara",
+"Yenimahalle İlçe Müftülüğü|Ankara",
+"Antalya İl Müftülüğü|Antalya",
+"Akseki İlçe Müftülüğü|Antalya",
+"Aksu İlçe Müftülüğü|Antalya",
+"Alanya İlçe Müftülüğü|Antalya",
+"Demre İlçe Müftülüğü|Antalya",
+"Döşemealtı İlçe Müftülüğü|Antalya",
+"Elmalı İlçe Müftülüğü|Antalya",
+"Finike İlçe Müftülüğü|Antalya",
+"Gazipaşa İlçe Müftülüğü|Antalya",
+"Gündoğmuş İlçe Müftülüğü|Antalya",
+"İbradı İlçe Müftülüğü|Antalya",
+"Kaş İlçe Müftülüğü|Antalya",
+"Kemer İlçe Müftülüğü|Antalya",
+"Kepez İlçe Müftülüğü|Antalya",
+"Konyaaltı İlçe Müftülüğü|Antalya",
+"Korkuteli İlçe Müftülüğü|Antalya",
+"Kumluca İlçe Müftülüğü|Antalya",
+"Manavgat İlçe Müftülüğü|Antalya",
+"Muratpaşa İlçe Müftülüğü|Antalya",
+"Serik İlçe Müftülüğü|Antalya",
+"Artvin İl Müftülüğü|Artvin",
+"Ardanuç İlçe Müftülüğü|Artvin",
+"Arhavi İlçe Müftülüğü|Artvin",
+"Borçka İlçe Müftülüğü|Artvin",
+"Hopa İlçe Müftülüğü|Artvin",
+"Kemalpaşa İlçe Müftülüğü|Artvin",
+"Murgul İlçe Müftülüğü|Artvin",
+"Şavşat İlçe Müftülüğü|Artvin",
+"Yusufeli İlçe Müftülüğü|Artvin",
+"Aydın İl Müftülüğü|Aydın",
+"Bozdoğan İlçe Müftülüğü|Aydın",
+"Buharkent İlçe Müftülüğü|Aydın",
+"Çine İlçe Müftülüğü|Aydın",
+"Didim İlçe Müftülüğü|Aydın",
+"Efeler İlçe Müftülüğü|Aydın",
+"Germencik İlçe Müftülüğü|Aydın",
+"İncirliova İlçe Müftülüğü|Aydın",
+"Karacasu İlçe Müftülüğü|Aydın",
+"Karpuzlu İlçe Müftülüğü|Aydın",
+"Koçarlı İlçe Müftülüğü|Aydın",
+"Köşk İlçe Müftülüğü|Aydın",
+"Kuşadası İlçe Müftülüğü|Aydın",
+"Kuyucak İlçe Müftülüğü|Aydın",
+"Nazilli İlçe Müftülüğü|Aydın",
+"Söke İlçe Müftülüğü|Aydın",
+"Sultanhisar İlçe Müftülüğü|Aydın",
+"Yenipazar İlçe Müftülüğü|Aydın",
+"Balıkesir İl Müftülüğü|Balıkesir",
+"Altıeylül İlçe Müftülüğü|Balıkesir",
+"Ayvalık İlçe Müftülüğü|Balıkesir",
+"Balya İlçe Müftülüğü|Balıkesir",
+"Bandırma İlçe Müftülüğü|Balıkesir",
+"Bigadiç İlçe Müftülüğü|Balıkesir",
+"Burhaniye İlçe Müftülüğü|Balıkesir",
+"Dursunbey İlçe Müftülüğü|Balıkesir",
+"Edremit İlçe Müftülüğü|Balıkesir",
+"Erdek İlçe Müftülüğü|Balıkesir",
+"Gömeç İlçe Müftülüğü|Balıkesir",
+"Gönen İlçe Müftülüğü|Balıkesir",
+"Havran İlçe Müftülüğü|Balıkesir",
+"İvrindi İlçe Müftülüğü|Balıkesir",
+"Karesi İlçe Müftülüğü|Balıkesir",
+"Kepsut İlçe Müftülüğü|Balıkesir",
+"Manyas İlçe Müftülüğü|Balıkesir",
+"Marmara İlçe Müftülüğü|Balıkesir",
+"Savaştepe İlçe Müftülüğü|Balıkesir",
+"Sındırgı İlçe Müftülüğü|Balıkesir",
+"Susurluk İlçe Müftülüğü|Balıkesir",
+"Bilecik İl Müftülüğü|Bilecik",
+"Bozüyük İlçe Müftülüğü|Bilecik",
+"Gölpazarı İlçe Müftülüğü|Bilecik",
+"İnhisar İlçe Müftülüğü|Bilecik",
+"Osmaneli İlçe Müftülüğü|Bilecik",
+"Pazaryeri İlçe Müftülüğü|Bilecik",
+"Söğüt İlçe Müftülüğü|Bilecik",
+"Yenipazar İlçe Müftülüğü|Bilecik",
+"Bingöl İl Müftülüğü|Bingöl",
+"Adaklı İlçe Müftülüğü|Bingöl",
+"Genç İlçe Müftülüğü|Bingöl",
+"Karlıova İlçe Müftülüğü|Bingöl",
+"Kiği İlçe Müftülüğü|Bingöl",
+"Solhan İlçe Müftülüğü|Bingöl",
+"Yayladere İlçe Müftülüğü|Bingöl",
+"Yedisu İlçe Müftülüğü|Bingöl",
+"Bitlis İl Müftülüğü|Bitlis",
+"Adilcevaz İlçe Müftülüğü|Bitlis",
+"Ahlat İlçe Müftülüğü|Bitlis",
+"Güroymak İlçe Müftülüğü|Bitlis",
+"Hizan İlçe Müftülüğü|Bitlis",
+"Mutki İlçe Müftülüğü|Bitlis",
+"Tatvan İlçe Müftülüğü|Bitlis",
+"Bolu İl Müftülüğü|Bolu",
+"Dörtdivan İlçe Müftülüğü|Bolu",
+"Gerede İlçe Müftülüğü|Bolu",
+"Göynük İlçe Müftülüğü|Bolu",
+"Kıbrıscık İlçe Müftülüğü|Bolu",
+"Mengen İlçe Müftülüğü|Bolu",
+"Mudurnu İlçe Müftülüğü|Bolu",
+"Seben İlçe Müftülüğü|Bolu",
+"Yeniçağa İlçe Müftülüğü|Bolu",
+"Burdur İl Müftülüğü|Burdur",
+"Ağlasun İlçe Müftülüğü|Burdur",
+"Altınyayla İlçe Müftülüğü|Burdur",
+"Bucak İlçe Müftülüğü|Burdur",
+"Çavdır İlçe Müftülüğü|Burdur",
+"Çeltikçi İlçe Müftülüğü|Burdur",
+"Gölhisar İlçe Müftülüğü|Burdur",
+"Karamanlı İlçe Müftülüğü|Burdur",
+"Kemer İlçe Müftülüğü|Burdur",
+"Tefenni İlçe Müftülüğü|Burdur",
+"Yeşilova İlçe Müftülüğü|Burdur",
+"Bursa İl Müftülüğü|Bursa",
+"Büyükorhan İlçe Müftülüğü|Bursa",
+"Gemlik İlçe Müftülüğü|Bursa",
+"Gürsu İlçe Müftülüğü|Bursa",
+"Harmancık İlçe Müftülüğü|Bursa",
+"İnegöl İlçe Müftülüğü|Bursa",
+"İznik İlçe Müftülüğü|Bursa",
+"Karacabey İlçe Müftülüğü|Bursa",
+"Keles İlçe Müftülüğü|Bursa",
+"Kestel İlçe Müftülüğü|Bursa",
+"Mudanya İlçe Müftülüğü|Bursa",
+"Mustafakemalpaşa İlçe Müftülüğü|Bursa",
+"Nilüfer İlçe Müftülüğü|Bursa",
+"Orhaneli İlçe Müftülüğü|Bursa",
+"Orhangazi İlçe Müftülüğü|Bursa",
+"Osmangazi İlçe Müftülüğü|Bursa",
+"Yenişehir İlçe Müftülüğü|Bursa",
+"Yıldırım İlçe Müftülüğü|Bursa",
+"Çanakkale İl Müftülüğü|Çanakkale",
+"Ayvacık İlçe Müftülüğü|Çanakkale",
+"Bayramiç İlçe Müftülüğü|Çanakkale",
+"Biga İlçe Müftülüğü|Çanakkale",
+"Bozcaada İlçe Müftülüğü|Çanakkale",
+"Çan İlçe Müftülüğü|Çanakkale",
+"Eceabat İlçe Müftülüğü|Çanakkale",
+"Ezine İlçe Müftülüğü|Çanakkale",
+"Gelibolu İlçe Müftülüğü|Çanakkale",
+"Gökçeada İlçe Müftülüğü|Çanakkale",
+"Lapseki İlçe Müftülüğü|Çanakkale",
+"Yenice İlçe Müftülüğü|Çanakkale",
+"Çankırı İl Müftülüğü|Çankırı",
+"Atkaracalar İlçe Müftülüğü|Çankırı",
+"Bayramören İlçe Müftülüğü|Çankırı",
+"Çerkeş İlçe Müftülüğü|Çankırı",
+"Eldivan İlçe Müftülüğü|Çankırı",
+"Ilgaz İlçe Müftülüğü|Çankırı",
+"Kızılırmak İlçe Müftülüğü|Çankırı",
+"Korgun İlçe Müftülüğü|Çankırı",
+"Kurşunlu İlçe Müftülüğü|Çankırı",
+"Orta İlçe Müftülüğü|Çankırı",
+"Şabanözü İlçe Müftülüğü|Çankırı",
+"Yapraklı İlçe Müftülüğü|Çankırı",
+"Çorum İl Müftülüğü|Çorum",
+"Alaca İlçe Müftülüğü|Çorum",
+"Bayat İlçe Müftülüğü|Çorum",
+"Boğazkale İlçe Müftülüğü|Çorum",
+"Dodurga İlçe Müftülüğü|Çorum",
+"İskilip İlçe Müftülüğü|Çorum",
+"Kargı İlçe Müftülüğü|Çorum",
+"Laçin İlçe Müftülüğü|Çorum",
+"Mecitözü İlçe Müftülüğü|Çorum",
+"Oğuzlar İlçe Müftülüğü|Çorum",
+"Ortaköy İlçe Müftülüğü|Çorum",
+"Osmancık İlçe Müftülüğü|Çorum",
+"Sungurlu İlçe Müftülüğü|Çorum",
+"Uğurludağ İlçe Müftülüğü|Çorum",
+"Denizli İl Müftülüğü|Denizli",
+"Acıpayam İlçe Müftülüğü|Denizli",
+"Babadağ İlçe Müftülüğü|Denizli",
+"Baklan İlçe Müftülüğü|Denizli",
+"Bekilli İlçe Müftülüğü|Denizli",
+"Beyağaç İlçe Müftülüğü|Denizli",
+"Bozkurt İlçe Müftülüğü|Denizli",
+"Buldan İlçe Müftülüğü|Denizli",
+"Çal İlçe Müftülüğü|Denizli",
+"Çameli İlçe Müftülüğü|Denizli",
+"Çardak İlçe Müftülüğü|Denizli",
+"Çivril İlçe Müftülüğü|Denizli",
+"Güney İlçe Müftülüğü|Denizli",
+"Honaz İlçe Müftülüğü|Denizli",
+"Kale İlçe Müftülüğü|Denizli",
+"Merkezefendi İlçe Müftülüğü|Denizli",
+"Pamukkale İlçe Müftülüğü|Denizli",
+"Sarayköy İlçe Müftülüğü|Denizli",
+"Serinhisar İlçe Müftülüğü|Denizli",
+"Tavas İlçe Müftülüğü|Denizli",
+"Diyarbakır İl Müftülüğü|Diyarbakır",
+"Bağlar İlçe Müftülüğü|Diyarbakır",
+"Bismil İlçe Müftülüğü|Diyarbakır",
+"Çermik İlçe Müftülüğü|Diyarbakır",
+"Çınar İlçe Müftülüğü|Diyarbakır",
+"Çüngüş İlçe Müftülüğü|Diyarbakır",
+"Dicle İlçe Müftülüğü|Diyarbakır",
+"Eğil İlçe Müftülüğü|Diyarbakır",
+"Ergani İlçe Müftülüğü|Diyarbakır",
+"Hani İlçe Müftülüğü|Diyarbakır",
+"Hazro İlçe Müftülüğü|Diyarbakır",
+"Kayapınar İlçe Müftülüğü|Diyarbakır",
+"Kocaköy İlçe Müftülüğü|Diyarbakır",
+"Kulp İlçe Müftülüğü|Diyarbakır",
+"Lice İlçe Müftülüğü|Diyarbakır",
+"Silvan İlçe Müftülüğü|Diyarbakır",
+"Sur İlçe Müftülüğü|Diyarbakır",
+"Yenişehir İlçe Müftülüğü|Diyarbakır",
+"Edirne İl Müftülüğü|Edirne",
+"Enez İlçe Müftülüğü|Edirne",
+"Havsa İlçe Müftülüğü|Edirne",
+"İpsala İlçe Müftülüğü|Edirne",
+"Keşan İlçe Müftülüğü|Edirne",
+"Lalapaşa İlçe Müftülüğü|Edirne",
+"Meriç İlçe Müftülüğü|Edirne",
+"Süloğlu İlçe Müftülüğü|Edirne",
+"Uzunköprü İlçe Müftülüğü|Edirne",
+"Elazığ İl Müftülüğü|Elazığ",
+"Ağın İlçe Müftülüğü|Elazığ",
+"Alacakaya İlçe Müftülüğü|Elazığ",
+"Arıcak İlçe Müftülüğü|Elazığ",
+"Baskil İlçe Müftülüğü|Elazığ",
+"Karakoçan İlçe Müftülüğü|Elazığ",
+"Keban İlçe Müftülüğü|Elazığ",
+"Kovancılar İlçe Müftülüğü|Elazığ",
+"Maden İlçe Müftülüğü|Elazığ",
+"Palu İlçe Müftülüğü|Elazığ",
+"Sivrice İlçe Müftülüğü|Elazığ",
+"Erzincan İl Müftülüğü|Erzincan",
+"Çayırlı İlçe Müftülüğü|Erzincan",
+"İliç İlçe Müftülüğü|Erzincan",
+"Kemah İlçe Müftülüğü|Erzincan",
+"Kemaliye İlçe Müftülüğü|Erzincan",
+"Otlukbeli İlçe Müftülüğü|Erzincan",
+"Refahiye İlçe Müftülüğü|Erzincan",
+"Tercan İlçe Müftülüğü|Erzincan",
+"Üzümlü İlçe Müftülüğü|Erzincan",
+"Erzurum İl Müftülüğü|Erzurum",
+"Aşkale İlçe Müftülüğü|Erzurum",
+"Aziziye İlçe Müftülüğü|Erzurum",
+"Çat İlçe Müftülüğü|Erzurum",
+"Hınıs İlçe Müftülüğü|Erzurum",
+"Horasan İlçe Müftülüğü|Erzurum",
+"İspir İlçe Müftülüğü|Erzurum",
+"Karaçoban İlçe Müftülüğü|Erzurum",
+"Karayazı İlçe Müftülüğü|Erzurum",
+"Köprüköy İlçe Müftülüğü|Erzurum",
+"Narman İlçe Müftülüğü|Erzurum",
+"Oltu İlçe Müftülüğü|Erzurum",
+"Olur İlçe Müftülüğü|Erzurum",
+"Palandöken İlçe Müftülüğü|Erzurum",
+"Pasinler İlçe Müftülüğü|Erzurum",
+"Pazaryolu İlçe Müftülüğü|Erzurum",
+"Şenkaya İlçe Müftülüğü|Erzurum",
+"Tekman İlçe Müftülüğü|Erzurum",
+"Tortum İlçe Müftülüğü|Erzurum",
+"Uzundere İlçe Müftülüğü|Erzurum",
+"Yakutiye İlçe Müftülüğü|Erzurum",
+"Eskişehir İl Müftülüğü|Eskişehir",
+"Alpu İlçe Müftülüğü|Eskişehir",
+"Beylikova İlçe Müftülüğü|Eskişehir",
+"Çifteler İlçe Müftülüğü|Eskişehir",
+"Günyüzü İlçe Müftülüğü|Eskişehir",
+"Han İlçe Müftülüğü|Eskişehir",
+"İnönü İlçe Müftülüğü|Eskişehir",
+"Mahmudiye İlçe Müftülüğü|Eskişehir",
+"Mihalgazi İlçe Müftülüğü|Eskişehir",
+"Mihalıççık İlçe Müftülüğü|Eskişehir",
+"Odunpazarı İlçe Müftülüğü|Eskişehir",
+"Sarıcakaya İlçe Müftülüğü|Eskişehir",
+"Seyitgazi İlçe Müftülüğü|Eskişehir",
+"Sivrihisar İlçe Müftülüğü|Eskişehir",
+"Tepebaşı İlçe Müftülüğü|Eskişehir",
+"Gaziantep İl Müftülüğü|Gaziantep",
+"Araban İlçe Müftülüğü|Gaziantep",
+"İslahiye İlçe Müftülüğü|Gaziantep",
+"Karkamış İlçe Müftülüğü|Gaziantep",
+"Nizip İlçe Müftülüğü|Gaziantep",
+"Nurdağı İlçe Müftülüğü|Gaziantep",
+"Oğuzeli İlçe Müftülüğü|Gaziantep",
+"Şahinbey İlçe Müftülüğü|Gaziantep",
+"Şehitkamil İlçe Müftülüğü|Gaziantep",
+"Yavuzeli İlçe Müftülüğü|Gaziantep",
+"Giresun İl Müftülüğü|Giresun",
+"Alucra İlçe Müftülüğü|Giresun",
+"Bulancak İlçe Müftülüğü|Giresun",
+"Çamoluk İlçe Müftülüğü|Giresun",
+"Çanakçı İlçe Müftülüğü|Giresun",
+"Dereli İlçe Müftülüğü|Giresun",
+"Doğankent İlçe Müftülüğü|Giresun",
+"Espiye İlçe Müftülüğü|Giresun",
+"Eynesil İlçe Müftülüğü|Giresun",
+"Görele İlçe Müftülüğü|Giresun",
+"Güce İlçe Müftülüğü|Giresun",
+"Keşap İlçe Müftülüğü|Giresun",
+"Piraziz İlçe Müftülüğü|Giresun",
+"Şebinkarahisar İlçe Müftülüğü|Giresun",
+"Tirebolu İlçe Müftülüğü|Giresun",
+"Yağlıdere İlçe Müftülüğü|Giresun",
+"Gümüşhane İl Müftülüğü|Gümüşhane",
+"Kelkit İlçe Müftülüğü|Gümüşhane",
+"Köse İlçe Müftülüğü|Gümüşhane",
+"Kürtün İlçe Müftülüğü|Gümüşhane",
+"Şiran İlçe Müftülüğü|Gümüşhane",
+"Torul İlçe Müftülüğü|Gümüşhane",
+"Hakkâri İl Müftülüğü|Hakkâri",
+"Çukurca İlçe Müftülüğü|Hakkâri",
+"Derecik İlçe Müftülüğü|Hakkâri",
+"Şemdinli İlçe Müftülüğü|Hakkâri",
+"Yüksekova İlçe Müftülüğü|Hakkâri",
+"Hatay İl Müftülüğü|Hatay",
+"Altınözü İlçe Müftülüğü|Hatay",
+"Antakya İlçe Müftülüğü|Hatay",
+"Arsuz İlçe Müftülüğü|Hatay",
+"Belen İlçe Müftülüğü|Hatay",
+"Defne İlçe Müftülüğü|Hatay",
+"Dörtyol İlçe Müftülüğü|Hatay",
+"Erzin İlçe Müftülüğü|Hatay",
+"Hassa İlçe Müftülüğü|Hatay",
+"İskenderun İlçe Müftülüğü|Hatay",
+"Kırıkhan İlçe Müftülüğü|Hatay",
+"Kumlu İlçe Müftülüğü|Hatay",
+"Payas İlçe Müftülüğü|Hatay",
+"Reyhanlı İlçe Müftülüğü|Hatay",
+"Samandağ İlçe Müftülüğü|Hatay",
+"Yayladağı İlçe Müftülüğü|Hatay",
+"Isparta İl Müftülüğü|Isparta",
+"Aksu İlçe Müftülüğü|Isparta",
+"Atabey İlçe Müftülüğü|Isparta",
+"Eğirdir İlçe Müftülüğü|Isparta",
+"Gelendost İlçe Müftülüğü|Isparta",
+"Gönen İlçe Müftülüğü|Isparta",
+"Keçiborlu İlçe Müftülüğü|Isparta",
+"Senirkent İlçe Müftülüğü|Isparta",
+"Sütçüler İlçe Müftülüğü|Isparta",
+"Şarkikaraağaç İlçe Müftülüğü|Isparta",
+"Uluborlu İlçe Müftülüğü|Isparta",
+"Yalvaç İlçe Müftülüğü|Isparta",
+"Yenişarbademli İlçe Müftülüğü|Isparta",
+"Mersin İl Müftülüğü|Mersin",
+"Akdeniz İlçe Müftülüğü|Mersin",
+"Anamur İlçe Müftülüğü|Mersin",
+"Aydıncık İlçe Müftülüğü|Mersin",
+"Bozyazı İlçe Müftülüğü|Mersin",
+"Çamlıyayla İlçe Müftülüğü|Mersin",
+"Erdemli İlçe Müftülüğü|Mersin",
+"Gülnar İlçe Müftülüğü|Mersin",
+"Mezitli İlçe Müftülüğü|Mersin",
+"Mut İlçe Müftülüğü|Mersin",
+"Silifke İlçe Müftülüğü|Mersin",
+"Tarsus İlçe Müftülüğü|Mersin",
+"Toroslar İlçe Müftülüğü|Mersin",
+"Yenişehir İlçe Müftülüğü|Mersin",
+"İstanbul İl Müftülüğü|İstanbul",
+"Adalar İlçe Müftülüğü|İstanbul",
+"Arnavutköy İlçe Müftülüğü|İstanbul",
+"Ataşehir İlçe Müftülüğü|İstanbul",
+"Avcılar İlçe Müftülüğü|İstanbul",
+"Bağcılar İlçe Müftülüğü|İstanbul",
+"Bahçelievler İlçe Müftülüğü|İstanbul",
+"Bakırköy İlçe Müftülüğü|İstanbul",
+"Başakşehir İlçe Müftülüğü|İstanbul",
+"Bayrampaşa İlçe Müftülüğü|İstanbul",
+"Beşiktaş İlçe Müftülüğü|İstanbul",
+"Beykoz İlçe Müftülüğü|İstanbul",
+"Beylikdüzü İlçe Müftülüğü|İstanbul",
+"Beyoğlu İlçe Müftülüğü|İstanbul",
+"Büyükçekmece İlçe Müftülüğü|İstanbul",
+"Çatalca İlçe Müftülüğü|İstanbul",
+"Çekmeköy İlçe Müftülüğü|İstanbul",
+"Esenler İlçe Müftülüğü|İstanbul",
+"Esenyurt İlçe Müftülüğü|İstanbul",
+"Eyüpsultan İlçe Müftülüğü|İstanbul",
+"Fatih İlçe Müftülüğü|İstanbul",
+"Gaziosmanpaşa İlçe Müftülüğü|İstanbul",
+"Güngören İlçe Müftülüğü|İstanbul",
+"Kadıköy İlçe Müftülüğü|İstanbul",
+"Kağıthane İlçe Müftülüğü|İstanbul",
+"Kartal İlçe Müftülüğü|İstanbul",
+"Küçükçekmece İlçe Müftülüğü|İstanbul",
+"Maltepe İlçe Müftülüğü|İstanbul",
+"Pendik İlçe Müftülüğü|İstanbul",
+"Sancaktepe İlçe Müftülüğü|İstanbul",
+"Sarıyer İlçe Müftülüğü|İstanbul",
+"Silivri İlçe Müftülüğü|İstanbul",
+"Sultanbeyli İlçe Müftülüğü|İstanbul",
+"Sultangazi İlçe Müftülüğü|İstanbul",
+"Şile İlçe Müftülüğü|İstanbul",
+"Şişli İlçe Müftülüğü|İstanbul",
+"Tuzla İlçe Müftülüğü|İstanbul",
+"Ümraniye İlçe Müftülüğü|İstanbul",
+"Üsküdar İlçe Müftülüğü|İstanbul",
+"Zeytinburnu İlçe Müftülüğü|İstanbul",
+"İzmir İl Müftülüğü|İzmir",
+"Aliağa İlçe Müftülüğü|İzmir",
+"Balçova İlçe Müftülüğü|İzmir",
+"Bayındır İlçe Müftülüğü|İzmir",
+"Bayraklı İlçe Müftülüğü|İzmir",
+"Bergama İlçe Müftülüğü|İzmir",
+"Beydağ İlçe Müftülüğü|İzmir",
+"Bornova İlçe Müftülüğü|İzmir",
+"Buca İlçe Müftülüğü|İzmir",
+"Çeşme İlçe Müftülüğü|İzmir",
+"Çiğli İlçe Müftülüğü|İzmir",
+"Dikili İlçe Müftülüğü|İzmir",
+"Foça İlçe Müftülüğü|İzmir",
+"Gaziemir İlçe Müftülüğü|İzmir",
+"Güzelbahçe İlçe Müftülüğü|İzmir",
+"Karabağlar İlçe Müftülüğü|İzmir",
+"Karaburun İlçe Müftülüğü|İzmir",
+"Karşıyaka İlçe Müftülüğü|İzmir",
+"Kemalpaşa İlçe Müftülüğü|İzmir",
+"Kınık İlçe Müftülüğü|İzmir",
+"Kiraz İlçe Müftülüğü|İzmir",
+"Konak İlçe Müftülüğü|İzmir",
+"Menderes İlçe Müftülüğü|İzmir",
+"Menemen İlçe Müftülüğü|İzmir",
+"Narlıdere İlçe Müftülüğü|İzmir",
+"Ödemiş İlçe Müftülüğü|İzmir",
+"Seferihisar İlçe Müftülüğü|İzmir",
+"Selçuk İlçe Müftülüğü|İzmir",
+"Tire İlçe Müftülüğü|İzmir",
+"Torbalı İlçe Müftülüğü|İzmir",
+"Urla İlçe Müftülüğü|İzmir",
+"Kars İl Müftülüğü|Kars",
+"Akyaka İlçe Müftülüğü|Kars",
+"Arpaçay İlçe Müftülüğü|Kars",
+"Digor İlçe Müftülüğü|Kars",
+"Kağızman İlçe Müftülüğü|Kars",
+"Sarıkamış İlçe Müftülüğü|Kars",
+"Selim İlçe Müftülüğü|Kars",
+"Susuz İlçe Müftülüğü|Kars",
+"Kastamonu İl Müftülüğü|Kastamonu",
+"Abana İlçe Müftülüğü|Kastamonu",
+"Ağlı İlçe Müftülüğü|Kastamonu",
+"Araç İlçe Müftülüğü|Kastamonu",
+"Azdavay İlçe Müftülüğü|Kastamonu",
+"Bozkurt İlçe Müftülüğü|Kastamonu",
+"Cide İlçe Müftülüğü|Kastamonu",
+"Çatalzeytin İlçe Müftülüğü|Kastamonu",
+"Daday İlçe Müftülüğü|Kastamonu",
+"Devrekani İlçe Müftülüğü|Kastamonu",
+"Doğanyurt İlçe Müftülüğü|Kastamonu",
+"Hanönü İlçe Müftülüğü|Kastamonu",
+"İhsangazi İlçe Müftülüğü|Kastamonu",
+"İnebolu İlçe Müftülüğü|Kastamonu",
+"Küre İlçe Müftülüğü|Kastamonu",
+"Pınarbaşı İlçe Müftülüğü|Kastamonu",
+"Seydiler İlçe Müftülüğü|Kastamonu",
+"Şenpazar İlçe Müftülüğü|Kastamonu",
+"Taşköprü İlçe Müftülüğü|Kastamonu",
+"Tosya İlçe Müftülüğü|Kastamonu",
+"Kayseri İl Müftülüğü|Kayseri",
+"Akkışla İlçe Müftülüğü|Kayseri",
+"Bünyan İlçe Müftülüğü|Kayseri",
+"Develi İlçe Müftülüğü|Kayseri",
+"Felahiye İlçe Müftülüğü|Kayseri",
+"Hacılar İlçe Müftülüğü|Kayseri",
+"İncesu İlçe Müftülüğü|Kayseri",
+"Kocasinan İlçe Müftülüğü|Kayseri",
+"Melikgazi İlçe Müftülüğü|Kayseri",
+"Özvatan İlçe Müftülüğü|Kayseri",
+"Pınarbaşı İlçe Müftülüğü|Kayseri",
+"Sarıoğlan İlçe Müftülüğü|Kayseri",
+"Sarız İlçe Müftülüğü|Kayseri",
+"Talas İlçe Müftülüğü|Kayseri",
+"Tomarza İlçe Müftülüğü|Kayseri",
+"Yahyalı İlçe Müftülüğü|Kayseri",
+"Yeşilhisar İlçe Müftülüğü|Kayseri",
+"Kırklareli İl Müftülüğü|Kırklareli",
+"Babaeski İlçe Müftülüğü|Kırklareli",
+"Demirköy İlçe Müftülüğü|Kırklareli",
+"Kofçaz İlçe Müftülüğü|Kırklareli",
+"Lüleburgaz İlçe Müftülüğü|Kırklareli",
+"Pehlivanköy İlçe Müftülüğü|Kırklareli",
+"Pınarhisar İlçe Müftülüğü|Kırklareli",
+"Vize İlçe Müftülüğü|Kırklareli",
+"Kırşehir İl Müftülüğü|Kırşehir",
+"Akçakent İlçe Müftülüğü|Kırşehir",
+"Akpınar İlçe Müftülüğü|Kırşehir",
+"Boztepe İlçe Müftülüğü|Kırşehir",
+"Çiçekdağı İlçe Müftülüğü|Kırşehir",
+"Kaman İlçe Müftülüğü|Kırşehir",
+"Mucur İlçe Müftülüğü|Kırşehir",
+"Kocaeli İl Müftülüğü|Kocaeli",
+"Başiskele İlçe Müftülüğü|Kocaeli",
+"Çayırova İlçe Müftülüğü|Kocaeli",
+"Darıca İlçe Müftülüğü|Kocaeli",
+"Derince İlçe Müftülüğü|Kocaeli",
+"Dilovası İlçe Müftülüğü|Kocaeli",
+"Gebze İlçe Müftülüğü|Kocaeli",
+"Gölcük İlçe Müftülüğü|Kocaeli",
+"İzmit İlçe Müftülüğü|Kocaeli",
+"Kandıra İlçe Müftülüğü|Kocaeli",
+"Karamürsel İlçe Müftülüğü|Kocaeli",
+"Kartepe İlçe Müftülüğü|Kocaeli",
+"Körfez İlçe Müftülüğü|Kocaeli",
+"Konya İl Müftülüğü|Konya",
+"Ahırlı İlçe Müftülüğü|Konya",
+"Akören İlçe Müftülüğü|Konya",
+"Akşehir İlçe Müftülüğü|Konya",
+"Altınekin İlçe Müftülüğü|Konya",
+"Beyşehir İlçe Müftülüğü|Konya",
+"Bozkır İlçe Müftülüğü|Konya",
+"Cihanbeyli İlçe Müftülüğü|Konya",
+"Çeltik İlçe Müftülüğü|Konya",
+"Çumra İlçe Müftülüğü|Konya",
+"Derbent İlçe Müftülüğü|Konya",
+"Doğanhisar İlçe Müftülüğü|Konya",
+"Emirgazi İlçe Müftülüğü|Konya",
+"Ereğli İlçe Müftülüğü|Konya",
+"Güneysınır İlçe Müftülüğü|Konya",
+"Hadim İlçe Müftülüğü|Konya",
+"Halkapınar İlçe Müftülüğü|Konya",
+"Hüyük İlçe Müftülüğü|Konya",
+"Ilgın İlçe Müftülüğü|Konya",
+"Kadınhanı İlçe Müftülüğü|Konya",
+"Karapınar İlçe Müftülüğü|Konya",
+"Karatay İlçe Müftülüğü|Konya",
+"Kulu İlçe Müftülüğü|Konya",
+"Meram İlçe Müftülüğü|Konya",
+"Sarayönü İlçe Müftülüğü|Konya",
+"Selçuklu İlçe Müftülüğü|Konya",
+"Seydişehir İlçe Müftülüğü|Konya",
+"Taşkent İlçe Müftülüğü|Konya",
+"Tuzlukçu İlçe Müftülüğü|Konya",
+"Yalıhüyük İlçe Müftülüğü|Konya",
+"Yunak İlçe Müftülüğü|Konya",
+"Kütahya İl Müftülüğü|Kütahya",
+"Altıntaş İlçe Müftülüğü|Kütahya",
+"Aslanapa İlçe Müftülüğü|Kütahya",
+"Çavdarhisar İlçe Müftülüğü|Kütahya",
+"Domaniç İlçe Müftülüğü|Kütahya",
+"Dumlupınar İlçe Müftülüğü|Kütahya",
+"Emet İlçe Müftülüğü|Kütahya",
+"Gediz İlçe Müftülüğü|Kütahya",
+"Hisarcık İlçe Müftülüğü|Kütahya",
+"Pazarlar İlçe Müftülüğü|Kütahya",
+"Simav İlçe Müftülüğü|Kütahya",
+"Şaphane İlçe Müftülüğü|Kütahya",
+"Tavşanlı İlçe Müftülüğü|Kütahya",
+"Malatya İl Müftülüğü|Malatya",
+"Akçadağ İlçe Müftülüğü|Malatya",
+"Arapgir İlçe Müftülüğü|Malatya",
+"Arguvan İlçe Müftülüğü|Malatya",
+"Battalgazi İlçe Müftülüğü|Malatya",
+"Darende İlçe Müftülüğü|Malatya",
+"Doğanşehir İlçe Müftülüğü|Malatya",
+"Doğanyol İlçe Müftülüğü|Malatya",
+"Hekimhan İlçe Müftülüğü|Malatya",
+"Kale İlçe Müftülüğü|Malatya",
+"Kuluncak İlçe Müftülüğü|Malatya",
+"Pütürge İlçe Müftülüğü|Malatya",
+"Yazıhan İlçe Müftülüğü|Malatya",
+"Yeşilyurt İlçe Müftülüğü|Malatya",
+"Manisa İl Müftülüğü|Manisa",
+"Ahmetli İlçe Müftülüğü|Manisa",
+"Akhisar İlçe Müftülüğü|Manisa",
+"Alaşehir İlçe Müftülüğü|Manisa",
+"Demirci İlçe Müftülüğü|Manisa",
+"Gölmarmara İlçe Müftülüğü|Manisa",
+"Gördes İlçe Müftülüğü|Manisa",
+"Kırkağaç İlçe Müftülüğü|Manisa",
+"Köprübaşı İlçe Müftülüğü|Manisa",
+"Kula İlçe Müftülüğü|Manisa",
+"Salihli İlçe Müftülüğü|Manisa",
+"Sarıgöl İlçe Müftülüğü|Manisa",
+"Saruhanlı İlçe Müftülüğü|Manisa",
+"Selendi İlçe Müftülüğü|Manisa",
+"Soma İlçe Müftülüğü|Manisa",
+"Şehzadeler İlçe Müftülüğü|Manisa",
+"Turgutlu İlçe Müftülüğü|Manisa",
+"Yunusemre İlçe Müftülüğü|Manisa",
+"Kahramanmaraş İl Müftülüğü|Kahramanmaraş",
+"Afşin İlçe Müftülüğü|Kahramanmaraş",
+"Andırın İlçe Müftülüğü|Kahramanmaraş",
+"Çağlayancerit İlçe Müftülüğü|Kahramanmaraş",
+"Dulkadiroğlu İlçe Müftülüğü|Kahramanmaraş",
+"Ekinözü İlçe Müftülüğü|Kahramanmaraş",
+"Elbistan İlçe Müftülüğü|Kahramanmaraş",
+"Göksun İlçe Müftülüğü|Kahramanmaraş",
+"Nurhak İlçe Müftülüğü|Kahramanmaraş",
+"Onikişubat İlçe Müftülüğü|Kahramanmaraş",
+"Pazarcık İlçe Müftülüğü|Kahramanmaraş",
+"Türkoğlu İlçe Müftülüğü|Kahramanmaraş",
+"Mardin İl Müftülüğü|Mardin",
+"Artuklu İlçe Müftülüğü|Mardin",
+"Dargeçit İlçe Müftülüğü|Mardin",
+"Derik İlçe Müftülüğü|Mardin",
+"Kızıltepe İlçe Müftülüğü|Mardin",
+"Mazıdağı İlçe Müftülüğü|Mardin",
+"Midyat İlçe Müftülüğü|Mardin",
+"Nusaybin İlçe Müftülüğü|Mardin",
+"Ömerli İlçe Müftülüğü|Mardin",
+"Savur İlçe Müftülüğü|Mardin",
+"Yeşilli İlçe Müftülüğü|Mardin",
+"Muğla İl Müftülüğü|Muğla",
+"Bodrum İlçe Müftülüğü|Muğla",
+"Dalaman İlçe Müftülüğü|Muğla",
+"Datça İlçe Müftülüğü|Muğla",
+"Fethiye İlçe Müftülüğü|Muğla",
+"Kavaklıdere İlçe Müftülüğü|Muğla",
+"Köyceğiz İlçe Müftülüğü|Muğla",
+"Marmaris İlçe Müftülüğü|Muğla",
+"Menteşe İlçe Müftülüğü|Muğla",
+"Milas İlçe Müftülüğü|Muğla",
+"Ortaca İlçe Müftülüğü|Muğla",
+"Seydikemer İlçe Müftülüğü|Muğla",
+"Ula İlçe Müftülüğü|Muğla",
+"Yatağan İlçe Müftülüğü|Muğla",
+"Muş İl Müftülüğü|Muş",
+"Bulanık İlçe Müftülüğü|Muş",
+"Hasköy İlçe Müftülüğü|Muş",
+"Korkut İlçe Müftülüğü|Muş",
+"Malazgirt İlçe Müftülüğü|Muş",
+"Varto İlçe Müftülüğü|Muş",
+"Nevşehir İl Müftülüğü|Nevşehir",
+"Acıgöl İlçe Müftülüğü|Nevşehir",
+"Avanos İlçe Müftülüğü|Nevşehir",
+"Derinkuyu İlçe Müftülüğü|Nevşehir",
+"Gülşehir İlçe Müftülüğü|Nevşehir",
+"Hacıbektaş İlçe Müftülüğü|Nevşehir",
+"Kozaklı İlçe Müftülüğü|Nevşehir",
+"Ürgüp İlçe Müftülüğü|Nevşehir",
+"Niğde İl Müftülüğü|Niğde",
+"Altunhisar İlçe Müftülüğü|Niğde",
+"Bor İlçe Müftülüğü|Niğde",
+"Çamardı İlçe Müftülüğü|Niğde",
+"Çiftlik İlçe Müftülüğü|Niğde",
+"Ulukışla İlçe Müftülüğü|Niğde",
+"Ordu İl Müftülüğü|Ordu",
+"Akkuş İlçe Müftülüğü|Ordu",
+"Altınordu İlçe Müftülüğü|Ordu",
+"Aybastı İlçe Müftülüğü|Ordu",
+"Çamaş İlçe Müftülüğü|Ordu",
+"Çatalpınar İlçe Müftülüğü|Ordu",
+"Çaybaşı İlçe Müftülüğü|Ordu",
+"Fatsa İlçe Müftülüğü|Ordu",
+"Gölköy İlçe Müftülüğü|Ordu",
+"Gülyalı İlçe Müftülüğü|Ordu",
+"Gürgentepe İlçe Müftülüğü|Ordu",
+"İkizce İlçe Müftülüğü|Ordu",
+"Kabadüz İlçe Müftülüğü|Ordu",
+"Kabataş İlçe Müftülüğü|Ordu",
+"Korgan İlçe Müftülüğü|Ordu",
+"Kumru İlçe Müftülüğü|Ordu",
+"Mesudiye İlçe Müftülüğü|Ordu",
+"Perşembe İlçe Müftülüğü|Ordu",
+"Ulubey İlçe Müftülüğü|Ordu",
+"Ünye İlçe Müftülüğü|Ordu",
+"Rize İl Müftülüğü|Rize",
+"Ardeşen İlçe Müftülüğü|Rize",
+"Çamlıhemşin İlçe Müftülüğü|Rize",
+"Çayeli İlçe Müftülüğü|Rize",
+"Derepazarı İlçe Müftülüğü|Rize",
+"Fındıklı İlçe Müftülüğü|Rize",
+"Güneysu İlçe Müftülüğü|Rize",
+"Hemşin İlçe Müftülüğü|Rize",
+"İkizdere İlçe Müftülüğü|Rize",
+"İyidere İlçe Müftülüğü|Rize",
+"Kalkandere İlçe Müftülüğü|Rize",
+"Pazar İlçe Müftülüğü|Rize",
+"Sakarya İl Müftülüğü|Sakarya",
+"Adapazarı İlçe Müftülüğü|Sakarya",
+"Akyazı İlçe Müftülüğü|Sakarya",
+"Arifiye İlçe Müftülüğü|Sakarya",
+"Erenler İlçe Müftülüğü|Sakarya",
+"Ferizli İlçe Müftülüğü|Sakarya",
+"Geyve İlçe Müftülüğü|Sakarya",
+"Hendek İlçe Müftülüğü|Sakarya",
+"Karapürçek İlçe Müftülüğü|Sakarya",
+"Karasu İlçe Müftülüğü|Sakarya",
+"Kaynarca İlçe Müftülüğü|Sakarya",
+"Kocaali İlçe Müftülüğü|Sakarya",
+"Pamukova İlçe Müftülüğü|Sakarya",
+"Sapanca İlçe Müftülüğü|Sakarya",
+"Serdivan İlçe Müftülüğü|Sakarya",
+"Söğütlü İlçe Müftülüğü|Sakarya",
+"Taraklı İlçe Müftülüğü|Sakarya",
+"Samsun İl Müftülüğü|Samsun",
+"Alaçam İlçe Müftülüğü|Samsun",
+"Asarcık İlçe Müftülüğü|Samsun",
+"Atakum İlçe Müftülüğü|Samsun",
+"Ayvacık İlçe Müftülüğü|Samsun",
+"Bafra İlçe Müftülüğü|Samsun",
+"Canik İlçe Müftülüğü|Samsun",
+"Çarşamba İlçe Müftülüğü|Samsun",
+"Havza İlçe Müftülüğü|Samsun",
+"İlkadım İlçe Müftülüğü|Samsun",
+"Kavak İlçe Müftülüğü|Samsun",
+"Ladik İlçe Müftülüğü|Samsun",
+"Salıpazarı İlçe Müftülüğü|Samsun",
+"Tekkeköy İlçe Müftülüğü|Samsun",
+"Terme İlçe Müftülüğü|Samsun",
+"Vezirköprü İlçe Müftülüğü|Samsun",
+"Yakakent İlçe Müftülüğü|Samsun",
+"19 Mayıs İlçe Müftülüğü|Samsun",
+"Siirt İl Müftülüğü|Siirt",
+"Baykan İlçe Müftülüğü|Siirt",
+"Eruh İlçe Müftülüğü|Siirt",
+"Kurtalan İlçe Müftülüğü|Siirt",
+"Pervari İlçe Müftülüğü|Siirt",
+"Şirvan İlçe Müftülüğü|Siirt",
+"Tillo İlçe Müftülüğü|Siirt",
+"Sinop İl Müftülüğü|Sinop",
+"Ayancık İlçe Müftülüğü|Sinop",
+"Boyabat İlçe Müftülüğü|Sinop",
+"Dikmen İlçe Müftülüğü|Sinop",
+"Durağan İlçe Müftülüğü|Sinop",
+"Erfelek İlçe Müftülüğü|Sinop",
+"Gerze İlçe Müftülüğü|Sinop",
+"Saraydüzü İlçe Müftülüğü|Sinop",
+"Türkeli İlçe Müftülüğü|Sinop",
+"Sivas İl Müftülüğü|Sivas",
+"Akıncılar İlçe Müftülüğü|Sivas",
+"Altınyayla İlçe Müftülüğü|Sivas",
+"Divriği İlçe Müftülüğü|Sivas",
+"Doğanşar İlçe Müftülüğü|Sivas",
+"Gemerek İlçe Müftülüğü|Sivas",
+"Gölova İlçe Müftülüğü|Sivas",
+"Gürün İlçe Müftülüğü|Sivas",
+"Hafik İlçe Müftülüğü|Sivas",
+"İmranlı İlçe Müftülüğü|Sivas",
+"Kangal İlçe Müftülüğü|Sivas",
+"Koyulhisar İlçe Müftülüğü|Sivas",
+"Suşehri İlçe Müftülüğü|Sivas",
+"Şarkışla İlçe Müftülüğü|Sivas",
+"Ulaş İlçe Müftülüğü|Sivas",
+"Yıldızeli İlçe Müftülüğü|Sivas",
+"Zara İlçe Müftülüğü|Sivas",
+"Tekirdağ İl Müftülüğü|Tekirdağ",
+"Çerkezköy İlçe Müftülüğü|Tekirdağ",
+"Çorlu İlçe Müftülüğü|Tekirdağ",
+"Ergene İlçe Müftülüğü|Tekirdağ",
+"Hayrabolu İlçe Müftülüğü|Tekirdağ",
+"Kapaklı İlçe Müftülüğü|Tekirdağ",
+"Malkara İlçe Müftülüğü|Tekirdağ",
+"Marmaraereğlisi İlçe Müftülüğü|Tekirdağ",
+"Muratlı İlçe Müftülüğü|Tekirdağ",
+"Saray İlçe Müftülüğü|Tekirdağ",
+"Süleymanpaşa İlçe Müftülüğü|Tekirdağ",
+"Şarköy İlçe Müftülüğü|Tekirdağ",
+"Tokat İl Müftülüğü|Tokat",
+"Almus İlçe Müftülüğü|Tokat",
+"Artova İlçe Müftülüğü|Tokat",
+"Başçiftlik İlçe Müftülüğü|Tokat",
+"Erbaa İlçe Müftülüğü|Tokat",
+"Niksar İlçe Müftülüğü|Tokat",
+"Pazar İlçe Müftülüğü|Tokat",
+"Reşadiye İlçe Müftülüğü|Tokat",
+"Sulusaray İlçe Müftülüğü|Tokat",
+"Turhal İlçe Müftülüğü|Tokat",
+"Yeşilyurt İlçe Müftülüğü|Tokat",
+"Zile İlçe Müftülüğü|Tokat",
+"Trabzon İl Müftülüğü|Trabzon",
+"Akçaabat İlçe Müftülüğü|Trabzon",
+"Araklı İlçe Müftülüğü|Trabzon",
+"Arsin İlçe Müftülüğü|Trabzon",
+"Beşikdüzü İlçe Müftülüğü|Trabzon",
+"Çarşıbaşı İlçe Müftülüğü|Trabzon",
+"Çaykara İlçe Müftülüğü|Trabzon",
+"Dernekpazarı İlçe Müftülüğü|Trabzon",
+"Düzköy İlçe Müftülüğü|Trabzon",
+"Hayrat İlçe Müftülüğü|Trabzon",
+"Köprübaşı İlçe Müftülüğü|Trabzon",
+"Maçka İlçe Müftülüğü|Trabzon",
+"Of İlçe Müftülüğü|Trabzon",
+"Ortahisar İlçe Müftülüğü|Trabzon",
+"Sürmene İlçe Müftülüğü|Trabzon",
+"Şalpazarı İlçe Müftülüğü|Trabzon",
+"Tonya İlçe Müftülüğü|Trabzon",
+"Vakfıkebir İlçe Müftülüğü|Trabzon",
+"Yomra İlçe Müftülüğü|Trabzon",
+"Tunceli İl Müftülüğü|Tunceli",
+"Çemişgezek İlçe Müftülüğü|Tunceli",
+"Hozat İlçe Müftülüğü|Tunceli",
+"Mazgirt İlçe Müftülüğü|Tunceli",
+"Nazımiye İlçe Müftülüğü|Tunceli",
+"Ovacık İlçe Müftülüğü|Tunceli",
+"Pertek İlçe Müftülüğü|Tunceli",
+"Pülümür İlçe Müftülüğü|Tunceli",
+"Şanlıurfa İl Müftülüğü|Şanlıurfa",
+"Akçakale İlçe Müftülüğü|Şanlıurfa",
+"Birecik İlçe Müftülüğü|Şanlıurfa",
+"Bozova İlçe Müftülüğü|Şanlıurfa",
+"Ceylanpınar İlçe Müftülüğü|Şanlıurfa",
+"Eyyübiye İlçe Müftülüğü|Şanlıurfa",
+"Halfeti İlçe Müftülüğü|Şanlıurfa",
+"Haliliye İlçe Müftülüğü|Şanlıurfa",
+"Harran İlçe Müftülüğü|Şanlıurfa",
+"Hilvan İlçe Müftülüğü|Şanlıurfa",
+"Karaköprü İlçe Müftülüğü|Şanlıurfa",
+"Siverek İlçe Müftülüğü|Şanlıurfa",
+"Suruç İlçe Müftülüğü|Şanlıurfa",
+"Viranşehir İlçe Müftülüğü|Şanlıurfa",
+"Uşak İl Müftülüğü|Uşak",
+"Banaz İlçe Müftülüğü|Uşak",
+"Eşme İlçe Müftülüğü|Uşak",
+"Karahallı İlçe Müftülüğü|Uşak",
+"Sivaslı İlçe Müftülüğü|Uşak",
+"Ulubey İlçe Müftülüğü|Uşak",
+"Van İl Müftülüğü|Van",
+"Bahçesaray İlçe Müftülüğü|Van",
+"Başkale İlçe Müftülüğü|Van",
+"Çaldıran İlçe Müftülüğü|Van",
+"Çatak İlçe Müftülüğü|Van",
+"Edremit İlçe Müftülüğü|Van",
+"Erciş İlçe Müftülüğü|Van",
+"Gevaş İlçe Müftülüğü|Van",
+"Gürpınar İlçe Müftülüğü|Van",
+"İpekyolu İlçe Müftülüğü|Van",
+"Muradiye İlçe Müftülüğü|Van",
+"Özalp İlçe Müftülüğü|Van",
+"Saray İlçe Müftülüğü|Van",
+"Tuşba İlçe Müftülüğü|Van",
+"Yozgat İl Müftülüğü|Yozgat",
+"Akdağmadeni İlçe Müftülüğü|Yozgat",
+"Aydıncık İlçe Müftülüğü|Yozgat",
+"Boğazlıyan İlçe Müftülüğü|Yozgat",
+"Çandır İlçe Müftülüğü|Yozgat",
+"Çayıralan İlçe Müftülüğü|Yozgat",
+"Çekerek İlçe Müftülüğü|Yozgat",
+"Kadışehri İlçe Müftülüğü|Yozgat",
+"Saraykent İlçe Müftülüğü|Yozgat",
+"Sarıkaya İlçe Müftülüğü|Yozgat",
+"Sorgun İlçe Müftülüğü|Yozgat",
+"Şefaatli İlçe Müftülüğü|Yozgat",
+"Yenifakılı İlçe Müftülüğü|Yozgat",
+"Yerköy İlçe Müftülüğü|Yozgat",
+"Zonguldak İl Müftülüğü|Zonguldak",
+"Alaplı İlçe Müftülüğü|Zonguldak",
+"Çaycuma İlçe Müftülüğü|Zonguldak",
+"Devrek İlçe Müftülüğü|Zonguldak",
+"Ereğli İlçe Müftülüğü|Zonguldak",
+"Gökçebey İlçe Müftülüğü|Zonguldak",
+"Kilimli İlçe Müftülüğü|Zonguldak",
+"Kozlu İlçe Müftülüğü|Zonguldak",
+"Aksaray İl Müftülüğü|Aksaray",
+"Ağaçören İlçe Müftülüğü|Aksaray",
+"Eskil İlçe Müftülüğü|Aksaray",
+"Gülağaç İlçe Müftülüğü|Aksaray",
+"Güzelyurt İlçe Müftülüğü|Aksaray",
+"Ortaköy İlçe Müftülüğü|Aksaray",
+"Sarıyahşi İlçe Müftülüğü|Aksaray",
+"Sultanhanı İlçe Müftülüğü|Aksaray",
+"Bayburt İl Müftülüğü|Bayburt",
+"Aydıntepe İlçe Müftülüğü|Bayburt",
+"Demirözü İlçe Müftülüğü|Bayburt",
+"Karaman İl Müftülüğü|Karaman",
+"Ayrancı İlçe Müftülüğü|Karaman",
+"Başyayla İlçe Müftülüğü|Karaman",
+"Ermenek İlçe Müftülüğü|Karaman",
+"Kazımkarabekir İlçe Müftülüğü|Karaman",
+"Sarıveliler İlçe Müftülüğü|Karaman",
+"Kırıkkale İl Müftülüğü|Kırıkkale",
+"Bahşili İlçe Müftülüğü|Kırıkkale",
+"Balışeyh İlçe Müftülüğü|Kırıkkale",
+"Çelebi İlçe Müftülüğü|Kırıkkale",
+"Delice İlçe Müftülüğü|Kırıkkale",
+"Karakeçili İlçe Müftülüğü|Kırıkkale",
+"Keskin İlçe Müftülüğü|Kırıkkale",
+"Sulakyurt İlçe Müftülüğü|Kırıkkale",
+"Yahşihan İlçe Müftülüğü|Kırıkkale",
+"Batman İl Müftülüğü|Batman",
+"Beşiri İlçe Müftülüğü|Batman",
+"Gercüş İlçe Müftülüğü|Batman",
+"Hasankeyf İlçe Müftülüğü|Batman",
+"Kozluk İlçe Müftülüğü|Batman",
+"Sason İlçe Müftülüğü|Batman",
+"Şırnak İl Müftülüğü|Şırnak",
+"Beytüşşebap İlçe Müftülüğü|Şırnak",
+"Cizre İlçe Müftülüğü|Şırnak",
+"Güçlükonak İlçe Müftülüğü|Şırnak",
+"İdil İlçe Müftülüğü|Şırnak",
+"Silopi İlçe Müftülüğü|Şırnak",
+"Uludere İlçe Müftülüğü|Şırnak",
+"Bartın İl Müftülüğü|Bartın",
+"Amasra İlçe Müftülüğü|Bartın",
+"Kurucaşile İlçe Müftülüğü|Bartın",
+"Ulus İlçe Müftülüğü|Bartın",
+"Ardahan İl Müftülüğü|Ardahan",
+"Çıldır İlçe Müftülüğü|Ardahan",
+"Damal İlçe Müftülüğü|Ardahan",
+"Göle İlçe Müftülüğü|Ardahan",
+"Hanak İlçe Müftülüğü|Ardahan",
+"Posof İlçe Müftülüğü|Ardahan",
+"Iğdır İl Müftülüğü|Iğdır",
+"Aralık İlçe Müftülüğü|Iğdır",
+"Karakoyunlu İlçe Müftülüğü|Iğdır",
+"Tuzluca İlçe Müftülüğü|Iğdır",
+"Yalova İl Müftülüğü|Yalova",
+"Altınova İlçe Müftülüğü|Yalova",
+"Armutlu İlçe Müftülüğü|Yalova",
+"Çınarcık İlçe Müftülüğü|Yalova",
+"Çiftlikköy İlçe Müftülüğü|Yalova",
+"Termal İlçe Müftülüğü|Yalova",
+"Karabük İl Müftülüğü|Karabük",
+"Eflani İlçe Müftülüğü|Karabük",
+"Eskipazar İlçe Müftülüğü|Karabük",
+"Ovacık İlçe Müftülüğü|Karabük",
+"Safranbolu İlçe Müftülüğü|Karabük",
+"Yenice İlçe Müftülüğü|Karabük",
+"Kilis İl Müftülüğü|Kilis",
+"Elbeyli İlçe Müftülüğü|Kilis",
+"Musabeyli İlçe Müftülüğü|Kilis",
+"Polateli İlçe Müftülüğü|Kilis",
+"Osmaniye İl Müftülüğü|Osmaniye",
+"Bahçe İlçe Müftülüğü|Osmaniye",
+"Düziçi İlçe Müftülüğü|Osmaniye",
+"Hasanbeyli İlçe Müftülüğü|Osmaniye",
+"Kadirli İlçe Müftülüğü|Osmaniye",
+"Sumbas İlçe Müftülüğü|Osmaniye",
+"Toprakkale İlçe Müftülüğü|Osmaniye",
+"Düzce İl Müftülüğü|Düzce",
+"Akçakoca İlçe Müftülüğü|Düzce",
+"Cumayeri İlçe Müftülüğü|Düzce",
+"Çilimli İlçe Müftülüğü|Düzce",
+"Gölyaka İlçe Müftülüğü|Düzce",
+"Gümüşova İlçe Müftülüğü|Düzce",
+"Kaynaşlı İlçe Müftülüğü|Düzce",
+"Yığılca İlçe Müftülüğü|Düzce"
+];
+const MUFTULUK_LISTESI = MUFTULUK_HAM.map(x => {
+  const p = x.split('|');
+  return {ad: p[0], il: p[1]};
+});
 
 function hesapYili(){
   const y = parseInt(String(state.tarih || '').slice(0,4), 10);
@@ -2783,6 +3897,11 @@ function round2(n){ return Math.round((n + Number.EPSILON)*100)/100; }
 /* Excel "#,##0.00" biçimi: binlik ayıracı nokta, ondalık ayıracı virgül.
    toLocaleString bazı tarayıcılarda opsiyonları yok saydığı için elle yapılıyor. */
 /* Binlik ayraçlı tutar; kuruş sıfırsa kuruş yazılmaz: 10000 -> "10.000" */
+/* Ondalık ayracı Türkçeleştirir; basamak sayısına dokunmaz (34.25 -> 34,25) */
+function trSayi(n){
+  if(n === '' || n === null || n === undefined || isNaN(n)) return '';
+  return String(n).replace('.', ',');
+}
 function trTutar(n){
   const t = trMoney(n);
   return t.endsWith(',00') ? t.slice(0,-3) : t;
@@ -2998,6 +4117,12 @@ function makeDefaultState(){
   muhasebeBirimiTarihi: '',
   // Belgenin altına elle yazılan serbest not
   notMetni: '',
+  // Birimdeki görevliler ve yetkileri (aşağıdaki tablo)
+  gorevliler: [],
+  // Belgede imzası görünecek görevliler (boşsa o sütun hiç çıkmaz)
+  mutemet: '',
+  // Atama onayının sayısı (girilirse belgede "Atama Tarihi ve Sayısı" olur)
+  atamaSayisi: '',
   // Personel listesinden gelen derece/ünvan eşlenemediğinde gösterilen uyarı
   unvanUyari: '',
   // Personel raporundaki "(derece-kademe-ekgösterge)" hücresinden okunan değerler.
@@ -3194,7 +4319,7 @@ function compute(){
   c.damgaOrani = damgaOraniSayisal;
   c.netOdenen = round2(c.damgaMatrahi - c.damgaVergisi);
 
-  c.sentenceE30 = `${state.nereye} atanan ${state.adSoyad} ve aile fertleri için sürekli görev yolluğu olarak tahakkuk eden `;
+  c.sentenceE30 = `${yonelmeEkle(state.nereye)} atanan ${state.adSoyad} ve aile fertleri için sürekli görev yolluğu olarak tahakkuk eden `;
   c.sentenceE31 = `${trMoney(c.R28)} Türk lirasını (${c.toplamYazi}) gösterir bildirimdir.`;
 
   return c;
@@ -3217,7 +4342,7 @@ const CALC_STATIC_HEAD = `
               </tr>
               <tr>
                 <th>Gün Sayısı</th><th>Yevmiye</th><th>Tutarı</th>
-                <th>Türü</th><th>Ücreti</th>
+                <th>Çeşidi /<br>Mevki</th><th>Ücreti</th>
                 <th>Sabit<br>Unsur</th><th>Mesafe<br>Km/Mil</th><th>Tutarı</th>
                 <th>Cinsi</th><th>Kuru</th>
               </tr>
@@ -3244,14 +4369,14 @@ function docHeadRows(c){
       <td class="dh-v">${state.birimAdi || bos}</td>
     </tr>
     <tr>
-      <td class="dh-l">Ünvanı</td>
+      <td class="dh-l">Unvanı</td>
       <td class="dh-v" colspan="2">${c.unvanEfektif || bos}</td>
       <td class="dh-title" colspan="8">YURTİÇİ / YURTDIŞI SÜREKLİ GÖREV YOLLUĞU BİLDİRİMİ</td>
       <td class="dh-l" colspan="2">Bütçe Yılı</td>
       <td class="dh-v">${c.butceYili || bos}</td>
     </tr>
     <tr>
-      <td class="dh-l">Aylık Kadro Der. / Pozisyonu</td>
+      <td class="dh-l">Aylık Kadro Derecesi ve Pozisyonu</td>
       <td class="dh-v" colspan="2">${state.pozisyon || bos}</td>
       <td class="dh-sub" colspan="8">(${state.tayinTuru})</td>
       <td class="dh-l" colspan="2">Önceden Avans Almışsa Aldığı</td>
@@ -3268,8 +4393,12 @@ function docHeadRows(c){
       <td class="dh-l">Gündeliği</td>
       <td class="dh-v" colspan="2">${c.gundelikBelirsiz ? '-' : trMoney(c.gundelik)}</td>
       <td class="dh-mid dh-bot" colspan="8"></td>
-      <td class="dh-l" colspan="2">Atama Tarihi</td>
-      <td class="dh-v">${fmtDateTR(state.atamaTarihi) || bos}</td>
+      <td class="dh-l" colspan="2">${state.atamaSayisi ? 'Atama Tarihi ve Sayısı' : 'Atama Tarihi'}</td>
+      <td class="dh-v dh-atama">
+        <span class="dh-tarih">${fmtDateTR(state.atamaTarihi) || bos}</span><input type="text" class="dh-sayi"
+               data-k="atamaSayisi" value="${escapeHtml(state.atamaSayisi||'')}"
+               placeholder="atama sayısını giriniz" title="Atama onayının sayısı">
+      </td>
     </tr>`;
 }
 
@@ -3298,20 +4427,20 @@ function buildSheet1Shell(){
             ${fieldRow('Ayrılma / Hesaplama', `<input type="date" data-k="tarih" value="${state.tarih}">`)}
             ${fieldRow('Muhasebe Tarihi', `<input type="date" data-k="muhasebeTarihi" value="${state.muhasebeTarihi}">`)}
             ${fieldRow('Tayin Türü', `<select data-k="tayinTuru">${tayinOpts}</select>`)}
-            ${fieldRow('Ünvanı', `<div class="combo" id="unvanCombo">
-                 <input type="text" data-k="unvan" autocomplete="off" value="${state.unvan}" placeholder="Ünvan seçiniz veya yazınız">
+            ${fieldRow('Unvanı', `<div class="combo" id="unvanCombo">
+                 <input type="text" data-k="unvan" autocomplete="off" value="${state.unvan}" placeholder="Unvan seçiniz veya yazınız">
                  <span class="combo-ok" id="unvanCaret">▾</span>
                  <div class="combo-liste" id="unvanListe"></div>
                </div>`)}
-            ${fieldRow('Aylık Kadro Der. / Poz.', `<select data-k="pozisyon">${pozOpts}</select>`)}
+            ${fieldRow('Aylık Kadro Derecesi ve Pozisyonu', `<select data-k="pozisyon">${pozOpts}</select>`)}
             ${fieldRow('Gidilen Mesafe Km', `<input type="text" inputmode="decimal" data-tutar="1" data-k="mesafeKm" value="${state.mesafeKm}" placeholder="Gidilen mesafeyi km olarak giriniz">`)}
-            ${fieldRow('Taşıt Ücreti', `<input type="text" inputmode="decimal" data-tutar="1" data-k="tasitUcreti" value="${state.tasitUcreti}" placeholder="Taşıt ücretini giriniz">`)}
+            ${fieldRow('Taşıt Ücreti', `<input type="text" inputmode="decimal" data-tutar="kurus" data-k="tasitUcreti" value="${state.tasitUcreti}" placeholder="Taşıt ücretini giriniz">`)}
             ${fieldRow('Adı Soyadı', `<div id="adSoyadWrap"></div>`)}
             ${fieldRow('Nereden Nereye Gidildiği', `<input type="text" data-k="nereye" value="${state.nereye}" placeholder="Örn: Reyhanlı'dan Antakya'ya">`)}
-            ${fieldRow('Taşıtın Türü', `<select data-k="tasitTuru">${tasitOpts}</select>`)}
+            ${fieldRow('Taşıtın Çeşidi / Mevki', `<select data-k="tasitTuru">${tasitOpts}</select>`)}
             ${fieldRow('Yol Süresi Gün', `<select data-k="yolSuresiGun">${yolGunOpts}</select>`)}
             ${fieldRow('Dövizin Cinsi (varsa)', `<input type="text" data-k="dovizCinsi" value="${state.dovizCinsi}" placeholder="Yurt dışı ise döviz cinsini giriniz">`)}
-            ${fieldRow('Dövizin Kuru (varsa)', `<input type="text" inputmode="decimal" data-tutar="1" data-k="dovizKuru" value="${state.dovizKuru}" placeholder="Yurt dışı ise döviz kurunu giriniz">`)}
+            ${fieldRow('Dövizin Kuru (varsa)', `<input type="text" inputmode="decimal" data-k="dovizKuru" value="${state.dovizKuru}" placeholder="Yurt dışı ise döviz kurunu giriniz">`)}
           </div>
         </div>
 
@@ -3346,9 +4475,9 @@ function buildSheet1Shell(){
           <div class="panel-head blue">Ek Gösterge / Gündelik Hesabı (otomatik)</div>
           <div class="panel-body">
             <table>
-              <tr><td>Ünvan Verisi</td><td id="mpUnvan"></td><td>İstisna Girişi</td><td><input type="text" id="ovrUnvanInput" data-k="ovrUnvan" value="${state.ovrUnvan}" placeholder="istisna giriniz"></td></tr>
+              <tr><td>Unvan Verisi</td><td id="mpUnvan"></td><td>İstisna Girişi</td><td><input type="text" id="ovrUnvanInput" data-k="ovrUnvan" value="${state.ovrUnvan}" placeholder="istisna giriniz"></td></tr>
               <tr><td>Ek Göstergesi</td><td id="mpEkGos"></td><td>İstisna</td><td><input type="number" step="any" id="ovrEkGostergeInput" data-k="ovrEkGosterge" value="${state.ovrEkGosterge}" placeholder="istisna giriniz"></td></tr>
-              <tr><td>Gündeliği</td><td id="mpGundelik"></td><td>İstisna</td><td><input type="text" inputmode="decimal" data-tutar="1" id="ovrGundelikInput" data-k="ovrGundelik" value="${state.ovrGundelik}" placeholder="istisna giriniz"></td></tr>
+              <tr><td>Gündeliği</td><td id="mpGundelik"></td><td>İstisna</td><td><input type="text" inputmode="decimal" data-tutar="kurus" id="ovrGundelikInput" data-k="ovrGundelik" value="${state.ovrGundelik}" placeholder="istisna giriniz"></td></tr>
             </table>
             <div id="unvanUyari" class="unvan-uyari" style="display:none;"></div>
           </div>
@@ -3357,12 +4486,26 @@ function buildSheet1Shell(){
         <div class="panel">
           <div class="panel-head blue">Birim Tanımlamalarını Yapınız</div>
           <div class="panel-body">
-            ${fieldRow('Harcama Birimi Adı', `<input type="text" data-k="birimAdi" value="${state.birimAdi}" placeholder="İl / İlçe Müftülüğü giriniz">`)}
-            ${fieldRow('Harcama Yetkilisi Adı Soyadı', `<input type="text" data-k="harcamaYetkilisi" value="${state.harcamaYetkilisi}" placeholder="Harcama Yetkilisi Adı Soyadı giriniz">`)}
-            ${fieldRow('Harcama Yetkilisi Ünvanı', `<input type="text" data-k="harcamaYetkilisiUnvan" value="${state.harcamaYetkilisiUnvan}" placeholder="Harcama Yetkilisi Ünvanı giriniz">`)}
+            ${fieldRow('Harcama Birimi Adı', `<div class="combo" id="birimCombo">
+                 <input type="text" data-k="birimAdi" autocomplete="off" value="${state.birimAdi}" placeholder="Müftülük seçiniz veya yazınız">
+                 <span class="combo-ok">▾</span>
+                 <div class="combo-liste" id="birimListe"></div>
+               </div>`)}
+            ${fieldRow('Düzenleyen (Mutemet)', `<select data-k="mutemet" id="selMutemet"></select>`)}
+            ${fieldRow('Gerçekleştirme Görevlisi', `<select data-k="gerceklestirmeGorevlisi" id="selGerceklestirme"></select>`)}
+            ${fieldRow('Harcama Yetkilisi Adı Soyadı', `<select data-k="harcamaYetkilisi" id="selHarcamaYetkilisi"></select>`)}
+            ${fieldRow('Harcama Yetkilisi Unvanı', `<input type="text" data-k="harcamaYetkilisiUnvan" value="${state.harcamaYetkilisiUnvan}" placeholder="Harcama Yetkilisi Unvanı giriniz">`)}
             ${fieldRow('Bilgi İçin', `<span class="fixed-val">${BILGI_ICIN}</span>`)}
             ${fieldRow('Önceden Avans Almışsa Aldığı', `<input type="text" inputmode="decimal" data-tutar="1" data-k="oncedenAvans" value="${state.oncedenAvans}" placeholder="Avans alındıysa tutarını giriniz" title="Girilen tutar toplamdan düşülür; damga vergisi kalan tutar üzerinden hesaplanır.">`)}
-            ${fieldRow('Muhasebe Birimi ve Tarihi', `<input type="text" data-k="muhasebeBirimiTarihi" value="${state.muhasebeBirimiTarihi}" placeholder="Muhasebe birimi ve tarihini giriniz">`)}
+            ${fieldRow('Muhasebe Birimi ve Tarihi', `<div class="tarih-kutu" id="mbtKutu">
+                 <input type="text" data-k="muhasebeBirimiTarihi" value="${escapeHtml(state.muhasebeBirimiTarihi||'')}" placeholder="Muhasebe birimini yazınız, tarihi takvimden seçiniz">
+                 <button type="button" class="tarih-btn" title="Takvimden tarih seç" aria-label="Takvimden tarih seç">
+                   <svg viewBox="0 0 24 24" class="ikon" style="margin:0;width:14px;height:14px;">
+                     <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>
+                   </svg>
+                 </button>
+                 <input type="date" class="tarih-gizli" tabindex="-1" aria-hidden="true">
+               </div>`)}
             ${fieldRow('Not (elle girilir)', `<textarea data-k="notMetni" rows="2" placeholder="Belgenin altında (**) Not: olarak görünür">${state.notMetni}</textarea>`)}
           </div>
         </div>
@@ -3387,11 +4530,106 @@ function buildSheet1Shell(){
         <div class="footnote" id="footnote"></div>
       </div>
     </div>
+
+    <!-- ============ GÖREVLİ TANIMLAMA ALANI (kağıda basılmaz) ============ -->
+    <div class="gorevli-blok no-print" id="gorevliBlok">
+      <div class="panel-head blue">Görevli Tanımlamaları</div>
+      <div style="overflow-x:auto;">
+        <table class="gorevli-tablo">
+          <thead>
+            <tr>
+              <th style="width:28px;">#</th>
+              <th style="min-width:180px;">ADI SOYADI</th>
+              <th style="min-width:150px;">ÜNVANI</th>
+              <th style="min-width:150px;">VEKÂLET ÜNVANI<span class="alt">(Harcama Yetkilisi için)</span></th>
+              <th style="width:92px;">DÜZENLEYEN<span class="alt">(MUTEMET)</span></th>
+              <th style="width:92px;">GERÇEKLEŞTİRME<br>GÖREVLİSİ</th>
+              <th style="width:82px;">HARCAMA<br>YETKİLİSİ</th>
+              <th style="width:82px;">MUHASEBE<br>YETKİLİSİ</th>
+              <th style="width:40px;"></th>
+            </tr>
+          </thead>
+          <tbody id="gorevliBody"></tbody>
+        </table>
+      </div>
+      <div class="gorevli-alt">
+        <span class="hint" id="gorevliHint" style="flex:1;text-align:left;"></span>
+        <span style="display:flex;gap:6px;white-space:nowrap;">
+          <button type="button" class="btn" id="gorevliEkle">+ Kişi Ekle</button>
+          <button type="button" class="btn secondary" id="gorevliToggle">Tüm satırları göster</button>
+        </span>
+      </div>
+    </div>
   `;
 
   bindInputs(root);
   bindUnvanCombo(root);
   bindFamilyInputs(root);
+  bindOkGezinme(root);
+
+  comboKur('#birimCombo', ()=> MUFTULUK_LISTESI.map(m => ({deger:m.ad, etiket:m.il})), root);
+  /* Takvim düğmesi: seçilen tarihi metin kutusuna yazar. Metinde zaten
+     gg.aa.yyyy varsa onu değiştirir, yoksa sonuna ekler. Kullanıcı istediği
+     gibi elle de yazabilir; kutu normal metin kutusudur. */
+  const mbt = root.querySelector('#mbtKutu');
+  if(mbt){
+    const metin = mbt.querySelector('input[type="text"]');
+    const gizli = mbt.querySelector('.tarih-gizli');
+    const dugme = mbt.querySelector('.tarih-btn');
+    dugme.addEventListener('click', ()=>{
+      try{
+        if(gizli.showPicker) gizli.showPicker();
+        else { gizli.style.pointerEvents='auto'; gizli.click(); }
+      }catch(e){ gizli.click(); }
+    });
+    gizli.addEventListener('change', ()=>{
+      if(!gizli.value) return;
+      const t = fmtDateTR(gizli.value);
+      const eski = String(metin.value || '').trim();
+      const yeni = /\d{2}\.\d{2}\.\d{4}/.test(eski)
+        ? eski.replace(/\d{2}\.\d{2}\.\d{4}/, t)
+        : (eski ? eski + ' ' + t : t);
+      metin.value = yeni;
+      metin.dispatchEvent(new Event('input', {bubbles:true}));
+    });
+  }
+
+  const theadKap = root.querySelector('#s1Thead');
+  if(theadKap){
+    const uygulaAtama = (e)=>{
+      const el = e.target.closest && e.target.closest('[data-k="atamaSayisi"]');
+      if(!el) return;
+      state.atamaSayisi = el.value;
+      renderAll();
+    };
+    theadKap.addEventListener('input', uygulaAtama);
+    theadKap.addEventListener('change', uygulaAtama);
+  }
+
+  gorevlileriYukle();
+  renderGorevliler();
+  rolSecimleriniTazele();
+  const gTogBtn = root.querySelector('#gorevliToggle');
+  if(gTogBtn) gTogBtn.addEventListener('click', ()=>{
+    gorevliHepsiGoster = !gorevliHepsiGoster;
+    gorevliGorunurluk();
+  });
+
+  const gEkleBtn = root.querySelector('#gorevliEkle');
+  if(gEkleBtn) gEkleBtn.addEventListener('click', ()=>{
+    // Gizli duran boş satır varsa yenisini eklemeden onu aç
+    let hedef = state.gorevliler.findIndex(g => String(g.ad||'').trim() === '');
+    if(hedef < 0){
+      state.gorevliler.push(bosGorevli());
+      hedef = state.gorevliler.length - 1;
+      gorevlileriKaydet();
+      renderGorevliler();
+    }
+    const satir = document.querySelector(`[data-gorevli-row="${hedef}"]`);
+    if(satir) satir.style.display = '';
+    const kutu = document.querySelector(`#gorevliBody input[data-gk="ad"][data-gi="${hedef}"]`);
+    if(kutu) kutu.focus();
+  });
 
   // Boş aile satırlarını göster/gizle düğmesi
   const famBtn = root.querySelector('#famToggle');
@@ -3420,7 +4658,8 @@ function buildSheet1Shell(){
       if(ham === '') return;
       const sayi = num(ham);
       if(!sayi) return;
-      const bicimli = trTutar(sayi);
+      // data-tutar="kurus" -> 250,00 · data-tutar="1" -> 1.250 (kuruş yazılmaz)
+      const bicimli = (el.dataset.tutar === 'kurus') ? trMoney(sayi) : trTutar(sayi);
       if(bicimli !== el.value){
         el.value = bicimli;
         el.dispatchEvent(new Event('input', {bubbles:true}));
@@ -3436,11 +4675,18 @@ function buildSheet1Shell(){
    veya seçim yaparken odak (focus) ve imleç konumu ASLA kaybolmaz. */
 function updateSheet1Dynamic(c){
   refreshUnvanDatalist();   // hesap yılı değiştiyse ünvan listesi yenilensin
+  rolSecimleriniTazele();
   updateFamilyVisibility(); // dolu satır sayısına göre boş satırları gizle
 
   // Belge başlığı (Excel 1-5. satırlar) + sabit sütun başlıkları
   const theadEl = document.getElementById('s1Thead');
-  if(theadEl) theadEl.innerHTML = docHeadRows(c) + CALC_STATIC_HEAD;
+  if(theadEl && !theadEl.contains(document.activeElement)){
+    theadEl.innerHTML = docHeadRows(c) + CALC_STATIC_HEAD;
+  } else if(theadEl){
+    // Atama sayısı kutusuna yazılırken yalnızca etiketi güncelle
+    const etiket = theadEl.querySelector('td.dh-atama')?.previousElementSibling;
+    if(etiket) etiket.textContent = state.atamaSayisi ? 'Atama Tarihi ve Sayısı' : 'Atama Tarihi';
+  }
 
   document.getElementById('mpUnvan').textContent = c.unvanTam || '-';
   document.getElementById('mpEkGos').textContent = c.ekGosterge;
@@ -3485,7 +4731,7 @@ function updateSheet1Dynamic(c){
       <td>${r.mesafe === '' ? '' : trTutar(r.mesafe)}</td>
       <td>${r.degTutar===''?'':trMoney(r.degTutar)}</td>
       <td>${r.dovizCinsi}</td>
-      <td>${r.kur===''?'':r.kur}</td>
+      <td>${trSayi(r.kur)}</td>
       <td><b>${trMoney(r.toplam)}</b></td>
     </tr>`;
   }).join('');
@@ -3505,7 +4751,7 @@ function updateSheet1Dynamic(c){
   `;
 
   document.getElementById('wordsRow').textContent = c.toplamYazi;
-  document.getElementById('sentenceRow').innerHTML = `${c.sentenceE30}<br>${c.sentenceE31}`;
+  document.getElementById('sentenceRow').innerHTML = `${c.sentenceE30}${c.sentenceE31}`;
 
   document.getElementById('summaryBox').innerHTML = `
     ${c.avans > 0 ? `<div class="cell"><span class="lab">Önceden Alınan Avans (−)</span><span class="val">${trTutar(c.avans)} TL</span></div>` : ''}
@@ -3515,18 +4761,15 @@ function updateSheet1Dynamic(c){
 
   document.getElementById('netBanner').textContent = `NET ÖDENEN: ${trMoney(c.netOdenen)} TL`;
 
-  document.getElementById('signGrid').innerHTML = `
+  const imzalar = imzaSutunlari(c);
+  const sg = document.getElementById('signGrid');
+  sg.style.gridTemplateColumns = `repeat(${imzalar.length}, 1fr)`;
+  sg.innerHTML = imzalar.map(i => `
     <div class="sign-box">
       <div>${fmtDateTR(state.muhasebeTarihi)}</div>
-      <div class="role">Birim Harcama Yetkilisi (*)</div>
-      <div class="line">${state.harcamaYetkilisi}<br>${state.harcamaYetkilisiUnvan}</div>
-    </div>
-    <div class="sign-box">
-      <div>${fmtDateTR(state.muhasebeTarihi)}</div>
-      <div class="role">Bildirim Sahibi</div>
-      <div class="line">${state.adSoyad}<br>${c.unvanEfektif}</div>
-    </div>
-  `;
+      <div class="role">${i.rol}</div>
+      <div class="line">${escapeHtml(i.ad||'')}<br>${escapeHtml(i.unvan||'')}</div>
+    </div>`).join('');
 
   const notHtml = `<div class="note-manual">(**) Not: ${escapeHtml(state.notMetni||'').replace(/\n/g,'<br>')}</div>`;
   document.getElementById('footnote').innerHTML = `
@@ -3537,7 +4780,26 @@ function updateSheet1Dynamic(c){
   `;
 
   renderPrintView(c);
+  cumleyiSigdir();
 }
+
+/* Tahakkuk cümlesi tek satır olacağı için, uzun isim/güzergâhta kutuya
+   sığmayabilir. Sığana kadar yazı boyutu kademeli küçültülür (11.5 -> 8 px).
+   Baskı tarafında da aynısı yapılır (8 -> 5.5 px). */
+function cumleyiSigdir(){
+  const ayarla = (el, buyuk, kucuk) => {
+    if(!el) return;
+    el.style.fontSize = buyuk + 'px';
+    let p = buyuk;
+    while(el.scrollWidth > el.clientWidth && p > kucuk){
+      p = Math.round((p - 0.25) * 100) / 100;
+      el.style.fontSize = p + 'px';
+    }
+  };
+  ayarla(document.getElementById('sentenceRow'), 11.5, 8);
+  ayarla(document.querySelector('#print-root .pv-cumle'), 8, 5.5);
+}
+window.addEventListener('resize', cumleyiSigdir);
 
 function renderSheet1(){
   const c = compute();
@@ -3568,6 +4830,123 @@ function updateFamilyVisibility(){
       ? `${gizli} boş satır gizli. Yeni kişi için "+ Kişi Ekle".`
       : 'Akrabalık derecesi seçilmeyen satırlar hesaba katılmaz.';
   }
+}
+
+/* ============================================================
+   GÖREVLİ TANIMLAMALARI
+   Birimdeki kişiler ve yetkileri. Kağıda basılmaz; bu tarayıcıda
+   saklanır ve "Yeni Hesaplama" ile silinmez (kurum bilgisi sayılır).
+   ============================================================ */
+const GOREVLI_KEY = 'yolluk_gorevliler_v1';
+let gorevliHepsiGoster = false;   // boş görevli satırları görünsün mü?
+
+function bosGorevli(){
+  return {ad:'', unvan:'', vekalet:'', mutemet:false, gerceklestirme:false,
+          harcama:false, muhasebe:false};
+}
+function gorevlileriYukle(){
+  try{
+    const ham = localStorage.getItem(GOREVLI_KEY);
+    const dizi = ham ? JSON.parse(ham) : null;
+    if(Array.isArray(dizi) && dizi.length){
+      state.gorevliler = dizi.map(g => {
+        const y = Object.assign(bosGorevli(), g);
+        // Eski kayıtlarda "false" gibi metin değerler olabilir; gerçek boolean'a çevir
+        ['mutemet','gerceklestirme','harcama','muhasebe'].forEach(a => {
+          y[a] = (y[a] === true || y[a] === 'true' || y[a] === 1 || y[a] === '1');
+        });
+        ['ad','unvan','vekalet'].forEach(a => { y[a] = String(y[a] || '').trim(); });
+        return y;
+      });
+      return;
+    }
+  }catch(e){}
+  state.gorevliler = [bosGorevli(), bosGorevli(), bosGorevli()];
+}
+function gorevlileriKaydet(){
+  try{ localStorage.setItem(GOREVLI_KEY, JSON.stringify(state.gorevliler)); }catch(e){}
+}
+
+function renderGorevliler(){
+  const govde = document.getElementById('gorevliBody');
+  if(!govde) return;
+  if(!Array.isArray(state.gorevliler) || !state.gorevliler.length){
+    state.gorevliler = [bosGorevli()];
+  }
+  const kutu = (i, alan, baslik) =>
+    `<td><input type="checkbox" data-gk="${alan}" data-gi="${i}" ${state.gorevliler[i][alan]?'checked':''} title="${baslik}"></td>`;
+
+  govde.innerHTML = state.gorevliler.map((g,i)=>`
+    <tr data-gorevli-row="${i}">
+      <td class="sira">${i+1}</td>
+      <td><input type="text" data-gk="ad" data-gi="${i}" value="${escapeHtml(g.ad)}" placeholder="adı soyadı"></td>
+      <td><input type="text" data-gk="unvan" data-gi="${i}" value="${escapeHtml(g.unvan)}" placeholder="örn. Şube Müdürü"></td>
+      <td><input type="text" class="vekalet" data-gk="vekalet" data-gi="${i}" value="${escapeHtml(g.vekalet)}" placeholder="örn. İlçe Müftü V."></td>
+      ${kutu(i,'mutemet','Düzenleyen (Mutemet)')}
+      ${kutu(i,'gerceklestirme','Gerçekleştirme Görevlisi')}
+      ${kutu(i,'harcama','Harcama Yetkilisi')}
+      ${kutu(i,'muhasebe','Muhasebe Yetkilisi')}
+      <td><button type="button" class="sil-btn" data-gsil="${i}" title="Satırı sil">🗑</button></td>
+    </tr>`).join('');
+
+  govde.querySelectorAll('[data-gk]').forEach(el=>{
+    const i = +el.dataset.gi, k = el.dataset.gk;
+    const uygula = ()=>{
+      state.gorevliler[i][k] = (el.type === 'checkbox') ? el.checked : el.value;
+      gorevlileriKaydet();
+      gorevliOzet();
+      rolSecimleriniTazele();
+      renderAll();
+    };
+    el.addEventListener('input', uygula);
+    el.addEventListener('change', uygula);
+  });
+  govde.querySelectorAll('[data-gsil]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      state.gorevliler.splice(+el.dataset.gsil, 1);
+      if(!state.gorevliler.length) state.gorevliler.push(bosGorevli());
+      gorevlileriKaydet(); renderGorevliler();
+    });
+  });
+  gorevliOzet();
+}
+
+/* Sadece adı yazılmış satırlar görünür; boşlar gizlenir.
+   Üzerinde yazı yazılan satır, adı silinse bile gizlenmez. */
+function gorevliGorunurluk(){
+  const satirlar = document.querySelectorAll('[data-gorevli-row]');
+  if(!satirlar.length) return;
+  const aktif = document.activeElement;
+  let gorunen = 0;
+  satirlar.forEach(tr => {
+    const i = +tr.dataset.gorevliRow;
+    const g = state.gorevliler[i] || {};
+    const dolu = ['ad','unvan','vekalet'].some(a => String(g[a]||'').trim() !== '');
+    const icinde = aktif && tr.contains(aktif);
+    const goster = gorevliHepsiGoster || dolu || icinde;
+    tr.style.display = goster ? '' : 'none';
+    if(goster) gorunen++;
+  });
+  // hiç satır kalmadıysa ilkini göster
+  if(gorunen === 0 && satirlar[0]) satirlar[0].style.display = '';
+  const btn = document.getElementById('gorevliToggle');
+  if(btn) btn.textContent = gorevliHepsiGoster
+    ? 'Boş satırları gizle' : `Tüm satırları göster (${state.gorevliler.length})`;
+}
+
+function gorevliOzet(){
+  const el = document.getElementById('gorevliHint');
+  gorevliGorunurluk();
+  if(!el) return;
+  const doluMu = g => ['ad','unvan','vekalet'].some(a => String(g[a]||'').trim() !== '');
+  const dolu = state.gorevliler.filter(g => String(g.ad||'').trim() !== '').length;
+  const gizli = state.gorevliler.filter(g => !doluMu(g)).length;
+  const say = a => state.gorevliler.filter(g => g[a] && String(g.ad||'').trim() !== '').length;
+  el.textContent = dolu
+    ? `${dolu} kişi tanımlı — Mutemet: ${say('mutemet')}, Gerçekleştirme: ${say('gerceklestirme')}, `
+      + `Harcama Yetkilisi: ${say('harcama')}, Muhasebe Yetkilisi: ${say('muhasebe')}`
+      + (gizli > 0 && !gorevliHepsiGoster ? `  ·  ${gizli} boş satır gizli` : '')
+    : 'Henüz kişi tanımlanmadı. Adı soyadını yazıp yetkilerini işaretleyiniz.';
 }
 
 function renderFamilyRows(){
@@ -3608,10 +4987,115 @@ function refreshUnvanDatalist(){
    Tarayıcının kendi <datalist> listesi, kutuda yazı varken listeyi
    o yazıya göre süzüyor ve seçim yapıldıktan sonra geriye tek satır
    kalıyordu. Bu yüzden liste tamamen kendimiz çiziyoruz:
-     - Kutuya tıklayınca DAİMA tüm ünvanlar açılır.
+     - Kutuya tıklayınca DAİMA tüm unvanlar açılır.
      - Yazmaya başlayınca süzülür.
      - Yukarı/aşağı ok + Enter ile seçilebilir, Esc kapatır.
    ------------------------------------------------------------ */
+/* Genel amaçlı aranabilir açılır liste.
+   kapSec: kapsayıcı seçici, listeFn: () => [{deger, etiket}] */
+/* Belgede görünecek imza sütunları.
+   Düzenleyen (Mutemet) ve Gerçekleştirme Görevlisi YALNIZCA seçilmişse çıkar;
+   seçilmezse belge Örnek No: 28'in aslıyla birebir aynı kalır. */
+function imzaSutunlari(c){
+  const liste = [];
+  if(String(state.mutemet||'').trim())
+    liste.push({rol:'Düzenleyen (Mutemet)', ad:state.mutemet, unvan:gorevliUnvani(state.mutemet)});
+  if(String(state.gerceklestirmeGorevlisi||'').trim())
+    liste.push({rol:'Gerçekleştirme Görevlisi', ad:state.gerceklestirmeGorevlisi, unvan:gorevliUnvani(state.gerceklestirmeGorevlisi)});
+  liste.push({rol:'Birim Harcama Yetkilisi (*)', ad:state.harcamaYetkilisi, unvan:state.harcamaYetkilisiUnvan});
+  liste.push({rol:'Bildirim Sahibi', ad:state.adSoyad, unvan:c.unvanEfektif});
+  return liste;
+}
+
+function comboKur(kapSec, listeFn, root){
+  const kap = (root || document).querySelector(kapSec);
+  if(!kap || kap.dataset.bagli) return;
+  kap.dataset.bagli = '1';
+  const inp   = kap.querySelector('input');
+  const liste = kap.querySelector('.combo-liste');
+  let secIdx = -1;
+  const norm = t => String(t||'').toLocaleLowerCase('tr')
+                     .replace(/i̇/g,'i').replace(/\s+/g,' ').trim();
+  function ciz(suz){
+    const tum = listeFn();
+    const q = norm(suz);
+    const veri = q ? tum.filter(o => norm(o.deger + ' ' + (o.etiket||'')).includes(q)) : tum;
+    secIdx = -1;
+    liste.innerHTML = veri.length
+      ? veri.slice(0, 400).map(o =>
+          `<div data-deger="${String(o.deger).replace(/"/g,'&quot;')}">${o.deger}` +
+          (o.etiket ? ` <span style="color:#888;">— ${o.etiket}</span>` : '') + `</div>`).join('')
+          + (veri.length > 400 ? '<div class="combo-bos">… yazarak daraltınız</div>' : '')
+      : '<div class="combo-bos">Eşleşen kayıt yok</div>';
+  }
+  function ac(suz){
+    ciz(suz); liste.classList.add('acik'); liste.scrollTop = 0;
+    const k = inp.getBoundingClientRect();
+    const ust = k.top - 6, alt = window.innerHeight - k.bottom - 6;
+    const yukari = ust >= 150 || ust >= alt;
+    liste.classList.toggle('yukari', yukari);
+    liste.style.maxHeight = Math.max(120, Math.min(300, yukari ? ust : alt)) + 'px';
+  }
+  function kapat(){ liste.classList.remove('acik'); secIdx = -1; }
+  function sec(d){ inp.value = d; inp.dispatchEvent(new Event('input',{bubbles:true})); kapat(); }
+  function isaretle(){
+    const o = liste.querySelectorAll('div[data-deger]');
+    o.forEach((x,k)=>x.classList.toggle('secili', k===secIdx));
+    if(secIdx>=0 && o[secIdx]) o[secIdx].scrollIntoView({block:'nearest'});
+  }
+  inp.addEventListener('mousedown', (e)=>{
+    if(liste.classList.contains('acik')) kapat(); else ac('');
+    e.stopPropagation();
+  });
+  inp.addEventListener('input', ()=>{ ac(inp.value); });
+  inp.addEventListener('keydown', (e)=>{
+    const o = liste.querySelectorAll('div[data-deger]');
+    if(e.key==='ArrowDown'){ if(!liste.classList.contains('acik')){ ac(''); return e.preventDefault(); }
+      secIdx=Math.min(secIdx+1,o.length-1); isaretle(); e.preventDefault(); }
+    else if(e.key==='ArrowUp'){ secIdx=Math.max(secIdx-1,0); isaretle(); e.preventDefault(); }
+    else if(e.key==='Enter'){ if(liste.classList.contains('acik') && secIdx>=0 && o[secIdx]){ sec(o[secIdx].dataset.deger); e.preventDefault(); } }
+    else if(e.key==='Escape'){ kapat(); }
+  });
+  liste.addEventListener('mousedown', (e)=>{
+    const o = e.target.closest('div[data-deger]');
+    if(!o) return; e.preventDefault(); sec(o.dataset.deger);
+  });
+  document.addEventListener('mousedown', (e)=>{ if(!kap.contains(e.target)) kapat(); });
+  inp.addEventListener('blur', ()=>{ setTimeout(kapat, 120); });
+}
+
+/* ---- Görevli tablosundan yardımcılar ---- */
+function gorevliListesi(alan){
+  return (state.gorevliler || [])
+    .filter(g => g[alan] && String(g.ad||'').trim() !== '')
+    .map(g => String(g.ad).trim());
+}
+/* Belgede yazılacak ünvan: vekâlet ünvanı doluysa O yazılır. */
+function gorevliUnvani(ad){
+  const g = (state.gorevliler || []).find(x => String(x.ad||'').trim() === String(ad||'').trim());
+  if(!g) return '';
+  const v = String(g.vekalet||'').trim();
+  return v ? v : String(g.unvan||'').trim();
+}
+/* Rol açılır listelerini tazeler (içerik değişmediyse dokunmaz). */
+function rolSecimleriniTazele(){
+  const kur = (id, alan, bosMetin) => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    const adlar = gorevliListesi(alan);
+    const mevcut = state[el.dataset.k] || '';
+    if(mevcut && adlar.indexOf(mevcut) < 0) adlar.push(mevcut);   // elle girilmiş eski değer kaybolmasın
+    const imza = bosMetin + '||' + adlar.join('|') + '||' + mevcut;
+    if(el.dataset.imza === imza) return;
+    el.dataset.imza = imza;
+    el.innerHTML = `<option value="">${bosMetin}</option>` +
+      adlar.map(a => `<option value="${a.replace(/"/g,'&quot;')}" ${a===mevcut?'selected':''}>${a}</option>`).join('');
+  };
+  kur('selMutemet',          'mutemet',        '— yok (belgede görünmesin) —');
+  kur('selGerceklestirme',   'gerceklestirme', '— yok (belgede görünmesin) —');
+  kur('selHarcamaYetkilisi', 'harcama',        '— seçiniz —');
+}
+
 function bindUnvanCombo(root){
   const kap = (root || document).querySelector('#unvanCombo');
   if(!kap || kap.dataset.bagli) return;
@@ -3630,7 +5114,7 @@ function bindUnvanCombo(root){
     const veri = q ? tum.filter(u => norm(u).includes(q)) : tum;
     secIdx = -1;
     if(!veri.length){
-      liste.innerHTML = '<div class="combo-bos">Eşleşen ünvan yok</div>';
+      liste.innerHTML = '<div class="combo-bos">Eşleşen unvan yok</div>';
     } else {
       liste.innerHTML = veri.map(u =>
         `<div data-deger="${u.replace(/"/g,'&quot;')}">${u}</div>`).join('');
@@ -3710,27 +5194,91 @@ function unvanYilUyarisi(){
   const yil = hesapYili();
   if(unvanListesiYil(yil).indexOf(u) >= 0) return '';
   if(yil >= 2023 && UNVAN_2023_KARSILIK[u]){
-    return `"${u}" ünvanı 2023 yılından itibaren kaldırıldı. ${yil} hesabında `
+    return `"${u}" unvanı 2023 yılından itibaren kaldırıldı. ${yil} hesabında `
          + `"${UNVAN_2023_KARSILIK[u]}" karşılığı kullanıldı; belgede de bu yazacak.`;
   }
   if(yil <= 2022 && UNVAN_2022_ADAYLAR[u]){
-    return `"${u}" ünvanı ${yil} yılında yoktu (2023'te getirildi). Ünvanı alanından `
+    return `"${u}" unvanı ${yil} yılında yoktu (2023'te getirildi). Unvanı alanından `
          + `şunlardan birini seçiniz: ${UNVAN_2022_ADAYLAR[u].join('  •  ')}`;
   }
-  return `"${u}" ünvanı ${yil} yılı ek gösterge tablosunda bulunmuyor. `
-       + `Ünvanı alanından listeden bir seçim yapınız.`;
+  return `"${u}" unvanı ${yil} yılı ek gösterge tablosunda bulunmuyor. `
+       + `Unvanı alanından listeden bir seçim yapınız.`;
 }
 
 function bindInputs(root){
   root.querySelectorAll('[data-k]').forEach(el=>{
     const apply = ()=>{
       state[el.dataset.k] = el.value;
-      // Personel listesinden isim seçilince derece + ünvan otomatik gelsin
+      // Personel listesinden isim seçilince derece + unvan otomatik gelsin
       if(el.dataset.k === 'adSoyad') applyPersonelByName(el.value);
+      /* Kullanıcı Unvanı ya da Aylık Kadro Derecesi'ni ELLE değiştirdiyse,
+         personel raporundan gelen şahsi ek gösterge artık geçerli değildir;
+         hesap doğrudan referans tablosundan yapılır. */
+      if(el.dataset.k === 'unvan' || el.dataset.k === 'pozisyon'){
+        state.personelEkGos = '';
+        state.personelKademe = '';
+        state.unvanUyari = '';
+      }
+      // Harcama Yetkilisi seçilince ünvanı görevli tablosundan gelsin
+      if(el.dataset.k === 'harcamaYetkilisi'){
+        const u = gorevliUnvani(el.value);
+        if(u){
+          state.harcamaYetkilisiUnvan = u;
+          const kutu = document.querySelector('[data-k="harcamaYetkilisiUnvan"]');
+          if(kutu) kutu.value = u;
+        }
+      }
       renderAll();
     };
     el.addEventListener('input', apply);
     el.addEventListener('change', apply);
+  });
+}
+
+/* ------------------------------------------------------------
+   SOL PANELDE OK TUŞLARIYLA GEZİNME
+   Yazı kutularında ↓ / Enter bir alt alana, ↑ bir üst alana geçirir.
+   Açılır listeler (<select>), tarih kutuları ve arama kutuları (ünvan,
+   müftülük, personel) kendi ok tuşu davranışlarını kullandığı için
+   onlarda devreye girmez — sadece oraya GEÇİŞ yapılır.
+   ------------------------------------------------------------ */
+function bindOkGezinme(root){
+  // root'un kendisi #s1-root olabilir; querySelector yalnızca alt öğelere bakar
+  const kap = (root && root.id === 's1-root')
+            ? root
+            : ((root || document).querySelector('#s1-root') || document.getElementById('s1-root'));
+  if(!kap || kap.dataset.okBagli) return;
+  kap.dataset.okBagli = '1';
+
+  const gorunur = el => !!(el.offsetParent || el.getClientRects().length);
+  const alanlar = ()=> [...kap.querySelectorAll('.panel input, .panel select, .panel textarea')]
+      .filter(el => !el.disabled && el.type !== 'hidden' && el.type !== 'checkbox' && gorunur(el));
+
+  const kendiOkKullanir = el =>
+       el.tagName === 'SELECT'
+    || el.type === 'date' || el.type === 'month'
+    || el.closest('.combo')            // ünvan / müftülük arama kutuları
+    || el.closest('#adSoyadCombo')     // personel arama kutusu (varsa)
+    || el.tagName === 'TEXTAREA'
+    || el.hasAttribute('data-fk');     // aile satırları kendi gezinmesini yapar
+
+  kap.addEventListener('keydown', (e)=>{
+    if(e.key !== 'ArrowDown' && e.key !== 'ArrowUp' && e.key !== 'Enter') return;
+    const el = e.target;
+    if(!el || !el.tagName) return;
+    // Açılır liste ve tarih kutularında ok tuşları kendi işini yapar,
+    // ama ENTER ile bir sonraki alana geçilebilir.
+    if(kendiOkKullanir(el) && e.key !== 'Enter') return;
+    if(e.key === 'Enter' && el.tagName === 'TEXTAREA') return;
+    const liste = alanlar();
+    const i = liste.indexOf(el);
+    if(i < 0) return;
+    const yon = (e.key === 'ArrowUp') ? -1 : 1;
+    const hedef = liste[i + yon];
+    if(!hedef) return;
+    e.preventDefault();
+    hedef.focus();
+    if(hedef.select && hedef.type !== 'date') { try{ hedef.select(); }catch(err){} }
   });
 }
 
@@ -3807,7 +5355,7 @@ function renderPrintView(c){
 
     const mStyle  = mHasCell  ? '' : GRAY;
     const noStyle = noHasCell ? '' : GRAY;
-    const pqStyle = isSelf ? YEL : '';
+    const pqStyle = '';   // baskıda sarı zemin yok, beyaz kalır
 
     if(!r.active){
       return `<tr>
@@ -3831,7 +5379,7 @@ function renderPrintView(c){
       <td class="bx pv-c" style="${noStyle}">${r.mesafe === '' ? '' : trTutar(r.mesafe)}</td>
       <td class="bx pv-c" style="${noStyle}">${r.degTutar===''?'':trMoney(r.degTutar)}</td>
       <td class="bx pv-c" style="${pqStyle}">${r.dovizCinsi}</td>
-      <td class="bx pv-c" style="${pqStyle}">${r.kur===''?'':r.kur}</td>
+      <td class="bx pv-c" style="${pqStyle}">${trSayi(r.kur)}</td>
       <td class="bx pv-c">${trMoney(r.toplam)}</td>
     </tr>`;
   }).join('');
@@ -3856,7 +5404,7 @@ function renderPrintView(c){
     </tr>
     <!-- ===== satır 2 ===== -->
     <tr>
-      <td class="bx pv-l">Ünvanı</td>
+      <td class="bx pv-l">Unvanı</td>
       <td class="bx pv-c" colspan="2">${c.unvanEfektif}</td>
       <td class="bl br pv-title" colspan="8">YURTİÇİ / YURTDIŞI SÜREKLİ GÖREV YOLLUĞU BİLDİRİMİ</td>
       <td class="bx pv-l" colspan="2">Bütçe Yılı</td>
@@ -3864,25 +5412,27 @@ function renderPrintView(c){
     </tr>
     <!-- ===== satır 3 ===== -->
     <tr>
-      <td class="bx pv-l">Aylık Kadro Der. / Pozisyonu</td>
+      <td class="bx pv-l">Aylık Kadro Derecesi ve Pozisyonu</td>
       <td class="bx pv-c" colspan="2">${state.pozisyon}</td>
       <td class="bl br pv-sub" colspan="8">(${state.tayinTuru})</td>
-      <td class="bl bt br pv-l" colspan="3">Önceden Avans Almışsa Aldığı${c.avans ? ' &nbsp; ' + trTutar(c.avans) : ''}</td>
+      <td class="bx pv-l" colspan="2">Önceden Avans Almışsa Aldığı</td>
+      <td class="bx pv-c">${c.avans ? trTutar(c.avans) : ''}</td>
     </tr>
     <!-- ===== satır 4 ===== -->
     <tr>
       <td class="bx pv-l">Ek Göstergesi</td>
       <td class="bx pv-c" colspan="2">${c.ekGosterge}</td>
       <td class="bl br" colspan="8"></td>
-      <td class="bl bb br pv-l" colspan="3">Muhasebe Birimi ve Tarihi${state.muhasebeBirimiTarihi ? ' &nbsp; ' + state.muhasebeBirimiTarihi : ''}</td>
+      <td class="bx pv-l" colspan="2">Muhasebe Birimi ve Tarihi</td>
+      <td class="bx pv-c">${escapeHtml(state.muhasebeBirimiTarihi || '')}</td>
     </tr>
     <!-- ===== satır 5 ===== -->
     <tr>
       <td class="bx pv-l">Gündeliği</td>
       <td class="bx pv-c" colspan="2">${trMoney(c.gundelik)}</td>
       <td class="bl br" colspan="8"></td>
-      <td class="bl bt br pv-l" colspan="2">Atama Tarihi</td>
-      <td class="bl bt br pv-c">${fmtDateTR(state.atamaTarihi)}</td>
+      <td class="bl bt br pv-l" colspan="2">${state.atamaSayisi ? 'Atama Tarihi ve Sayısı' : 'Atama Tarihi'}</td>
+      <td class="bl bt br pv-c">${fmtDateTR(state.atamaTarihi)}${state.atamaSayisi ? ' - ' + escapeHtml(state.atamaSayisi) : ''}</td>
     </tr>
 
     <!-- ===== başlık satırları 6-9 ===== -->
@@ -3897,7 +5447,7 @@ function renderPrintView(c){
       <td class="bx pv-h" rowspan="3">TOPLAM TUTAR</td>
     </tr>
     <tr>
-      <td class="bx pv-h" rowspan="3">Türü</td>
+      <td class="bx pv-h" rowspan="3">Çeşidi / Mevki</td>
       <td class="bx pv-h" rowspan="2">Ücreti</td>
       <td class="bx pv-h" rowspan="2">Sabit Unsur</td>
       <td class="bx pv-h" colspan="2">Değişken Unsur</td>
@@ -3937,74 +5487,57 @@ function renderPrintView(c){
       <td class="bx pv-r">${trMoney(c.R28)}</td>
     </tr>
 
-    ${c.avans > 0 ? `
-    <!-- avans girildiyse: mahsup satırları -->
-    <tr>
-      <td class="bl bt" colspan="9"></td>
-      <td colspan="2"></td>
-      <td class="bx pv-l pv-tot" colspan="2">Önceden Alınan Avans (−)</td>
-      <td class="bx pv-r pv-tot">${trTutar(c.avans)}</td>
-    </tr>
-` : ''}
-    <!-- ===== satır 29: (gizli yazı hücresi) + Damga Vergisi ===== -->
-    <tr>
-      <td class="${c.avans > 0 ? 'bl' : 'bl bt'}" colspan="9"></td>
-      <td colspan="2"></td>
-      <td class="bx pv-l pv-tot" colspan="2">Damga Vergisi</td>
-      <td class="bx pv-r pv-tot">${trMoney(c.damgaVergisi)}</td>
-    </tr>
-    <!-- ===== satır 30: cümle 1 + Net Ödenen ===== -->
-    <tr>
-      <td class="bl pv-l" colspan="11">${c.sentenceE30}</td>
-      <td class="bx pv-l pv-tot" colspan="2">Net Ödenen</td>
-      <td class="bx pv-r pv-tot">${trMoney(c.netOdenen)}</td>
-    </tr>
-    <!-- ===== satır 31: cümle 2 ===== -->
-    <tr>
-      <td class="bl pv-l" colspan="13">${c.sentenceE31}</td>
-      <td class="bt br"></td>
-    </tr>
+    <!-- ===== Tahakkuk cümlesi + sağda toplamlar (aralarında boş satır YOK) =====
+         Cümle GENEL TOPLAM'ın hemen altındaki satırda, solda tek satır hâlinde.
+         Sağ sütunda toplamlar art arda dizilir. -->
+    ${(()=>{
+      const toplamlar = [];
+      if(c.avans > 0) toplamlar.push(['Önceden Alınan Avans (−)', trTutar(c.avans)]);
+      toplamlar.push(['Damga Vergisi', trMoney(c.damgaVergisi)]);
+      toplamlar.push(['Net Ödenen',    trMoney(c.netOdenen)]);
+      return toplamlar.map((t, i) => `
+      <tr>
+        ${i === 0
+          ? `<td class="bl br bt pv-l pv-cumle" colspan="11">${c.sentenceE30}${c.sentenceE31}</td>`
+          : `<td class="bl br" colspan="11"></td>`}
+        <td class="bx pv-l pv-tot" colspan="2">${t[0]}</td>
+        <td class="bx pv-r pv-tot">${t[1]}</td>
+      </tr>`).join('');
+    })()}
 
-    <!-- ===== satır 32-36: imza bloğu (iç kenarlık YOK) ===== -->
-    <tr>
-      <td class="bl" colspan="5"></td>
-      <td class="pv-c" colspan="3">${fmtDateTR(state.muhasebeTarihi)}</td>
-      <td class="pv-c" colspan="3">${fmtDateTR(state.muhasebeTarihi)}</td>
-      <td colspan="2"></td>
-      <td class="br"></td>
-    </tr>
-    <tr>
-      <td class="bl" colspan="5"></td>
-      <td class="pv-c" colspan="3">Birim Harcama Yetkilisi (*)</td>
-      <td class="pv-c" colspan="3">Bildirim Sahibi</td>
-      <td colspan="2"></td>
-      <td class="br"></td>
-    </tr>
-    <tr>
-      <td class="bl" colspan="4"></td>
-      <td class="pv-c">Adı Soyadı</td>
-      <td class="pv-c" colspan="3">${state.harcamaYetkilisi}</td>
-      <td class="pv-c" colspan="3">${state.adSoyad}</td>
-      <td colspan="2"></td>
-      <td class="br"></td>
-    </tr>
-    <tr>
-      <td class="bl pv-l pv-foot" colspan="3" rowspan="2">(*) Bu kısım bildirim sahibinin atama işleminden bilgisi<br>olan amir tarafından imzalanacaktır.</td>
-      <td></td>
-      <td class="pv-c">Unvanı</td>
-      <td class="pv-c" colspan="3">${state.harcamaYetkilisiUnvan}</td>
-      <td class="pv-c" colspan="3">${c.unvanEfektif}</td>
-      <td colspan="2"></td>
-      <td class="br"></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="pv-c">İmzası</td>
-      <td class="pv-c" colspan="3">.............................................</td>
-      <td class="pv-c" colspan="3">.............................................</td>
-      <td colspan="2"></td>
-      <td class="br"></td>
-    </tr>
+    <!-- ===== imza bloğu (sütun sayısı seçime göre değişir) ===== -->
+    ${(()=>{
+      const im = imzaSutunlari(c);
+      const N = im.length, gen = 3;
+      const sol = (N <= 2) ? 4 : (N === 3 ? 2 : 1);
+      const sag = 14 - sol - 1 - N*gen;
+      const bos = (n, sinif) => n > 0 ? `<td class="${sinif||''}" colspan="${n}"></td>` : '';
+      const sagBos = sag > 1 ? `<td colspan="${sag-1}"></td><td class="br"></td>`
+                             : (sag === 1 ? `<td class="br"></td>` : '');
+      const satir = (etiket, alan) => `<tr>
+        ${bos(sol,'bl')}
+        <td class="pv-c">${etiket}</td>
+        ${im.map(i => `<td class="pv-c" colspan="${gen}">${escapeHtml(String(alan(i)||''))}</td>`).join('')}
+        ${sagBos}
+      </tr>`;
+      return `
+      <tr>
+        ${bos(sol+1,'bl')}
+        ${im.map(()=>`<td class="pv-c" colspan="${gen}">${fmtDateTR(state.muhasebeTarihi)}</td>`).join('')}
+        ${sagBos}
+      </tr>
+      <tr>
+        ${bos(sol+1,'bl')}
+        ${im.map(i=>`<td class="pv-c" colspan="${gen}">${i.rol}</td>`).join('')}
+        ${sagBos}
+      </tr>
+      ${satir('Adı Soyadı', i => i.ad)}
+      ${satir('Unvanı',     i => i.unvan)}
+      ${satir('İmzası',     () => '.............................................')}
+      <tr>
+        <td class="bl br pv-l pv-foot pv-kirmizi" colspan="14">(*) Bu kısım bildirim sahibinin atama işleminden bilgisi olan amir tarafından imzalanacaktır.</td>
+      </tr>`;
+    })()}
     <!-- ===== "(*) Not:" — kutu İÇİNDE, "(*) Bu kısım..." satırının hemen altında ===== -->
     <tr>
       <td class="bl pv-l pv-foot pv-not" colspan="13">(**) Not: ${escapeHtml(state.notMetni||'').replace(/\n/g,'<br>')}</td>
@@ -4316,16 +5849,61 @@ function mapPersonelUnvan(raw){
   return {unvan:'', sozlesmeli:false, belirsiz:[]};
 }
 
+/* ------------------------------------------------------------
+   ÖĞRENİME GÖRE AYRIŞAN ÜNVANLARDA DOĞRU ADAYI SEÇME
+   "Şef", "Memur", "İmam-Hatip" gibi ünvanlar öğrenim durumuna göre
+   ikiye/dörde ayrılır. Personel raporunda ise ek gösterge ZATEN yazılı
+   olduğu için doğru adayı kendimiz bulabiliriz:
+     1) Ek gösterge + derece, ek gösterge tablosunda hangi adaya
+        birebir uyuyorsa o seçilir (en güvenilir yol).
+     2) Olmazsa "Öğrenim Durumu" hücresindeki metne bakılır
+        (Lisans/Ön Lisans/Fakülte -> Yükseköğrenim gibi).
+   İkisi de tek bir adaya işaret etmiyorsa eskisi gibi uyarı gösterilir.
+   ------------------------------------------------------------ */
+function unvanAdayiSec(adaylar, derece, ekGos, ogrenimHam){
+  if(!adaylar || !adaylar.length) return null;
+  const yil    = hesapYili();
+  const liste  = unvanListesiYil(yil);
+  const harita = (yil >= 2023) ? NEW_MAP : OLD_MAP;
+  const gecerli = adaylar.filter(a => liste.indexOf(a) >= 0);
+  if(gecerli.length === 1) return {unvan:gecerli[0], kaynak:'tek'};
+
+  // 1) Ek gösterge + derece eşleşmesi
+  const eg = (ekGos === '' || ekGos === null || ekGos === undefined) ? null : Number(ekGos);
+  if(eg !== null && !isNaN(eg) && derece && derece !== '4B Sözleşmeli'){
+    const uyan = gecerli.filter(a => (harita[a + '-' + derece] || 0) === eg);
+    if(uyan.length === 1) return {unvan:uyan[0], kaynak:'ekgosterge'};
+  }
+
+  // 2) Öğrenim durumu metni
+  const o = String(ogrenimHam || '').toLocaleLowerCase('tr');
+  let ek = null;
+  if(/imam\s*hatip\s*lise/.test(o))                                   ek = 'İmam Hatip Lisesi';
+  else if(/(lisans|fak[üu]lte|y[üu]ksek[öo]?[ğg]renim|doktora|önlisans)/.test(o)) ek = 'Yükseköğrenim';
+  else if(o)                                                           ek = 'Diğer Öğrenim';
+  if(ek){
+    const uyan = gecerli.filter(a => a.length > ek.length && a.slice(-ek.length) === ek);
+    if(uyan.length === 1) return {unvan:uyan[0], kaynak:'ogrenim'};
+  }
+  return null;
+}
+
 /* Seçilen personelin DERECE ve ÜNVAN bilgilerini forma yazar.
    Derece hesabın esas belirleyicisi olduğu için her zaman uygulanır. */
 function applyPersonelByName(name){
   state.unvanUyari = '';
+  /* Personel listesinden gelen ŞAHSİ ek gösterge yalnızca o kişiye aittir.
+     İsim listede bulunamazsa (liste yüklü değilse ya da kullanıcı adı elle
+     yazdıysa) önceki kişiden kalan değer temizlenir; hesap referans
+     tablosundan yapılır. Aksi hâlde eski kişinin ek göstergesi yeni
+     ünvana yapışıp kalırdı. */
+  const personelBilgisiniTemizle = ()=>{ state.personelEkGos = ''; state.personelKademe = ''; };
   const cols = personelCols();
-  if(cols.ad < 0 || !personnelState.rows.length) return false;
+  if(cols.ad < 0 || !personnelState.rows.length){ personelBilgisiniTemizle(); return false; }
   const target = String(name || '').trim().toLocaleLowerCase('tr');
-  if(!target) return false;
+  if(!target){ personelBilgisiniTemizle(); return false; }
   const row = personnelState.rows.find(r => String(r[cols.ad] || '').trim().toLocaleLowerCase('tr') === target);
-  if(!row) return false;
+  if(!row){ personelBilgisiniTemizle(); return false; }
 
   const rawUnvan  = cols.unvan  >= 0 ? String(row[cols.unvan]  || '').trim() : '';
   const rawDerece = cols.derece >= 0 ? String(row[cols.derece] || '').trim() : '';
@@ -4358,33 +5936,51 @@ function applyPersonelByName(name){
     dereceUyari = `Rapordaki derece "${rawDerece}" tanınamadı. Aylık Kadro Der./Poz. alanını elle seçiniz.`;
   }
 
-  if(cols.birim >= 0 && row[cols.birim]) state.birimAdi = String(row[cols.birim]).trim();
+  // Harcama Birimi kullanıcının seçtiği birimdir; personel listesindeki
+  // birim yalnızca alan BOŞSA doldurulur, doluysa asla değiştirilmez.
+  if(cols.birim >= 0 && row[cols.birim] && !String(state.birimAdi||'').trim()){
+    state.birimAdi = String(row[cols.birim]).trim();
+    const kutu = document.querySelector('#birimCombo input');
+    if(kutu) kutu.value = state.birimAdi;
+  }
 
   // ---- ÜNVAN ----
   let unvanUyari = '';
   if(m.sozlesmeli){
     state.unvan = '';
-    unvanUyari = `Raporda ünvan "${rawUnvan}" (sözleşmeli personel). Kadro/pozisyon "4B Sözleşmeli" yapıldı, ek gösterge uygulanmaz.`;
+    unvanUyari = `Raporda unvan "${rawUnvan}" (sözleşmeli personel). Kadro/pozisyon "4B Sözleşmeli" yapıldı, ek gösterge uygulanmaz.`;
   } else if(m.unvan){
     state.unvan = m.unvan;
   } else if(m.belirsiz && m.belirsiz.length){
+    // Önce ek gösterge / öğrenim durumundan doğru adayı bulmayı dene
+    const secim = unvanAdayiSec(m.belirsiz, state.pozisyon, state.personelEkGos,
+                                cols.ogrenim >= 0 ? row[cols.ogrenim] : '');
+    if(secim){
+      state.unvan = secim.unvan;
+      if(secim.kaynak === 'ogrenim'){
+        unvanUyari = `"${rawUnvan}" unvanı öğrenim durumuna göre ayrıldığı için `
+          + `öğrenim kaydına bakılarak "${secim.unvan}" seçildi. Yanlışsa Unvanı alanından değiştirebilirsiniz.`;
+      }
+      state.unvanUyari = [dereceUyari, unvanUyari].filter(Boolean).join(' ');
+      return true;
+    }
     state.unvan = '';
     // Ek gösterge zaten personel raporundan okunduysa hesap eksiksizdir;
     // ünvan yalnızca belgede yazacak metin için gereklidir.
     if(state.personelEkGos !== ''){
       unvanUyari = `Ek gösterge (${state.personelEkGos}) otomatik geldi, hesaplama eksiksiz. `
-        + `Belgede yazacak ünvan metnini seçmek isterseniz: ${m.belirsiz.join('  •  ')}`;
+        + `Belgede yazacak unvan metnini seçmek isterseniz: ${m.belirsiz.join('  •  ')}`;
     } else {
       const ogrOzet = ogrenimOzeti(cols.ogrenim >= 0 ? row[cols.ogrenim] : '');
-      unvanUyari = `"${rawUnvan}" ünvanı öğrenim durumuna göre değiştiği için otomatik seçilemedi.`
+      unvanUyari = `"${rawUnvan}" unvanı öğrenim durumuna göre değiştiği için otomatik seçilemedi.`
         + (ogrOzet ? ` Rapordaki öğrenim kaydı: "${ogrOzet}".` : '')
-        + ` Ünvanı alanından şunlardan birini seçiniz: ${m.belirsiz.join('  •  ')}`;
+        + ` Unvanı alanından şunlardan birini seçiniz: ${m.belirsiz.join('  •  ')}`;
     }
   } else if(rawUnvan){
     state.unvan = '';
-    unvanUyari = `"${rawUnvan}" ünvanı ek gösterge tablosunda bulunamadı. Ünvanı alanından doğru karşılığını seçiniz.`;
+    unvanUyari = `"${rawUnvan}" unvanı ek gösterge tablosunda bulunamadı. Unvanı alanından doğru karşılığını seçiniz.`;
   } else if(cols.unvan < 0){
-    unvanUyari = 'Bu listede "Ünvan" sütunu yok. Ünvanı alanını elle seçiniz.';
+    unvanUyari = 'Bu listede "Unvan" sütunu yok. Unvanı alanını elle seçiniz.';
   }
 
   state.unvanUyari = [dereceUyari, unvanUyari].filter(Boolean).join(' ');
@@ -4429,7 +6025,7 @@ function parseDereceKademe(raw){
 }
 
 /* Bir kişinin serbest metin "Öğrenim Durumu" hücresinden en yüksek/ilgili
-   okulu tek satıra indirger — kullanıcı "İstisna Girişi"nde doğru ünvanı
+   okulu tek satıra indirger — kullanıcı "İstisna Girişi"nde doğru unvanı
    saniyeler içinde seçebilsin diye uyarının içine basılır. Ham veriyi
    değiştirmez, sadece OKUNAKLI kısa bir özet üretir; hesaplamada kullanılmaz. */
 function ogrenimOzeti(raw){
@@ -4590,8 +6186,8 @@ function renderSheet3(){
     <h2 class="section-title" style="margin-top:0;">Referans Veriler</h2>
     <div class="ref-note">Bu veriler, Diyanet "Yolluk Hesaplama" Excel dosyasının "Referans Veriler" sekmesinden birebir alınmıştır ve hesaplama motoru tarafından kullanılır (Memur Maaş Katsayıları hariç — o tablo bilgi amaçlıdır). Personel listesi yükleme işlemi artık üstteki <b>"Personel"</b> sekmesine taşınmıştır.</div>
     <div class="subtabbar">
-      <div class="subtabbtn ${refState.sub==='new'?'active':''}" data-sub="new">Ünvan / Ek Gösterge (2023 ve Sonrası)</div>
-      <div class="subtabbtn ${refState.sub==='old'?'active':''}" data-sub="old">Ünvan / Ek Gösterge (2022 ve Öncesi)</div>
+      <div class="subtabbtn ${refState.sub==='new'?'active':''}" data-sub="new">Unvan / Ek Gösterge (2023 ve Sonrası)</div>
+      <div class="subtabbtn ${refState.sub==='old'?'active':''}" data-sub="old">Unvan / Ek Gösterge (2022 ve Öncesi)</div>
       <div class="subtabbtn ${refState.sub==='perdiem'?'active':''}" data-sub="perdiem">Gündelik ve Damga Vergisi Oranları</div>
       <div class="subtabbtn ${refState.sub==='katsayi'?'active':''}" data-sub="katsayi">Memur Maaş Katsayıları</div>
     </div>
@@ -4610,11 +6206,11 @@ function renderSheet3Body(){
     const q = refState.q.trim().toLocaleLowerCase('tr');
     const filtered = q ? rows.filter(r => String(r[0]).toLocaleLowerCase('tr').includes(q)) : rows;
     body.innerHTML = `
-      <input type="text" class="ref-search" id="refSearch" placeholder="Ünvana göre ara (örn. Vaiz, Şoför, Öğretmen...)" value="${refState.q}">
+      <input type="text" class="ref-search" id="refSearch" placeholder="Unvana göre ara (örn. Vaiz, Şoför, Öğretmen...)" value="${refState.q}">
       <div class="ref-count">${filtered.length} / ${rows.length} kayıt</div>
       <div class="ref-scroll">
         <table class="ref-table">
-          <thead><tr><th style="width:55%;">Ünvan</th><th style="width:20%;">Derece</th><th style="width:25%;">Ek Gösterge</th></tr></thead>
+          <thead><tr><th style="width:55%;">Unvan</th><th style="width:20%;">Derece</th><th style="width:25%;">Ek Gösterge</th></tr></thead>
           <tbody>
             ${filtered.map(r=>`<tr><td class="l">${orBlank(r[0])}</td><td>${orBlank(r[1])}</td><td>${orBlank(r[2])}</td></tr>`).join('')}
           </tbody>
@@ -4853,7 +6449,7 @@ function renderPersonelBody(body){
       <span class="hint" id="personelStatus">${p.fileName ? `Yüklü: <b>${escapeHtml(p.fileName)}</b> — ${p.rows.length} kayıt, ${p.headers.length} sütun${p.loadedAt ? ` • Yükleme: ${fmtDateTimeTR(p.loadedAt)}` : ''}` : 'Henüz dosya yüklenmedi.'}</span>
     </div>
     ${p.rows.length ? `
-      <input type="text" class="ref-search" id="personelSearch" placeholder="Ada, sicile, ünvana, birime göre ara..." value="${p.q}">
+      <input type="text" class="ref-search" id="personelSearch" placeholder="Ada, sicile, unvana, birime göre ara..." value="${p.q}">
       <div class="ref-count">${filtered.length} / ${p.rows.length} kayıt${filtered.length>PERSONEL_GOSTER_LIMIT?` (tamamı yüklendi; tabloda ilk ${PERSONEL_GOSTER_LIMIT} tanesi gösteriliyor, aramayla daraltabilirsiniz)`:''}</div>
       <div class="ref-scroll" style="overflow-x:auto;">
         <table class="ref-table personel-table">
@@ -5108,7 +6704,7 @@ function renderSheet2PrintView(c){
       <td rowspan="2" class="bx oeb-c oeb-b">Tutar</td>
     </tr>
     <tr style="height:${oebH(28.35)}">
-      <td colspan="2" class="bx oeb-c oeb-b">Adı Soyadı / Ünvanı</td>
+      <td colspan="2" class="bx oeb-c oeb-b">Adı Soyadı / Unvanı</td>
       <td colspan="2" class="bx oeb-c oeb-b">VKN / TCKN</td>
     </tr>
     <tr style="height:${oebH(21.2)}">
@@ -5281,7 +6877,7 @@ function buildSheet2Shell(){
     </div>
 
     <table class="doc-table" style="margin-top:6px;">
-      <thead><tr><th>Sıra</th><th>Adı Soyadı / Ünvanı</th><th>VKN / TCKN</th><th>IBAN</th><th>Net Tutar</th></tr></thead>
+      <thead><tr><th>Sıra</th><th>Adı Soyadı / Unvanı</th><th>VKN / TCKN</th><th>IBAN</th><th>Net Tutar</th></tr></thead>
       <tbody>
         <tr>
           <td>1</td><td id="s2AdSoyad1"></td>
@@ -5722,7 +7318,11 @@ function renderSheet5(){
       Tutarlarda şüpheye düşersen bu adresi aç, sağ alttaki <b>Sürüm</b> tarihini kendi dosyandakiyle karşılaştır.
       Adresi kaydedip her seferinde oradan açman en sağlıklısıdır.
     </div>
-    <div class="ref-note">Bu sayfa, Diyanet "Sürekli Görev Yolluğu" Excel dosyasındaki hesaplama mantığının birebir aynısıyla çalışır. Tek dosyadır; kuruluma, internete veya Excel'e ihtiyaç duymaz. Girdiğin veriler sadece bu bilgisayarın tarayıcısında kalır.</div>
+    <div class="ref-note">Bu program, <b>Sürekli Görev Yolluğu Bildirimi</b> ve <b>Ödeme Emri Belgesi</b>'ni hazırlar.
+      Ürettiği belge,
+      <a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=9815&amp;MevzuatTur=7&amp;MevzuatTertip=5" target="_blank" rel="noopener">Merkezî Yönetim Harcama Belgeleri Yönetmeliği</a>'nin
+      eklerinde yer alan <b>M.Y.H.B.Y. Örnek No: 28</b> ile birebir aynıdır; hesaplama mantığı da resmî Excel dosyasından aktarılmıştır.
+      Tek dosyadır; kuruluma, internete veya Excel'e ihtiyaç duymaz. Girdiğin veriler sadece bu cihazın tarayıcısında kalır.</div>
 
     <h3 class="kg-h3">1. Genel Bilgiler</h3>
     <ul class="kg-ul">
@@ -5730,7 +7330,8 @@ function renderSheet5(){
       <li>Girdiğin veriler <b>sadece kendi bilgisayarındaki tarayıcıda</b> saklanır. Dosyanın kendisine hiçbir şey yazılmaz, kimseyle otomatik paylaşılmaz.</li>
       <li><b>Sarı alanlar</b> = elle veri gireceğin yerler. Boşken içlerinde soluk yazıyla ne yazman gerektiği yazar, sen yazmaya başlayınca kaybolur.</li>
       <li>Üstte 6 sekme vardır: <b>Sürekli Görev Yolluğu</b>, <b>Ödeme Emri</b>, <b>Referans Veriler</b>, <b>Personel</b>, <b>Geçmiş Hesaplamalar</b> ve <b>Kılavuz</b> (bu sayfa). Sekme çubuğu <b>sayfayı kaydırsan da üstte sabit kalır</b>; açık olan sekmenin zemini mavidir.</li>
-      <li><b>Tutar kutuları:</b> "10000" yazıp başka bir yere tıkladığında kendiliğinden <b>10.000</b> biçimine döner. İstersen doğrudan "10.000,50" diye de yazabilirsin; program iki yazımı da anlar.</li>
+      <li><b>Klavyeyle hızlı giriş:</b> Veri girişi alanlarında <b>↓</b> ve <b>Enter</b> bir alt alana, <b>↑</b> bir üst alana geçirir. Açılır listelerde (Tayin Türü, Taşıtın Türü, Derece...) ok tuşları seçeneği değiştirir, <b>Enter</b> ile bir sonraki alana geçersiniz. Aile fertleri listesinde de aynı şekilde satırlar arasında gezinebilirsiniz.</li>
+      <li><b>Tutar kutuları:</b> Yazıp başka bir yere tıkladığında kendiliğinden biçimlenir. <b>Para alanlarında kuruş yazılır</b> (Taşıt Ücreti, İstisna Gündelik: <i>250 → 250,00</i>), <b>sayı alanlarında yazılmaz</b> (Mesafe: <i>1250 → 1.250</i>, Avans: <i>10000 → 10.000</i>). Döviz kuruna dokunulmaz, ondalık hassasiyeti korunur. İstersen doğrudan "1.250,50" diye de yazabilirsin; program iki yazımı da anlar.</li>
       <li>Sağ alt köşedeki soluk <b>Sürüm</b> rozeti, elindeki dosyanın tarihini gösterir. Bir arkadaşınla tutar farkı çıkarsa ilk bakılacak yer burasıdır. <b>Üzerine tıklarsan güncel sürüm yeni sekmede açılır.</b> Kağıda basılmaz.</li>
       <li><b>Çevrimiçi adres:</b> <a href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener">diyanetyolluk.github.io/Yolluk</a> — buradan açarsan her zaman en güncel hâlini kullanmış olursun; dosya indirmene gerek kalmaz. İnternetsiz çalışman gerekiyorsa dosyayı bilgisayarına kaydedip çift tıklayarak da açabilirsin, program çevrimdışı da tam çalışır.</li>
     </ul>
@@ -5740,25 +7341,41 @@ function renderSheet5(){
       <tr><th style="width:30%;">Alan</th><th>Açıklama</th></tr>
       <tr><td>Atama / Ayrılma-Hesaplama / Muhasebe Tarihi</td><td>Otomatik bugüne göre dolar, istersen değiştirebilirsin</td></tr>
       <tr><td>Tayin Türü</td><td>Normal Tayin / Eş Durumu Tayini / Gündelik + Yol</td></tr>
-      <tr><td><b>Ünvanı</b></td><td>Kutuya tıklayınca <b>tüm ünvanlar listelenir</b> (kaç kez değiştirirsen değiştir). Yazmaya başlayınca süzülür; <b>↑ ↓</b> ile gez, <b>Enter</b> ile seç, <b>Esc</b> ile kapat. Liste <b>Ayrılma / Hesaplama tarihinin yılına</b> göre değişir. Personel listesi yüklüyse Adı Soyadı'ndan isim seçtiğinde <b>otomatik gelir</b></td></tr>
+      <tr><td><b>Unvanı</b></td><td>Kutuya tıklayınca <b>tüm unvanlar listelenir</b> (kaç kez değiştirirsen değiştir). Yazmaya başlayınca süzülür; <b>↑ ↓</b> ile gez, <b>Enter</b> ile seç, <b>Esc</b> ile kapat. Liste <b>Ayrılma / Hesaplama tarihinin yılına</b> göre değişir. Personel listesi yüklüyse Adı Soyadı'ndan isim seçtiğinde <b>otomatik gelir</b></td></tr>
       <tr><td>Aylık Kadro Der. / Poz.</td><td>Derece (1-15) veya "4B Sözleşmeli"</td></tr>
       <tr><td><b>Adı Soyadı</b></td><td>Personel listesi yüklüyse <b>aramalı seçici</b> olur: kutuya tıklayınca liste açılır, <b>isim yazdıkça süzülür</b> (🔍). Fareyle tıklayarak ya da ↑ ↓ tuşları + Enter ile seçebilirsin. Liste yüklü değilse normal metin kutusudur</td></tr>
       <tr><td>Diğer Aile Fertleri</td><td>En fazla 10 kişi. <b>Sadece dolu satırlar görünür</b>, boşlar gizlenir. Yeni kişi için <b>"+ Kişi Ekle"</b> (imleç doğrudan yeni satıra gider), hepsini açmak için <b>"Tüm satırları göster"</b>. İsim kutularında <b>↑ ↓</b> ve <b>Enter</b> ile satırlar arasında geçebilirsin. Akrabalık derecesi <b>seçilmeyen</b> satır hesaba katılmaz</td></tr>
-      <tr><td>Ek Gösterge / Gündelik</td><td>Otomatik hesaplanır. Öncelik sırası: <b>1)</b> İstisna kutusuna yazdığın değer, <b>2)</b> personel listesindeki kişiye ait ek gösterge, <b>3)</b> ünvan+derece tablosu</td></tr>
+      <tr><td>Ek Gösterge / Gündelik</td><td>Otomatik hesaplanır. Öncelik sırası: <b>1)</b> İstisna kutusuna yazdığın değer, <b>2)</b> personel listesinden seçilen kişiye ait şahsi ek gösterge, <b>3)</b> unvan + derece tablosu.<br>
+        <b>Personel listesi kullanmak zorunlu değildir</b> — hiç liste yüklemeden, sadece <b>Unvanı</b> ve <b>Aylık Kadro Derecesi</b> seçerek çalışabilirsin; değerler referans tablosundan gelir.<br>
+        Listeden bir kişi seçtikten sonra <b>Unvanı veya dereceyi elle değiştirirsen</b>, o kişiye ait şahsi ek gösterge devreden çıkar ve hesap yeniden referans tablosuna göre yapılır. Aynı şekilde Adı Soyadı'nı elle yazıp listede bulunmayan bir isim girersen de tablo kullanılır</td></tr>
       <tr><td><b>İstisna Girişi</b></td><td>Otomatik gelen değeri değiştirmek istersen ilgili kutuya yaz — o kutunun zemini <b>kırmızıya</b> döner ve senin değerin kullanılır. Boşaltırsan otomatiğe geri döner</td></tr>
       <tr><td><b>Önceden Avans Almışsa Aldığı</b></td><td>Kişiye daha önce yolluk avansı ödendiyse tutarı buraya yaz. Toplamdan düşülür ve <b>damga vergisi kalan tutar üzerinden</b> hesaplanır (bkz. 8. bölüm). Boşsa hiçbir şey değişmez</td></tr>
+      <tr><td><b>Harcama Birimi Adı</b></td><td>Türkiye'deki <b>81 il ve 921 ilçe müftülüğü</b> listeden seçilir (toplam 1002 kayıt). Kutuya tıklayınca liste açılır, yazdıkça süzülür. Aynı adlı ilçeler için sağda bağlı olduğu il gösterilir (örn. <i>Gölbaşı İlçe Müftülüğü — Ankara / — Adıyaman</i>). Listede yoksa elle de yazabilirsin</td></tr>
+      <tr><td><b>Düzenleyen (Mutemet)</b><br><b>Gerçekleştirme Görevlisi</b></td><td>Sayfanın altındaki <b>Görevli Tanımlamaları</b> tablosunda ilgili kutucuğu işaretli olan kişiler burada listelenir. <b>Seçersen belgeye imza sütunu olarak eklenir, seçmezsen belge Örnek No: 28'in aslıyla birebir aynı kalır</b></td></tr>
+      <tr><td><b>Harcama Yetkilisi Adı Soyadı</b></td><td>Görevli tablosunda "Harcama Yetkilisi" işaretli kişiler arasından seçilir. Seçince <b>unvanı da otomatik gelir</b> — kişinin <b>vekâlet unvanı</b> doluysa belgeye o yazılır (örn. "İlçe Müftü V."), boşsa normal unvanı</td></tr>
+      <tr><td><b>Atama Tarihi ve Sayısı</b></td><td>Belge başlığındaki <b>Atama Tarihi</b> hücresi ikiye bölünmüştür: solda tarih, sağda <b>sarı alan</b>. Sarı alana atama onayının sayısını yazarsanız etiket kendiliğinden <b>"Atama Tarihi ve Sayısı"</b> olur ve belgeye <i>09.08.2026 - E-12345</i> biçiminde basılır. Boş bırakırsanız sadece <b>"Atama Tarihi"</b> yazar</td></tr>
+      <tr><td><b>Muhasebe Birimi ve Tarihi</b></td><td>Birim adını elle yazarsınız; yanındaki <b>takvim düğmesine</b> basarak tarihi seçebilirsiniz. Seçilen tarih metnin sonuna eklenir, metinde zaten bir tarih varsa onun yerine yazılır. İsterseniz tamamını elle de yazabilirsiniz</td></tr>
       <tr><td>Bilgi İçin</td><td><b>Sabittir</b> (Mehmet TOKTAŞ), değiştirilemez. Belgenin altında görünür</td></tr>
       <tr><td>Not (elle girilir)</td><td>Belgenin altına <b>(**) Not:</b> olarak basılır. İmza altındaki <b>(*)</b> açıklamasıyla karışmaması için iki yıldızlıdır</td></tr>
     </table>
-    <div class="unvan-uyari" style="display:block;">⚠️ Bazı ünvanlar (İmam Hatip, Müezzin Kayyım, Kur'an Kursu Öğreticisi, Memur, Murakıp, Şef, Şoför, V.H.K.İ.) öğrenim durumuna göre farklı ek göstergeye ayrıldığı için <b>Ünvanı</b> alanı otomatik dolmayabilir. Ek gösterge personel listesinden geldiyse <b>hesaplama yine de eksiksizdir</b>; ünvanı yalnızca belgede yazacak metin için seçmen gerekir. Turuncu uyarı kutusu sana adayları listeler.</div>
+    <div class="unvan-uyari" style="display:block;">⚠️ Bazı unvanlar (İmam Hatip, Müezzin Kayyım, Kur'an Kursu Öğreticisi, Memur, Murakıp, Şef, Şoför, V.H.K.İ.) öğrenim durumuna göre farklı ek göstergeye ayrılır. Program bu durumda doğru olanı <b>kendisi bulur:</b> önce <b>ek gösterge + derece</b> ikilisinin tabloda hangi unvana birebir uyduğuna bakar; olmazsa raporun <b>"Öğrenim Durumu"</b> hücresine göre seçer (Lisans/Fakülte → Yükseköğrenim, İmam Hatip Lisesi → İmam Hatip Lisesi, diğerleri → Diğer Öğrenim). İkisi de tek bir sonuca varmazsa turuncu uyarı çıkar ve adaylar listelenir; o zaman elle seçersin. Öğrenime bakılarak seçildiyse uyarıda bunu belirtir — yanlışsa değiştirebilirsin.</div>
 
-    <h3 class="kg-h3">2.1. Ünvan listesi neden yıla göre değişiyor?</h3>
+    <h3 class="kg-h3">2.1. Unvan listesi neden yıla göre değişiyor?</h3>
     <ul class="kg-ul">
-      <li>Ek gösterge cetveli <b>2023'te değişti.</b> Bu yüzden ünvan listesi, <b>Ayrılma / Hesaplama tarihinin yılına</b> göre kendini ayarlar: 2022 ve öncesi için <b>59 ünvan</b>, 2023 ve sonrası için <b>60 ünvan</b> gösterilir.</li>
-      <li>En bilinen değişiklik: <b>"İlahiyat Lisans"</b> ve <b>"Diğer Lisans / Ön Lisans"</b> ayrımı 2023'te kaldırılıp tek bir <b>"Yükseköğrenim"</b> ünvanında birleştirildi. (İmam Hatip, Müezzin Kayyım ve K.K. Öğreticisi için geçerlidir.)</li>
-      <li>Eski bir kaydı açar da tarihi 2023 sonrasına çekersen, program eski ünvanı <b>otomatik olarak yeni karşılığına çevirir</b> ve sana turuncu bir not gösterir. Ek gösterge ve gündelik de buna göre düzelir.</li>
-      <li><b>Belgeye ünvan sade yazılır:</b> "İmam Hatip Yükseköğrenim" seçsen bile kağıda <b>"İmam Hatip"</b> basılır — çünkü sondaki ek ünvan değil, öğrenim durumudur ve yalnızca doğru ek göstergeyi bulmak için kullanılır. Ekrandaki "Ünvan Verisi" kutusunda tam adı görürsün.</li>
-      <li>Listedeki ünvanlar <b>Referans Veriler</b> sekmesindeki tablodan üretilir; tabloda olmayan bir ünvan listede çıkmaz, tabloya eklenen ünvan ise kendiliğinden listeye girer.</li>
+      <li>Ek gösterge cetveli <b>2023'te değişti.</b> Bu yüzden unvan listesi, <b>Ayrılma / Hesaplama tarihinin yılına</b> göre kendini ayarlar: 2022 ve öncesi için <b>59 unvan</b>, 2023 ve sonrası için <b>60 unvan</b> gösterilir.</li>
+      <li>En bilinen değişiklik: <b>"İlahiyat Lisans"</b> ve <b>"Diğer Lisans / Ön Lisans"</b> ayrımı 2023'te kaldırılıp tek bir <b>"Yükseköğrenim"</b> unvanında birleştirildi. (İmam Hatip, Müezzin Kayyım ve K.K. Öğreticisi için geçerlidir.)</li>
+      <li>Eski bir kaydı açar da tarihi 2023 sonrasına çekersen, program eski unvanı <b>otomatik olarak yeni karşılığına çevirir</b> ve sana turuncu bir not gösterir. Ek gösterge ve gündelik de buna göre düzelir.</li>
+      <li><b>Belgeye unvan sade yazılır:</b> "İmam Hatip Yükseköğrenim" seçsen bile kağıda <b>"İmam Hatip"</b> basılır — çünkü sondaki ek unvan değil, öğrenim durumudur ve yalnızca doğru ek göstergeyi bulmak için kullanılır. Ekrandaki "Unvan Verisi" kutusunda tam adı görürsün.</li>
+      <li>Listedeki unvanlar <b>Referans Veriler</b> sekmesindeki tablodan üretilir; tabloda olmayan bir unvan listede çıkmaz, tabloya eklenen unvan ise kendiliğinden listeye girer.</li>
+    </ul>
+
+    <h3 class="kg-h3">2.2. Görevli Tanımlamaları ve İmza Sütunları</h3>
+    <p class="kg-p">Sayfanın en altındaki <b>Görevli Tanımlamaları</b> tablosuna biriminizdeki kişileri bir kez yazarsınız: adı soyadı, unvanı, varsa vekâlet unvanı ve hangi yetkilere sahip olduğu (Düzenleyen/Mutemet · Gerçekleştirme Görevlisi · Harcama Yetkilisi · Muhasebe Yetkilisi). Bu liste tarayıcıda saklanır, "Yeni Hesaplama" ile silinmez ve <b>kağıda basılmaz</b>.</p>
+    <ul class="kg-ul">
+      <li><b>Belgenin aslı korunur:</b> Düzenleyen ve Gerçekleştirme Görevlisi seçilmediği sürece imza bloğunda yalnızca <b>Birim Harcama Yetkilisi</b> ve <b>Bildirim Sahibi</b> görünür — yani M.Y.H.B.Y. Örnek No: 28'in aynısı.</li>
+      <li><b>Ekleyen ekler:</b> Bazı müftülükler bildirime mutemedi ve gerçekleştirme görevlisini de koyuyor. Onları seçtiğinde imza bloğuna <b>yeni sütun açılır</b>. Sıralama soldan sağa: Düzenleyen (Mutemet) → Gerçekleştirme Görevlisi → Birim Harcama Yetkilisi → Bildirim Sahibi.</li>
+      <li><b>Vekâlet unvanı:</b> Bir kişi vekâleten bakıyorsa tabloya vekâlet unvanını yaz (örn. "İlçe Müftü V."). Belgeye <b>vekâlet unvanı</b> yazılır; boş bırakırsan normal unvanı yazılır.</li>
+      <li>Sütun sayısı 2'den 4'e çıkınca sütunlar otomatik daralır, hepsi tek sırada kalır ve sayfa taşmaz.</li>
     </ul>
 
     <h3 class="kg-h3">3. Ödeme Emri Sekmesi</h3>
@@ -5766,7 +7383,7 @@ function renderSheet5(){
     <p class="kg-p"><b>Gerçekleştirme Görevlisi</b> adını, sayfanın en altındaki imza bloğunda "Kontrol edilmiş ve uygun görülmüştür." yazısının altındaki <b>sarı kutuya</b> yazarsın. Yazdırınca sarı zemin kaybolur, ad düz yazı olarak çıkar.</p>
 
     <h3 class="kg-h3">4. Referans Veriler Sekmesi</h3>
-    <p class="kg-p">Ünvan/Ek Gösterge tabloları (2023 ve sonrası / 2022 ve öncesi), Gündelik ve Damga Vergisi Oranları ve Memur Maaş Katsayıları alt sekmelerinden oluşur.</p>
+    <p class="kg-p">Unvan/Ek Gösterge tabloları (2023 ve sonrası / 2022 ve öncesi), Gündelik ve Damga Vergisi Oranları ve Memur Maaş Katsayıları alt sekmelerinden oluşur.</p>
     <p class="kg-p" style="font-weight:bold;">Yeni yılın oranları nasıl girilir?</p>
     <ul class="kg-ul">
       <li>Excel dosyasıyla birebir aynı şekilde, gündelikte <b>01.01.2027 – 01.01.2045</b>, katsayıda <b>2027-01 – 2045-07</b> satırları <b>tabloda hazır ama boş</b> bekler. Yeni dönem açıklandığında ilgili satırı bulup tutarları yazmanız yeterlidir.</li>
@@ -5783,12 +7400,12 @@ function renderSheet5(){
     <p class="kg-p" style="font-weight:bold;">Personel listesi nasıl yüklenir?</p>
     <ul class="kg-ul">
       <li><b>"Dosya Seç"</b> ile <b>.xls, .xlsx, .csv</b> veya <b>.pdf</b> yükle. Diyanet HİTAP/DİBBS'in ".xls" uzantılı HTML raporları da desteklenir.</li>
-      <li><b>Tek şart:</b> dosyada <b>"Adı Soyadı"</b> başlıklı bir sütun bulunmalı. İsim her zaman esnek bulunur; Derece/Ünvan/Birim ise ancak başlıkta tam o kelimeler geçiyorsa otomatik doldurulur — farklı bir kelime kullanılmışsa (örn. "Kademe") o alan boş kalır, elle girilir.</li>
-      <li>Rapordaki <b>"Ödenilecek Derece/Kademe"</b> hücresi "(1-4-3600)" biçimindeyse, sondaki sayı kişinin <b>ek göstergesidir</b> ve doğrudan hesaba alınır. Bu sayede ünvanı öğrenime göre ayrışan personelde (İmam-Hatip, Müezzin-Kayyım vb.) bile ek gösterge otomatik gelir.</li>
+      <li><b>Tek şart:</b> dosyada <b>"Adı Soyadı"</b> başlıklı bir sütun bulunmalı. İsim her zaman esnek bulunur; Derece/Unvan/Birim ise ancak başlıkta tam o kelimeler geçiyorsa otomatik doldurulur — farklı bir kelime kullanılmışsa (örn. "Kademe") o alan boş kalır, elle girilir.</li>
+      <li>Rapordaki <b>"Ödenilecek Derece/Kademe"</b> hücresi "(1-4-3600)" biçimindeyse, sondaki sayı kişinin <b>ek göstergesidir</b> ve doğrudan hesaba alınır. Bu sayede unvanı öğrenime göre ayrışan personelde (İmam-Hatip, Müezzin-Kayyım vb.) bile ek gösterge otomatik gelir.</li>
       <li>Kaç kayıt olursa olsun tamamı yüklenir. Veri sadece bu bilgisayarda saklanır; dosyayı başka birine verdiğinde o kendi listesini kendisi yükler.</li>
       <li>Üstte <b>"Yükleme: [tarih/saat]"</b> yazar. <b>"Temizle"</b> ile listeyi silebilirsin.</li>
       <li>Tablo çok geniş olduğu için bir satıra tıkladığında o satır <b>baştan sona mavi</b> işaretlenir — yatay çubuğu kaydırdığında hangi kişide olduğunu kaybetmezsin. Aynı satıra tekrar tıklarsan işaret kalkar.</li>
-      <li>Satırdaki <b>"Forma Aktar"</b> butonu o kişiyi Sürekli Görev Yolluğu formuna aktarır (ad, derece, ünvan ve ek gösterge birlikte gelir).</li>
+      <li>Satırdaki <b>"Forma Aktar"</b> butonu o kişiyi Sürekli Görev Yolluğu formuna aktarır (ad, derece, unvan ve ek gösterge birlikte gelir).</li>
     </ul>
 
     <h3 class="kg-h3">6. Geçmiş Hesaplamalar Sekmesi</h3>
@@ -5802,9 +7419,9 @@ function renderSheet5(){
     <h3 class="kg-h3">7. Üstteki Butonlar</h3>
     <table class="kg-table">
       <tr><th style="width:22%;">Buton</th><th>Ne yapar</th></tr>
-      <tr><td><b>🖥 Bilgisayar görünümü</b></td><td>Sadece <b>telefon/tablette</b> görünür (mor renkli). Basınca sayfa, bilgisayardaki düzenin aynısıyla çizilir — sol veri girişi ve belge yan yana durur; parmakla yakınlaştırıp kaydırarak kullanırsın. Tekrar basınca <b>📱 Telefon görünümü</b>'ne döner (alanlar alt alta, büyük ve okunaklı). Tercihin hatırlanır, her açılışta seçtiğin görünüm gelir.</td></tr>
+      <tr><td><b>🖥 Bilgisayar görünümü</b></td><td>Sadece <b>telefon ve tablette</b> görünür (mor renkli); bilgisayarda hiç çıkmaz. Basınca sayfa, bilgisayardaki düzenin aynısıyla çizilir — sol veri girişi ve belge yan yana durur; parmakla yakınlaştırıp kaydırarak kullanırsınız. Cihaza göre ayarlanır: <b>tablette</b> daha geniş ve okunaklı, <b>telefonda</b> sayfanın tamamı sığacak şekilde. Tekrar basınca <b>📱 Telefon / Tablet görünümü</b>'ne döner (alanlar alt alta). Tercihiniz hatırlanır.</td></tr>
       <tr><td><b>💾 Hesaplamayı Kaydet</b></td><td>O anki hesaplamayı <b>Geçmiş Hesaplamalar</b> listesine kaydeder/günceller. Kaydedince üstte "✔ Kaydedildi" yazısı belirir.</td></tr>
-      <tr><td><b>Yeni Hesaplama</b></td><td>Kişiye özel alanları temizler (isim, ünvan, mesafe, aile fertleri vb.) ama <b>Harcama Birimi / Harcama Yetkilisi gibi kurum bilgilerini korur</b>. Önceki hesaplama otomatik olarak kaydedilir.</td></tr>
+      <tr><td><b>Yeni Hesaplama</b></td><td>Kişiye özel alanları temizler (isim, unvan, mesafe, aile fertleri vb.) ama <b>Harcama Birimi / Harcama Yetkilisi gibi kurum bilgilerini korur</b>. Önceki hesaplama otomatik olarak kaydedilir.</td></tr>
       <tr><td><b>Önizle</b></td><td>Çıktının kağıtta nasıl görüneceğini ekranda gösterir (A4 sayfa + kenar boşlukları ile birlikte). Oradan doğrudan yazdırabilir, <b>Esc</b> ile çıkabilirsiniz.</td></tr>
       <tr><td><b>Yazdır</b></td><td>O an açık olan sekmeyi yazdırır (Sürekli Görev Yolluğu yatay, diğerleri dikey A4). Kenar boşlukları: üst 2 cm, sol 1,5 cm, sağ 1 cm, alt 1 cm. Basmadan önce kayıt "Yazdırıldı" olarak işaretlenir.</td></tr>
     </table>
@@ -5816,17 +7433,20 @@ function renderSheet5(){
     <div class="kg-qa"><b>S: Telefonda Yazdır'a basıyorum ama hiçbir şey olmuyor.</b><br>Dosyayı WhatsApp / Telegram gibi bir uygulamanın kendi mini tarayıcısında açmış olabilirsiniz; bu mini tarayıcılar yazdırmayı desteklemez. Sağ üstteki "..." menüsünden <b>"Safari'de Aç" / "Tarayıcıda Aç"</b> deyip tekrar deneyin. <b>Önizle</b> ise her yerde çalışır.</div>
     <div class="kg-qa"><b>S: Yanlışlıkla "Tümünü Temizle" dedim, geri gelir mi?</b><br>Hayır, bu işlem geri alınamaz. Silmeden önce onay sorusu çıkar.</div>
     <div class="kg-qa"><b>S: Yeni yılın gündelik tutarları açıklandı, ne yapmalıyım?</b><br>Referans Veriler → Gündelik ve Damga Vergisi Oranları sekmesine girin; ilgili yılın satırı (örn. 01.01.2027) zaten boş olarak hazır bekler, tutarları yazmanız yeterlidir. Dosyayı değiştirmenize veya yeni sürüm beklemenize gerek yoktur.</div>
-    <div class="kg-qa"><b>S: Personel listesinde bir kişi seçtim ama Ünvanı boş kaldı, hesap yanlış mı?</b><br>Hayır. Ek gösterge personel listesinden geldiyse hesaplama eksiksizdir. Ünvan yalnızca yazdırılan belgede görünecek metindir; turuncu uyarıdaki adaylardan doğru olanı seçebilirsiniz.</div>
+    <div class="kg-qa"><b>S: Personel listesi yüklemek zorunda mıyım?</b><br>Hayır. Program listesiz de tam çalışır: Unvanı ve Aylık Kadro Derecesi'ni kendin seçersin, ek gösterge ve gündelik referans tablosundan otomatik gelir. Liste yalnızca isimleri tek tek yazmamak ve kişinin şahsi ek göstergesini rapordan almak için kolaylıktır.</div>
+    <div class="kg-qa"><b>S: Listeden birini seçtim, sonra unvanı/dereceyi elle değiştirdim — eski kişinin ek göstergesi kalır mı?</b><br>Hayır, kalmaz. Unvanı ya da dereceyi elle değiştirdiğin anda personel raporundan gelen şahsi ek gösterge devreden çıkar, hesap doğrudan referans tablosuna göre yapılır. Adı Soyadı'na listede olmayan bir isim yazdığında da aynısı olur. Böylece önceki kişiden kalan bir değer yeni hesaba karışmaz.</div>
+    <div class="kg-qa"><b>S: Personel listesinde bir kişi seçtim ama Unvanı boş kaldı, hesap yanlış mı?</b><br>Hayır. Ek gösterge personel listesinden geldiyse hesaplama eksiksizdir. Unvan yalnızca yazdırılan belgede görünecek metindir; turuncu uyarıdaki adaylardan doğru olanı seçebilirsiniz. Program çoğu durumda unvanı <b>ek gösterge ve öğrenim durumundan kendisi bulur</b> — boş kalması, raporda bu bilgilerin de eksik olduğu anlamına gelir.</div>
+    <div class="kg-qa"><b>S: Program ilk açılışta bir pencere gösteriyor, nasıl kapatırım?</b><br>Bu, kılavuzu okumanızı hatırlatan karşılama penceresidir. <b>"Kapat ve başla"</b> ile geçebilir, <b>"Kılavuzu Aç"</b> ile doğrudan bu sayfaya gelebilirsiniz. Bir daha çıkmasını istemiyorsanız kapatmadan önce <b>"Bir daha gösterme"</b> kutucuğunu işaretleyin. Yazdırılan belgeye hiçbir etkisi yoktur.</div>
     <div class="kg-qa"><b>S: Telefonda sayfa bilgisayardakinden farklı görünüyor, normal mi?</b><br>Evet. Telefon ekranı dar olduğu için alanlar okunaklı olsun diye alt alta dizilir. Bilgisayardaki düzeni istiyorsanız üstteki mor <b>"🖥 Bilgisayar görünümü"</b> düğmesine basın — sayfa birebir aynı görünür, parmakla yakınlaştırarak kullanırsınız. Tercihiniz hatırlanır.</div>
     <div class="kg-qa"><b>S: Elimdeki dosya güncel mi, nasıl anlarım?</b><br>Sağ alt köşedeki <b>Sürüm</b> rozetine tıklayın; çevrimiçi sürüm açılır. Oradaki rozetin tarihi sizinkinden yeniyse dosyanız eskimiş demektir. En pratiği, <a href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener">diyanetyolluk.github.io/Yolluk</a> adresini sık kullanılanlara ekleyip her zaman oradan açmaktır — böylece güncelleme derdi olmaz.</div>
     <div class="kg-qa"><b>S: Linki WhatsApp'tan gönderdiğimde ne görünüyor?</b><br>Başlık ("Yolluk Hesaplama — Diyanet İşleri Başkanlığı"), kısa bir açıklama ve bir görsel çıkar; karşı taraf tıklamadan ne olduğunu anlar. Bu bilgiler dosyanın içinde görünmez etiketler olarak durur, sayfanın görüntüsünü etkilemez.</div>
     <div class="kg-qa"><b>S: Avanstan damga vergisi kesilir mi?</b><br>Evet. 488 sayılı Damga Vergisi Kanunu'na ekli (1) sayılı tablonun <b>IV/1-b</b> bendinde "…<b>harcırah</b>… ve benzeri her ne adla olursa olsun hizmet karşılığı alınan paralar <b>(avans olarak ödenenler dahil)</b>" denilmektedir. Bu yüzden avans ödenirken de damga vergisi kesilir. Mükerrer vergi olmaması için, kesin ödemede (mahsupta) damga vergisi <b>avans düşüldükten sonra kalan tutar</b> üzerinden hesaplanır. Program da böyle çalışır: avans girdiğinizde belgede "Önceden Alınan Avans (−)" satırı çıkar, damga vergisi kalan tutardan hesaplanır.</div>
     <div class="kg-qa"><b>S: Kırmızı "NET ÖDENEN" bandı neyi gösteriyor?</b><br>Damga vergisi düşülmüş, <b>kişinin eline geçecek net tutarı</b>. Varsa avans da düşülmüştür. Brüt (genel toplam) tutarı tablonun "GENEL TOPLAM" satırında görürsünüz.</div>
-    <div class="kg-qa"><b>S: Ünvan seçtim ama belgeye eksik yazıldı, hata mı?</b><br>Hayır. Ek gösterge tablosundaki "Memur Yükseköğrenim", "İmam Hatip Diğer Öğrenim" gibi adların sonundaki ek <b>öğrenim durumudur, ünvanın parçası değildir</b>. Belgeye kişinin ünvanı yazılır: "Memur", "İmam Hatip". Hesaplama seçtiğiniz tam satıra göre yapılır.</div>
+    <div class="kg-qa"><b>S: Unvan seçtim ama belgeye eksik yazıldı, hata mı?</b><br>Hayır. Ek gösterge tablosundaki "Memur Yükseköğrenim", "İmam Hatip Diğer Öğrenim" gibi adların sonundaki ek <b>öğrenim durumudur, unvanın parçası değildir</b>. Belgeye kişinin unvanı yazılır: "Memur", "İmam Hatip". Hesaplama seçtiğiniz tam satıra göre yapılır.</div>
     <div class="kg-qa"><b>S: Gündelik yıl ortasında değişti, tabloya nasıl işlerim?</b><br>Referans Veriler → Gündelik ve Damga Vergisi Oranları'nda <b>"+ Satır Ekle"</b> deyip yeni satırın tarihini değişikliğin yürürlük tarihi yapın (örn. 07.07.2027) ve tutarları girin. Program, hesaplama tarihine göre <b>o tarihe eşit veya ondan önceki en yakın satırı</b> kullanır.</div>
     <div class="kg-qa"><b>S: Excel dosyasını güncellersem bu araç da güncellenir mi?</b><br>Hayır, bu araç Excel'den bağımsız çalışır. Ancak oran/katsayı güncellemelerini yukarıdaki gibi doğrudan sayfadan yapabilirsiniz.</div>
 
-    <div class="footnote" style="margin-top:16px;">Bu araç, Diyanet "Yolluk Hesaplama" Excel dosyasındaki hesaplama mantığı esas alınarak hazırlanmıştır.</div>
+    <div class="footnote" style="margin-top:16px;">Bu araç, <b>M.Y.H.B.Y. Örnek No: 28</b> (Merkezî Yönetim Harcama Belgeleri Yönetmeliği eki) ve "Yolluk Hesaplama" Excel dosyasındaki hesaplama mantığı esas alınarak hazırlanmıştır.</div>
   `;
 }
 
@@ -5889,14 +7509,24 @@ function bildirimGoster(mesaj, hataMi){
    ------------------------------------------------------------ */
 const GORUNUM_KEY = 'yolluk_gorunum_v1';
 const VP_TELEFON  = 'width=device-width, initial-scale=1.0';
-const VP_MASAUSTU = 'width=1500';
+/* Tablette 1200, telefonda 1500 piksel genişliğinde çizilir: tablette
+   yazılar daha büyük ve okunaklı olur, telefonda ise sayfanın tamamı sığar. */
+function masaustuGenisligi(){
+  const en = Math.max(window.screen ? window.screen.width : 0, window.innerWidth || 0);
+  return 'width=' + (en >= 700 ? 1200 : 1500);
+}
 
 function gorunumUygula(masaustu){
   const meta = document.getElementById('viewportMeta');
-  if(meta) meta.setAttribute('content', masaustu ? VP_MASAUSTU : VP_TELEFON);
+  if(meta) meta.setAttribute('content', masaustu ? masaustuGenisligi() : VP_TELEFON);
   document.body.classList.toggle('masaustu-gorunum', masaustu);
   const b = document.getElementById('btnGorunum');
-  if(b) b.textContent = masaustu ? '📱 Telefon görünümü' : '🖥 Bilgisayar görünümü';
+  if(b){
+    const dar = (window.screen ? window.screen.width : window.innerWidth) < 700;
+    b.textContent = masaustu
+      ? (dar ? '📱 Telefon görünümü' : '📱 Tablet görünümü')
+      : '🖥 Bilgisayar görünümü';
+  }
   try{ localStorage.setItem(GORUNUM_KEY, masaustu ? '1' : '0'); }catch(e){}
 }
 
@@ -5907,6 +7537,39 @@ if(btnGorunum) btnGorunum.addEventListener('click', ()=>{
 try{
   if(localStorage.getItem(GORUNUM_KEY) === '1') gorunumUygula(true);
 }catch(e){}
+
+/* ------------------------------------------------------------
+   İLK AÇILIŞ KARŞILAMASI
+   ------------------------------------------------------------ */
+const KARSILAMA_KEY = 'yolluk_karsilama_v1';
+function karsilamaKur(){
+  const perde = document.getElementById('karsilamaPerde');
+  if(!perde) return;
+  let gizle = false;
+  try{ gizle = localStorage.getItem(KARSILAMA_KEY) === 'gizle'; }catch(e){}
+  const kapat = ()=>{
+    const kutu = document.getElementById('karsilamaGosterme');
+    if(kutu && kutu.checked){ try{ localStorage.setItem(KARSILAMA_KEY, 'gizle'); }catch(e){} }
+    perde.style.display = 'none';
+  };
+  document.getElementById('karsilamaKapat').addEventListener('click', kapat);
+  document.getElementById('karsilamaKilavuz').addEventListener('click', ()=>{
+    kapat();
+    const sekme = document.querySelector('.tabbtn[data-tab="s5"]');
+    if(sekme) sekme.click();
+    if(window.scrollTo) try{ window.scrollTo(0,0); }catch(e){}
+  });
+  perde.addEventListener('mousedown', (e)=>{ if(e.target === perde) kapat(); });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && perde.style.display !== 'none') kapat();
+  });
+  if(!gizle) perde.style.display = 'flex';
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', karsilamaKur);
+} else {
+  karsilamaKur();
+}
 
 const btnKaydet = document.getElementById('btnKaydet');
 if(btnKaydet) btnKaydet.addEventListener('click', ()=>{
@@ -5977,6 +7640,34 @@ checkDraftBanner();
 
 </script>
 <!-- Sürüm rozeti: programı her güncellediğinde AŞAĞIDAKİ TARİHİ değiştir. -->
+<!-- ===== İlk açılışta karşılama penceresi ===== -->
+<div class="karsilama-perde no-print" id="karsilamaPerde" style="display:none;">
+  <div class="karsilama">
+    <div class="karsilama-bas">Yolluk Hesaplama Programı</div>
+    <div class="karsilama-govde">
+      <p><span class="k-vurgu">Hoş geldiniz.</span> Bu program,
+         <span class="k-vurgu">Sürekli Görev Yolluğu Bildirimi</span> ve
+         <span class="k-vurgu">Ödeme Emri Belgesi</span>'ni hazırlar. Hesaplama tablosu,
+         <a href="https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=9815&amp;MevzuatTur=7&amp;MevzuatTertip=5"
+            target="_blank" rel="noopener">Merkezî Yönetim Harcama Belgeleri Yönetmeliği</a>'nin
+         eklerinde yer alan <span class="k-vurgu">M.Y.H.B.Y. Örnek No: 28</span> ile birebir aynıdır.</p>
+      <p class="karsilama-uyari">⚠️ Programı kullanmadan önce lütfen <span class="k-vurgu">Kılavuz</span> bölümünü okuyunuz.
+         Unvan seçimi, ek gösterge, avans ve imza sütunları gibi konular orada anlatılmıştır.</p>
+      <ul>
+        <li><span class="k-vurgu">Sarı alanlar</span> sizin dolduracağınız yerlerdir.</li>
+        <li>Girdiğiniz veriler <span class="k-vurgu">yalnızca bu cihazda</span> kalır, hiçbir yere gönderilmez.</li>
+        <li>Sağ alttaki <span class="k-vurgu">Sürüm</span> rozetinden güncel sürüme ulaşabilirsiniz.</li>
+      </ul>
+    </div>
+    <div class="karsilama-alt">
+      <label class="karsilama-onay"><input type="checkbox" id="karsilamaGosterme"> Bir daha gösterme</label>
+      <span style="flex:1"></span>
+      <button type="button" class="btn secondary" id="karsilamaKapat">Kapat ve başla</button>
+      <button type="button" class="btn" id="karsilamaKilavuz">Kılavuzu Aç</button>
+    </div>
+  </div>
+</div>
+
 <a class="surum-rozet no-print" href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener"
    title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 12.08.2026 · Güncel sürüm ↗</a>
 </body>
