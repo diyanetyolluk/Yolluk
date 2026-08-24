@@ -26,7 +26,6 @@
 <meta name="twitter:description" content="Sürekli Görev Yolluğu Bildirimi ve Ödeme Emri Belgesi hesaplama programı. Unvan ve ek göstergeye göre gündelik, yer değiştirme gideri ve damga vergisi otomatik hesaplanır; belge doğrudan yazdırılabilir. Kurulum gerektirmez, veriler yalnızca kendi cihazınızda kalır.">
 <meta name="twitter:image" content="https://diyanetyolluk.github.io/Yolluk/onizleme.png">
 <link rel="canonical" href="https://diyanetyolluk.github.io/Yolluk/">
-<style id="dynamic-page-style"></style>
 <style>
   :root{
     --blue:#DBEEF4;
@@ -45,13 +44,11 @@
   .app{max-width:1500px;margin:0 auto;padding:14px;position:relative;z-index:1;}
 
   /* ---- tabs ---- */
-  .tabbar{display:flex;gap:3px;margin-bottom:8px;position:sticky;top:0;z-index:70;
-          background:#e9edf1;padding:4px 0 0;border-bottom:1px solid var(--border-strong);}
-  /* Sekme düğmeleri: bilgisayarda derli toplu dursun diye küçük tutuldu.
-     (Telefon/tablet için aşağıdaki @media kurallarında daha büyükler —
-      parmakla basılacağı için orada küçültme yapılmaz.) */
-  .tabbtn{padding:4px 9px;display:inline-flex;align-items:center;background:#c9d3da;border:1px solid var(--border-strong);border-bottom:none;
-    border-radius:5px 5px 0 0;cursor:pointer;font-weight:bold;font-size:11.5px;color:#333;}
+  .tabbar{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px;position:sticky;top:0;z-index:70;
+          background:#e9edf1;padding:5px 0 0;border-bottom:1px solid var(--border-strong);}
+  .tabbtn{padding:4px 8px;font-size:11.5px;line-height:1.25;white-space:nowrap;
+    display:inline-flex;align-items:center;background:#c9d3da;border:1px solid var(--border-strong);border-bottom:none;
+    border-radius:5px 5px 0 0;cursor:pointer;font-weight:bold;color:#333;}
   .tabbtn .ikon{width:12px;height:12px;margin-right:4px;}
   /* Aktif sekme renkli zeminle belirgin olsun */
   .tabbtn.active{background:#2b6cb0;color:#fff;border-color:#1f4e7a;font-weight:bold;}
@@ -66,11 +63,6 @@
   #btnOnizle:hover{background:#276749;}
   #btnYazdir{background:#2b6cb0;color:#fff;}
   #btnYazdir:hover{background:#245a94;}
-  /* Boş satırları gizle/göster düğmesi — yalnızca Sürekli Görev Yolluğu sekmesinde görünür */
-  #btnBosSatir{background:#b7791f;color:#fff;white-space:nowrap;}
-  #btnBosSatir:hover{background:#8f6115;}
-  #btnBosSatir.gizli-aktif{background:#2c7a7b;}
-  #btnBosSatir.gizli-aktif:hover{background:#22605f;}
   /* Görünüm düğmesi yalnızca dar ekranlarda (telefon/tablet) görünür */
   #btnGorunum{display:none;background:#6b46c1;}
   #btnGorunum:hover{background:#553c9a;}
@@ -80,9 +72,6 @@
     background:#2f855a;color:#fff;padding:8px 16px;border-radius:6px;font-size:12.5px;font-weight:bold;
     box-shadow:0 3px 10px rgba(0,0,0,.25);}
   @media print{ .tabbar{position:static;} }
-  /* Ekrandaki bilgi balonu kağıda basılmasın: düğmeye basıp hemen Yazdır'a
-     basıldığında balon hâlâ ekranda olabiliyordu, belgenin üstüne çıkıyordu. */
-  @media print{ .kayit-bildirim{display:none!important;} }
   /* Kullanım Kılavuzu sekmesi göze çarpsın diye kırmızı zeminli */
   .tabbtn[data-tab="s5"]{background:#c0392b;color:#fff;}
   .tabbtn[data-tab="s5"]:hover{background:#a93226;}
@@ -295,8 +284,10 @@
 
   .sign-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
   .sign-box{border:1px solid var(--border-strong);padding:10px;text-align:center;font-size:11.5px;}
-  .sign-box .role{font-weight:bold;margin-top:14px;}
-  .sign-box .line{margin-top:22px;border-top:1px solid #333;padding-top:4px;}
+  /* Görev adı, üstündeki tarihe bitişik dursun (tek blok gibi okunur) */
+  .sign-box .role{font-weight:bold;margin-top:1px;}
+  /* Görev adı ile ad/unvan arasındaki boşluk ISLAK İMZA içindir */
+  .sign-box .line{margin-top:28px;border-top:1px solid #333;padding-top:4px;}
 
   .note-red{color:var(--red);font-weight:bold;font-size:11px;margin:4px 0;}
   .footnote{font-size:10.5px;color:#333;margin-top:6px;}
@@ -399,6 +390,20 @@
   .pv-tot{background:#DBEEF4;font-weight:bold;}
   .pv-foot{font-size:7.5px;line-height:1.25;}
   .pv-not{color:#1F4E9C;font-weight:bold;}   /* "(**) Not:" satırı — parlamento mavisi */
+  .pv-imza-rol{font-weight:bold;}            /* imza bloğundaki görev/rol satırı */
+  /* Görev adı satırının ALTINDAKİ boşluk ıslak imza içindir; görev adı ise
+     üstündeki tarihe bitişik kalır (ekrandaki kutularla aynı düzen). */
+  .pv-table tr.pv-imza-bosluk td{height:16px;vertical-align:top;padding-top:0;}
+
+  /* ---- Boş satırları gizle/göster ----
+     Belgedeki DOLU satırlar hiçbir zaman gizlenmez; yalnızca hiç veri
+     girilmemiş (boş) form satırları saklanır. Ekranda, önizlemede ve
+     kağıtta aynı şekilde davranır. */
+  body.bos-gizli tr.bos-satir{display:none!important;}
+  #btnBosSatir{background:#b7791f;color:#fff;}
+  #btnBosSatir:hover{background:#975a16;}
+  body.bos-gizli #btnBosSatir{background:#2f855a;}
+  body.bos-gizli #btnBosSatir:hover{background:#276749;}
   .pv-kirmizi{color:#FF0000;font-weight:bold;}
   /* Tahakkuk cümlesi: satır yüksekliği metne göre büyür, kırpılmaz */
   .pv-table td.pv-cumle{height:auto;overflow:hidden;white-space:nowrap;
@@ -420,6 +425,15 @@
   .oeb-logo img{width:108pt;height:auto;display:inline-block;}
 
   @page{size:A4 landscape;margin:8mm;}
+
+  /* ---- BASKI ÖLÇEĞİ ----
+     Kağıt kenarındaki basılamayan alan (yazıcı donanım payı) yüzünden
+     %100'de belgenin sağ kenarı taşabiliyordu. Belge %95'e küçültülüp
+     ortalanıyor; böylece Chrome'un "Ölçek: Varsayılan" ayarıyla doğrudan
+     düzgün basılır, kullanıcının her seferinde %95 yazmasına gerek kalmaz.
+     zoom (transform değil) kullanılıyor: yerleşimi de küçülttüğü için
+     sayfa sonu hesabı doğru kalır. */
+  :root{ --baski-olcek:0.95; }
 
   /* ================= ÖNİZLEME MODU =================
      Yazdırmadan önce çıktının kağıtta nasıl görüneceğini ekranda gösterir.
@@ -445,6 +459,10 @@
   body.onizleme .app{
     background:#fff; margin:70px auto 40px; box-shadow:0 6px 30px rgba(0,0,0,.45);
     padding:20mm 10mm 10mm 15mm;      /* üst / sağ / alt / sol */
+  }
+  /* Önizleme, kağıttakiyle birebir aynı ölçekte gösterilsin */
+  body.onizleme #print-root, body.onizleme #s2-print-root{
+    transform:scale(var(--baski-olcek)); transform-origin:top center;
   }
   body.onizleme.yatay .app{ width:297mm; min-height:210mm; }   /* A4 yatay  */
   body.onizleme.dikey .app{ width:210mm; min-height:297mm; }   /* A4 dikey  */
@@ -579,10 +597,40 @@
     #sheet-s2 table.doc-table td, #sheet-s2 table.doc-table th{padding:2px 5px;}
     #sheet-s2 .sign-grid{margin-top:8px;gap:10px;}
     #sheet-s2 .sign-box{padding:6px;}
-    #sheet-s2 .sign-box .role{margin-top:6px;}
-    #sheet-s2 .sign-box .line{margin-top:10px;}
+    #sheet-s2 .sign-box .role{margin-top:1px;}
+    #sheet-s2 .sign-box .line{margin-top:18px;}
+
+    /* ---- ÖNİZLEME AÇIKKEN YAZDIRMA ----
+       "Önizle" modunun ekrandaki kağıt yaprağı taklidi (297mm genişlik,
+       20mm iç boşluk, 210mm asgari yükseklik, gölge, dış boşluk) yalnızca
+       EKRAN içindir. Bu kurallar yazdırmada da geçerli kaldığı için belge
+       kağıda sığmıyor ve arkasına boş bir ikinci sayfa çıkıyordu.
+       Aşağısı, önizleme açıkken basılsa bile çıktının doğrudan yazdırmayla
+       birebir aynı olmasını sağlar. */
+    body.onizleme{background:#fff!important;overflow:visible!important;}
+    body.onizleme .app,
+    body.onizleme.yatay .app,
+    body.onizleme.dikey .app{
+      width:auto!important; max-width:none!important; min-height:0!important;
+      margin:0 auto!important; padding:0!important;
+      box-shadow:none!important; background:transparent!important;
+    }
+
+    /* ---- Kağıda basarken %95 ölçek (bkz. --baski-olcek) ----
+       transform:scale kullanılıyor; yerleşim kutusu tam genişlikte kalır,
+       çizim %95'e küçülüp yatayda ortalanır. Böylece belge yazıcının
+       basılamayan kenar payına hiç yaklaşmaz. */
+    #print-root, #s2-print-root,
+    body.onizleme #print-root, body.onizleme #s2-print-root{
+      transform:scale(var(--baski-olcek))!important; transform-origin:top center!important;
+      margin-left:auto!important; margin-right:auto!important;
+    }
   }
 </style>
+<!-- Kağıt yönü ve kenar boşlukları buraya JS tarafından yazılır.
+     ANA STİLDEN SONRA olmak ZORUNDA: yukarıdaki "@page{margin:8mm}"
+     ile aynı özgüllükte olduğu için son yazılan kural geçerli olur. -->
+<style id="dynamic-page-style"></style>
 </head>
 <body>
 <div class="onizle-bar" id="onizleBar">
@@ -604,8 +652,8 @@
     <div style="flex:1"></div>
     <div class="tabbtn tabbtn-islem" id="btnYeniHesaplama"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Yeni Hesaplama</div>
     <div class="tabbtn tabbtn-islem" id="btnOnizle"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Önizle</div>
+    <div class="tabbtn tabbtn-islem" id="btnBosSatir" title="Belgedeki boş satırları gizler/gösterir. Dolu satırlar her zaman görünür."><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18"/></svg><span id="btnBosSatirYazi">Boş satırları gizle</span></div>
     <div class="tabbtn tabbtn-islem" id="btnGorunum" title="Telefonda bilgisayardaki düzeni göster">🖥 Bilgisayar görünümü</div>
-    <div class="tabbtn tabbtn-islem" id="btnBosSatir" title="Belgedeki doldurulmamış satırları gizler; hem ekranda hem kağıtta yalnızca dolu satırlar kalır."><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18"/></svg><span class="bs-yazi">Boş satırları gizle</span></div>
     <div class="tabbtn tabbtn-islem" id="btnYazdir"><svg class="ikon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Yazdır</div>
   </div>
   <div id="draftBanner" class="draft-banner no-print" style="display:none;"></div>
@@ -1337,21 +1385,21 @@ const OLD_ROWS = [
   ["Müezzin Kayyım Diğer Öğrenim", 13, null],
   ["Müezzin Kayyım Diğer Öğrenim", 14, null],
   ["Müezzin Kayyım Diğer Öğrenim", 15, null],
-  ["Öğretmen (Baş Öğretmen)", 1, 3000],
-  ["Öğretmen (Baş Öğretmen)", 2, 2200],
-  ["Öğretmen (Baş Öğretmen)", 3, 1600],
-  ["Öğretmen (Baş Öğretmen)", 4, 1100],
-  ["Öğretmen (Baş Öğretmen)", 5, 900],
-  ["Öğretmen (Baş Öğretmen)", 6, 800],
-  ["Öğretmen (Baş Öğretmen)", 7, 500],
-  ["Öğretmen (Baş Öğretmen)", 8, 450],
-  ["Öğretmen (Baş Öğretmen)", 9, null],
-  ["Öğretmen (Baş Öğretmen)", 10, null],
-  ["Öğretmen (Baş Öğretmen)", 11, null],
-  ["Öğretmen (Baş Öğretmen)", 12, null],
-  ["Öğretmen (Baş Öğretmen)", 13, null],
-  ["Öğretmen (Baş Öğretmen)", 14, null],
-  ["Öğretmen (Baş Öğretmen)", 15, null],
+  ["Öğretmen (Başöğretmen)", 1, 3000],
+  ["Öğretmen (Başöğretmen)", 2, 2200],
+  ["Öğretmen (Başöğretmen)", 3, 1600],
+  ["Öğretmen (Başöğretmen)", 4, 1100],
+  ["Öğretmen (Başöğretmen)", 5, 900],
+  ["Öğretmen (Başöğretmen)", 6, 800],
+  ["Öğretmen (Başöğretmen)", 7, 500],
+  ["Öğretmen (Başöğretmen)", 8, 450],
+  ["Öğretmen (Başöğretmen)", 9, null],
+  ["Öğretmen (Başöğretmen)", 10, null],
+  ["Öğretmen (Başöğretmen)", 11, null],
+  ["Öğretmen (Başöğretmen)", 12, null],
+  ["Öğretmen (Başöğretmen)", 13, null],
+  ["Öğretmen (Başöğretmen)", 14, null],
+  ["Öğretmen (Başöğretmen)", 15, null],
   ["Öğretmen (Uzman Öğretmen)", 1, 3000],
   ["Öğretmen (Uzman Öğretmen)", 2, 2200],
   ["Öğretmen (Uzman Öğretmen)", 3, 1600],
@@ -2173,21 +2221,21 @@ const NEW_ROWS = [
   ["Müezzin Kayyım Diğer Öğrenim", 13, null],
   ["Müezzin Kayyım Diğer Öğrenim", 14, null],
   ["Müezzin Kayyım Diğer Öğrenim", 15, null],
-  ["Öğretmen (Baş Öğretmen)", 1, 3600],
-  ["Öğretmen (Baş Öğretmen)", 2, 3000],
-  ["Öğretmen (Baş Öğretmen)", 3, 2200],
-  ["Öğretmen (Baş Öğretmen)", 4, 2100],
-  ["Öğretmen (Baş Öğretmen)", 5, 1800],
-  ["Öğretmen (Baş Öğretmen)", 6, 1700],
-  ["Öğretmen (Baş Öğretmen)", 7, 1500],
-  ["Öğretmen (Baş Öğretmen)", 8, 1400],
-  ["Öğretmen (Baş Öğretmen)", 9, null],
-  ["Öğretmen (Baş Öğretmen)", 10, null],
-  ["Öğretmen (Baş Öğretmen)", 11, null],
-  ["Öğretmen (Baş Öğretmen)", 12, null],
-  ["Öğretmen (Baş Öğretmen)", 13, null],
-  ["Öğretmen (Baş Öğretmen)", 14, null],
-  ["Öğretmen (Baş Öğretmen)", 15, null],
+  ["Öğretmen (Başöğretmen)", 1, 3600],
+  ["Öğretmen (Başöğretmen)", 2, 3000],
+  ["Öğretmen (Başöğretmen)", 3, 2200],
+  ["Öğretmen (Başöğretmen)", 4, 2100],
+  ["Öğretmen (Başöğretmen)", 5, 1800],
+  ["Öğretmen (Başöğretmen)", 6, 1700],
+  ["Öğretmen (Başöğretmen)", 7, 1500],
+  ["Öğretmen (Başöğretmen)", 8, 1400],
+  ["Öğretmen (Başöğretmen)", 9, null],
+  ["Öğretmen (Başöğretmen)", 10, null],
+  ["Öğretmen (Başöğretmen)", 11, null],
+  ["Öğretmen (Başöğretmen)", 12, null],
+  ["Öğretmen (Başöğretmen)", 13, null],
+  ["Öğretmen (Başöğretmen)", 14, null],
+  ["Öğretmen (Başöğretmen)", 15, null],
   ["Öğretmen (Uzman Öğretmen)", 1, 3600],
   ["Öğretmen (Uzman Öğretmen)", 2, 3000],
   ["Öğretmen (Uzman Öğretmen)", 3, 2200],
@@ -2468,7 +2516,7 @@ const UNVAN_LIST = [
   "Müezzin Kayyım Diğer Lisans / Ön Lisans",
   "Müezzin Kayyım İmam Hatip Lisesi",
   "Müezzin Kayyım Diğer Öğrenim",
-  "Öğretmen (Baş Öğretmen)",
+  "Öğretmen (Başöğretmen)",
   "Öğretmen (Uzman Öğretmen)",
   "Öğretmen",
   "Şef Yükseköğrenim",
@@ -2544,6 +2592,7 @@ const ESKI_YAZIM = {
   'İmam-Hatip İlahiyat Lisans'          : 'İmam Hatip İlahiyat Lisans',
   'İmam-Hatip Yükseköğrenim'            : 'İmam Hatip Yükseköğrenim',
   'Müezzin Kayyım (Baş Müezzin Kayım)'  : 'Müezzin Kayyım (Baş Müezzin Kayyım)',
+  'Öğretmen (Baş Öğretmen)'             : 'Öğretmen (Başöğretmen)',
 };
 
 /* ------------------------------------------------------------
@@ -4096,19 +4145,6 @@ let aileHepsiGoster = false;   // boş aile satırları görünsün mü?
 let aileEkstraSatir = 0;       // "+ Kişi Ekle" ile açılan fazladan satır
 const PRINT_FAMILY_ROWS = 17;
 
-/* Belgedeki BOŞ (doldurulmamış) satırlar görünsün mü?
-   false = Örnek No: 28'in aslındaki gibi boş satırlar da durur (VARSAYILAN)
-   true  = yalnızca dolu satırlar kalır; tablo kısalır (hem ekranda hem kağıtta)
-   Üst çubuktaki "Boş satırları gizle" düğmesi bu bayrağı çevirir.
-   Tercih kaydedilmez; program her açıldığında boş satırlar görünür gelir. */
-let bosSatirGizli = false;
-
-/* T.C. Kimlik No kutusundaki numara PERSONEL LİSTESİNDEN mi geldi, yoksa
-   kullanıcı elle mi yazdı? Listeden gelen numara yalnız o kişiye aittir;
-   başka bir kişiye geçilince silinir — önceki kişinin numarası yeni
-   belgeye yapışıp kalmasın. Elle yazılan numaraya program dokunmaz. */
-let tcknListedenGeldi = false;
-
 /* Her "hesaplama oturumu" için benzersiz kimlik — Geçmiş Hesaplamalar
    kaydının hangi girdiye karşılık geldiğini takip etmek için kullanılır. */
 function newCalcId(){
@@ -4133,8 +4169,6 @@ function makeDefaultState(){
   nereye: '',
   tasitTuru: 'Otobüs',
   yolSuresiGun: '1',
-  dovizCinsi: '',
-  dovizKuru: '',
   // istisna girişi (override)
   ovrUnvan: '',
   ovrEkGosterge: '',
@@ -4281,13 +4315,12 @@ function compute(){
   else if(state.tayinTuru === 'Eş Durumu Tayini') katsayi = 2.5;
   else katsayi = 5;
   const O10 = round2(N10*gundelik*katsayi/100);
-  const Q10 = state.dovizKuru === '' ? '' : num(state.dovizKuru);
-  const R10 = round2(round2(J10+L10+M10+O10) * (Q10==='' ? 1 : Q10));
+  const R10 = round2(J10+L10+M10+O10);
 
   rows.push({
     idx:-1, nereden: state.nereye, ad: state.adSoyad, akraba:'Kendisi',
     gunSayisi:H10, yevmiye:I10, tutar:J10, tasitTuru: state.tasitTuru, ucret:L10,
-    sabitUnsur:M10, mesafe:N10, degTutar:O10, dovizCinsi:state.dovizCinsi, kur:Q10, toplam:R10,
+    sabitUnsur:M10, mesafe:N10, degTutar:O10, toplam:R10,
     active:true
   });
 
@@ -4297,7 +4330,7 @@ function compute(){
     const active = !!(f.rel && f.rel.trim() !== '');
     if(!active){
       rows.push({idx, nereden:'', ad:'', akraba:'', gunSayisi:'', yevmiye:'', tutar:'', tasitTuru:'', ucret:'',
-        sabitUnsur:'', mesafe:'', degTutar:'', dovizCinsi:'', kur:'', toplam:'', active:false});
+        sabitUnsur:'', mesafe:'', degTutar:'', toplam:'', active:false});
       return;
     }
     famActiveCount++;
@@ -4310,12 +4343,11 @@ function compute(){
       : '';
     const MfNum = (Mf === '') ? 0 : Mf;
     const Of = 0; // N/O sütunlarında formül yalnız 10. satırda var
-    const Qf = Q10;
-    const Rf = round2(round2(Jf+Lf+MfNum+Of) * (Qf==='' ? 1 : Qf));
+    const Rf = round2(Jf+Lf+MfNum+Of);
     rows.push({
       idx, nereden: state.nereye, ad: f.name, akraba: f.rel,
       gunSayisi:Hf, yevmiye:If, tutar:Jf, tasitTuru: state.tasitTuru, ucret:Lf,
-      sabitUnsur:Mf, mesafe:'', degTutar:'', dovizCinsi: (f.rel? state.dovizCinsi:''), kur:Qf, toplam:Rf,
+      sabitUnsur:Mf, mesafe:'', degTutar:'', toplam:Rf,
       active:true
     });
   });
@@ -4335,7 +4367,11 @@ function compute(){
 
   // ---- yazıyla toplam, damga vergisi, net ödenen ----
   c.toplamYazi = tutarYaziyla(c.R28);
-  const damgaOrani = lookupApprox(c.tarih, 'damga');
+  /* Excel R29 formülü oranı B4 = MUHASEBE TARİHİ'nden okur (ayrılma tarihinden
+     değil). Muhasebe tarihi girilmemişse ayrılma tarihine düşülür. */
+  const damgaTarihi = state.muhasebeTarihi || c.tarih;
+  c.damgaTarihi = damgaTarihi;
+  const damgaOrani = lookupApprox(damgaTarihi, 'damga');
   // damgaOrani===undefined -> tabloda hiç eşleşen tarih yok (gerçek Excel hatası) -> yedek oran
   // damgaOrani===null      -> dönem tabloda var ama oranı henüz girilmemiş -> Excel'de 0 sayılır
   const damgaOraniSayisal = (damgaOrani===undefined) ? 7.59/1000 : (damgaOrani===null ? 0 : damgaOrani);
@@ -4351,6 +4387,15 @@ function compute(){
   c.damgaVergisi = round2(c.damgaMatrahi * damgaOraniSayisal);
   c.damgaOrani = damgaOraniSayisal;
   c.netOdenen = round2(c.damgaMatrahi - c.damgaVergisi);
+  /* ---- ÖDEME EMRİ BELGESİ için tutarlı üçlü ----
+     Belgenin "Ödeme Emri Toplam Tutarı" satırı kendi içinde tutmalıdır:
+        Brüt (R28) − Kesinti (damga)  =  Net Tutar
+        Net Tutar  − Mahsup Edilen Ön Ödeme (avans) = Ödenmesi Gereken Tutar
+     Daha önce Net Tutar'a doğrudan netOdenen yazılıp mahsup sütununa 0,00
+     bastığı için avans girildiğinde satır tutmuyordu. */
+  c.oebNetTutar = round2(c.R28 - c.damgaVergisi);   // brüt − kesinti
+  c.oebMahsup   = c.avans;                          // mahsup edilen ön ödeme
+  c.oebOdenecek = c.netOdenen;                      // ödenmesi gereken tutar
 
   c.sentenceE30 = `${yonelmeEkle(state.nereye)} atanan ${state.adSoyad} ve aile fertleri için sürekli görev yolluğu olarak tahakkuk eden `;
   c.sentenceE31 = `${trMoney(c.R28)} Türk lirasını (${c.toplamYazi}) gösterir bildirimdir.`;
@@ -4370,20 +4415,17 @@ const CALC_STATIC_HEAD = `
                 <th colspan="3">G Ü N D E L İ K L E R</th>
                 <th colspan="2">T A Ş I T I N</th>
                 <th colspan="3">Y E R  D E Ğ İ Ş T İ R M E  G İ D E R İ</th>
-                <th colspan="2">Dövizin</th>
                 <th rowspan="3">TOPLAM<br>TUTAR (TL)</th>
               </tr>
               <tr>
                 <th>Gün Sayısı</th><th>Yevmiye</th><th>Tutarı</th>
                 <th>Çeşidi /<br>Mevki</th><th>Ücreti</th>
                 <th>Sabit<br>Unsur</th><th>Mesafe<br>Km/Mil</th><th>Tutarı</th>
-                <th>Cinsi</th><th>Kuru</th>
               </tr>
               <tr>
                 <th></th><th>TL/Döviz</th><th>TL/Döviz</th>
                 <th></th><th>TL/Döviz</th>
                 <th>TL/Döviz</th><th></th><th>TL/Döviz</th>
-                <th></th><th>TL</th>
               </tr>
 `;
 
@@ -4397,28 +4439,28 @@ function docHeadRows(c){
     <tr>
       <td class="dh-l">Adı Soyadı</td>
       <td class="dh-v" colspan="2">${state.adSoyad || bos}</td>
-      <td class="dh-mid dh-top" colspan="8"></td>
+      <td class="dh-mid dh-top" colspan="6"></td>
       <td class="dh-l" colspan="2">Dairesi</td>
       <td class="dh-v">${state.birimAdi || bos}</td>
     </tr>
     <tr>
       <td class="dh-l">Unvanı</td>
       <td class="dh-v" colspan="2">${c.unvanEfektif || bos}</td>
-      <td class="dh-title" colspan="8">YURTİÇİ / YURTDIŞI SÜREKLİ GÖREV YOLLUĞU BİLDİRİMİ</td>
+      <td class="dh-title" colspan="6">YURTİÇİ SÜREKLİ GÖREV YOLLUĞU BİLDİRİMİ</td>
       <td class="dh-l" colspan="2">Bütçe Yılı</td>
       <td class="dh-v">${c.butceYili || bos}</td>
     </tr>
     <tr>
       <td class="dh-l">Aylık Kadro Derecesi ve Pozisyonu</td>
       <td class="dh-v" colspan="2">${state.pozisyon || bos}</td>
-      <td class="dh-sub" colspan="8">(${state.tayinTuru})</td>
+      <td class="dh-sub" colspan="6">(${state.tayinTuru})</td>
       <td class="dh-l" colspan="2">Önceden Avans Almışsa Aldığı</td>
       <td class="dh-v">${c.avans ? trTutar(c.avans) : bos}</td>
     </tr>
     <tr>
       <td class="dh-l">Ek Göstergesi</td>
       <td class="dh-v" colspan="2">${c.ekGosterge}</td>
-      <td class="dh-mid" colspan="8"></td>
+      <td class="dh-mid" colspan="6"></td>
       <td class="dh-l" colspan="2">Muhasebe Birimi ve Tarihi</td>
       <td class="dh-v dh-muhasebe">
         <input type="text" class="dh-birim"
@@ -4429,7 +4471,7 @@ function docHeadRows(c){
     <tr>
       <td class="dh-l">Gündeliği</td>
       <td class="dh-v" colspan="2">${c.gundelikBelirsiz ? '-' : trMoney(c.gundelik)}</td>
-      <td class="dh-mid dh-bot" colspan="8"></td>
+      <td class="dh-mid dh-bot" colspan="6"></td>
       <td class="dh-l" colspan="2">${state.atamaSayisi ? 'Atama Tarihi ve Sayısı' : 'Atama Tarihi'}</td>
       <td class="dh-v dh-atama">
         <span class="dh-tarih">${fmtDateTR(state.atamaTarihi) || bos}</span><input type="text" class="dh-sayi"
@@ -4509,12 +4551,9 @@ function buildSheet1Shell(){
             ${fieldRow('Gidilen Mesafe Km', `<input type="text" inputmode="decimal" data-tutar="1" data-k="mesafeKm" value="${state.mesafeKm}" placeholder="Gidilen mesafeyi km olarak giriniz">`)}
             ${fieldRow('Taşıt Ücreti', `<input type="text" inputmode="decimal" data-tutar="kurus" data-k="tasitUcreti" value="${state.tasitUcreti}" placeholder="Taşıt ücretini giriniz">`)}
             ${fieldRow('Adı Soyadı', `<div id="adSoyadWrap"></div>`)}
-            ${fieldRow('T.C. Kimlik No', `<input type="text" inputmode="numeric" maxlength="11" data-k="tckn" value="${escapeHtml(state.tckn||'')}" placeholder="Yazarsan bildirimde adın altında görünür" title="Bildirimde Adı Soyadı'nın altında küçük punto ile, Ödeme Emri'nde ise VKN/TCKN alanında görünür. Boş bırakırsan belgede hiç çıkmaz.">`)}
             ${fieldRow('Nereden Nereye Gidildiği', `<input type="text" data-k="nereye" value="${state.nereye}" placeholder="Örn: Reyhanlı'dan Antakya'ya">`)}
             ${fieldRow('Taşıtın Çeşidi / Mevki', `<select data-k="tasitTuru">${tasitOpts}</select>`)}
             ${fieldRow('Yol Süresi Gün', `<select data-k="yolSuresiGun">${yolGunOpts}</select>`)}
-            ${fieldRow('Dövizin Cinsi (varsa)', `<input type="text" data-k="dovizCinsi" value="${state.dovizCinsi}" placeholder="Yurt dışı ise döviz cinsini giriniz">`)}
-            ${fieldRow('Dövizin Kuru (varsa)', `<input type="text" inputmode="decimal" data-k="dovizKuru" value="${state.dovizKuru}" placeholder="Yurt dışı ise döviz kurunu giriniz">`)}
           </div>
         </div>
 
@@ -4809,12 +4848,9 @@ function updateSheet1Dynamic(c){
   toggleIstisna('ovrGundelikInput', state.ovrGundelik);
 
 
-  /* "Boş satırları gizle" açıksa doldurulmamış satırlar hiç çizilmez;
-     kapalıysa (varsayılan) Excel'deki gibi boş satırlar da görünür. */
-  const ekranSatirlari = bosSatirGizli ? c.rows.filter(r=>r.active) : c.rows;
-  document.getElementById('calcBody').innerHTML = ekranSatirlari.map(r=>{
+  document.getElementById('calcBody').innerHTML = c.rows.map(r=>{
     if(!r.active){
-      return `<tr class="fam-row-out"><td colspan="14" style="color:#bbb;">&nbsp;</td></tr>`;
+      return `<tr class="fam-row-out bos-satir"><td colspan="12" style="color:#bbb;">&nbsp;</td></tr>`;
     }
     return `<tr class="${r.akraba==='Kendisi'?'self-row':'fam-row-out'}">
       <td class="name-cell">${r.nereden}</td>
@@ -4828,8 +4864,6 @@ function updateSheet1Dynamic(c){
       <td>${r.sabitUnsur===''?'':trMoney(r.sabitUnsur)}</td>
       <td>${r.mesafe === '' ? '' : trTutar(r.mesafe)}</td>
       <td>${r.degTutar===''?'':trMoney(r.degTutar)}</td>
-      <td>${r.dovizCinsi}</td>
-      <td>${trSayi(r.kur)}</td>
       <td><b>${trMoney(r.toplam)}</b></td>
     </tr>`;
   }).join('');
@@ -4843,7 +4877,6 @@ function updateSheet1Dynamic(c){
       <td>${trMoney(c.M28)}</td>
       <td></td>
       <td>${trMoney(c.O28)}</td>
-      <td colspan="2"></td>
       <td>${trMoney(c.R28)}</td>
     </tr>
   `;
@@ -4869,7 +4902,12 @@ function updateSheet1Dynamic(c){
       <div class="line">${escapeHtml(i.ad||'')}<br>${escapeHtml(i.unvan||'')}</div>
     </div>`).join('');
 
-  const notHtml = `<div class="note-manual">(**) Not: ${escapeHtml(state.notMetni||'').replace(/\n/g,'<br>')}</div>`;
+  /* "(**) Not:" ibaresi yalnızca gerçekten not yazıldığında görünür.
+     Boşken ne ibare ne de satır basılır. */
+  const notVar = String(state.notMetni||'').trim() !== '';
+  const notHtml = notVar
+    ? `<div class="note-manual">(**) Not: ${escapeHtml(state.notMetni).replace(/\n/g,'<br>')}</div>`
+    : '';
   document.getElementById('footnote').innerHTML = `
     <div class="note-red">(*) Bu kısım bildirim sahibinin atama işleminden bilgisi olan amir tarafından imzalanacaktır.</div>
     <div class="note-red">Hesaplamaya esas veriler yukarıda otomatik olarak getirilmiştir. Kontrol ediniz. İstisna Girişi kısmından farklı veri girebilirsiniz.</div>
@@ -5307,9 +5345,6 @@ function bindInputs(root){
   root.querySelectorAll('[data-k]').forEach(el=>{
     const apply = ()=>{
       state[el.dataset.k] = el.value;
-      /* Kullanıcı T.C. kutusuna kendi elleriyle yazdıysa, bu numara artık
-         "listeden gelme" sayılmaz; isim değişse bile silinmez. */
-      if(el.dataset.k === 'tckn') tcknListedenGeldi = false;
       // Personel listesinden isim seçilince derece + unvan otomatik gelsin
       if(el.dataset.k === 'adSoyad') applyPersonelByName(el.value);
       /* Kullanıcı Unvanı ya da Aylık Kadro Derecesi'ni ELLE değiştirdiyse,
@@ -5450,13 +5485,9 @@ function renderPrintView(c){
   /* ---- veri satırları (Excel 10:27 = kendisi + 17 aile ferdi) ----
      Ekranda 10 aile ferdi satırı var; kağıttaki tablo yüksekliği Excel ile
      aynı kalsın diye eksik satırlar boş olarak tamamlanır. */
-  /* "Boş satırları gizle" açıkken kağıda yalnız dolu satırlar basılır; tablo
-     kısalır. Kapalıyken (varsayılan) Excel'in tablo yüksekliği korunur. */
-  const printRows = bosSatirGizli ? c.rows.filter(r=>r.active) : c.rows.slice();
-  if(!bosSatirGizli){
-    while(printRows.length < PRINT_FAMILY_ROWS + 1){
-      printRows.push({active:false});
-    }
+  const printRows = c.rows.slice();
+  while(printRows.length < PRINT_FAMILY_ROWS + 1){
+    printRows.push({active:false});
   }
   const bodyRows = printRows.map((r, i)=>{
     const isSelf = (i === 0);
@@ -5471,12 +5502,12 @@ function renderPrintView(c){
     const pqStyle = '';   // baskıda sarı zemin yok, beyaz kalır
 
     if(!r.active){
-      return `<tr>
+      return `<tr class="bos-satir">
         <td class="bx pv-l">&nbsp;</td><td class="bx"></td><td class="bx"></td>
         <td class="bx"></td><td class="bx"></td><td class="bx"></td>
         <td class="bx"></td><td class="bx"></td>
         <td class="bx" style="${mStyle}"></td><td class="bx" style="${noStyle}"></td><td class="bx" style="${noStyle}"></td>
-        <td class="bx"></td><td class="bx"></td><td class="bx"></td>
+        <td class="bx"></td>
       </tr>`;
     }
     return `<tr>
@@ -5491,8 +5522,6 @@ function renderPrintView(c){
       <td class="bx pv-c" style="${mStyle}">${r.sabitUnsur===''?'':trMoney(r.sabitUnsur)}</td>
       <td class="bx pv-c" style="${noStyle}">${r.mesafe === '' ? '' : trTutar(r.mesafe)}</td>
       <td class="bx pv-c" style="${noStyle}">${r.degTutar===''?'':trMoney(r.degTutar)}</td>
-      <td class="bx pv-c" style="${pqStyle}">${r.dovizCinsi}</td>
-      <td class="bx pv-c" style="${pqStyle}">${trSayi(r.kur)}</td>
       <td class="bx pv-c">${trMoney(r.toplam)}</td>
     </tr>`;
   }).join('');
@@ -5500,18 +5529,18 @@ function renderPrintView(c){
   el.innerHTML = `
   <table class="pv-table">
     <colgroup>
-      <col style="width:19.44%"><col style="width:13.94%"><col style="width:6.88%">
-      <col style="width:4.58%"><col style="width:4.58%"><col style="width:4.58%">
-      <col style="width:4.58%"><col style="width:4.58%">
-      <col style="width:4.58%"><col style="width:4.58%"><col style="width:4.58%">
-      <col style="width:4.58%"><col style="width:4.58%"><col style="width:13.94%">
+      <col style="width:21.5%"><col style="width:15.5%"><col style="width:7.5%">
+      <col style="width:5%"><col style="width:5%"><col style="width:5%">
+      <col style="width:5%"><col style="width:5%">
+      <col style="width:5%"><col style="width:5%"><col style="width:5%">
+      <col style="width:15.5%">
     </colgroup>
 
     <!-- ===== satır 1 ===== -->
     <tr>
       <td class="bx pv-l">Adı Soyadı</td>
-      <td class="bx pv-c" colspan="2">${escapeHtml(state.adSoyad)}</td>
-      <td class="bl br" colspan="8"></td>
+      <td class="bx pv-c" colspan="2">${state.adSoyad}</td>
+      <td class="bl br" colspan="6"></td>
       <td class="bx pv-l" colspan="2">Dairesi</td>
       <td class="bx pv-c">${state.birimAdi}</td>
     </tr>
@@ -5519,7 +5548,7 @@ function renderPrintView(c){
     <tr>
       <td class="bx pv-l">Unvanı</td>
       <td class="bx pv-c" colspan="2">${c.unvanEfektif}</td>
-      <td class="bl br pv-title" colspan="8">YURTİÇİ / YURTDIŞI SÜREKLİ GÖREV YOLLUĞU BİLDİRİMİ</td>
+      <td class="bl br pv-title" colspan="6">YURTİÇİ SÜREKLİ GÖREV YOLLUĞU BİLDİRİMİ</td>
       <td class="bx pv-l" colspan="2">Bütçe Yılı</td>
       <td class="bx pv-c">${c.butceYili}</td>
     </tr>
@@ -5527,7 +5556,7 @@ function renderPrintView(c){
     <tr>
       <td class="bx pv-l">Aylık Kadro Derecesi ve Pozisyonu</td>
       <td class="bx pv-c" colspan="2">${state.pozisyon}</td>
-      <td class="bl br pv-sub" colspan="8">(${state.tayinTuru})</td>
+      <td class="bl br pv-sub" colspan="6">(${state.tayinTuru})</td>
       <td class="bx pv-l" colspan="2">Önceden Avans Almışsa Aldığı</td>
       <td class="bx pv-c">${c.avans ? trTutar(c.avans) : ''}</td>
     </tr>
@@ -5535,7 +5564,7 @@ function renderPrintView(c){
     <tr>
       <td class="bx pv-l">Ek Göstergesi</td>
       <td class="bx pv-c" colspan="2">${c.ekGosterge}</td>
-      <td class="bl br" colspan="8"></td>
+      <td class="bl br" colspan="6"></td>
       <td class="bx pv-l" colspan="2">Muhasebe Birimi ve Tarihi</td>
       <td class="bx pv-c">${escapeHtml(state.muhasebeBirimiTarihi || '')}${state.muhasebeBirimiTarihi ? ' - ' : ''}${fmtDateTR(state.muhasebeTarihi)}</td>
     </tr>
@@ -5543,7 +5572,7 @@ function renderPrintView(c){
     <tr>
       <td class="bx pv-l">Gündeliği</td>
       <td class="bx pv-c" colspan="2">${trMoney(c.gundelik)}</td>
-      <td class="bl br" colspan="8"></td>
+      <td class="bl br" colspan="6"></td>
       <td class="bl bt br pv-l" colspan="2">${state.atamaSayisi ? 'Atama Tarihi ve Sayısı' : 'Atama Tarihi'}</td>
       <td class="bl bt br pv-c">${fmtDateTR(state.atamaTarihi)}${state.atamaSayisi ? ' - ' + escapeHtml(state.atamaSayisi) : ''}</td>
     </tr>
@@ -5556,7 +5585,6 @@ function renderPrintView(c){
       <td class="bx pv-h pv-sp" colspan="3" rowspan="2">GÜNDELİKLER</td>
       <td class="bx pv-h pv-sp" colspan="2">TAŞITIN</td>
       <td class="bx pv-h pv-sp" colspan="3">YER DEĞİŞTİRME GİDERİ</td>
-      <td class="bx pv-h" colspan="2" rowspan="2">Dövizin</td>
       <td class="bx pv-h" rowspan="3">TOPLAM TUTAR</td>
     </tr>
     <tr>
@@ -5571,8 +5599,6 @@ function renderPrintView(c){
       <td class="bx pv-h">Tutarı</td>
       <td class="bx pv-h" rowspan="2">Mesafe Km/Mil</td>
       <td class="bx pv-h">Tutarı</td>
-      <td class="bx pv-h" rowspan="2">Cinsi</td>
-      <td class="bx pv-h">Kuru</td>
     </tr>
     <tr>
       <td class="bx pv-h">TL / Döviz</td>
@@ -5580,7 +5606,6 @@ function renderPrintView(c){
       <td class="bx pv-h">TL / Döviz</td>
       <td class="bx pv-h">TL / Döviz</td>
       <td class="bx pv-h">TL / Döviz</td>
-      <td class="bx pv-h">TL</td>
       <td class="bx pv-h">TL</td>
     </tr>
 
@@ -5595,8 +5620,6 @@ function renderPrintView(c){
       <td class="bx pv-r">${trMoney(c.M28)}</td>
       <td class="bx"></td>
       <td class="bx pv-r">${trMoney(c.O28)}</td>
-      <td class="bx"></td>
-      <td class="bx"></td>
       <td class="bx pv-r">${trMoney(c.R28)}</td>
     </tr>
 
@@ -5611,8 +5634,8 @@ function renderPrintView(c){
       return toplamlar.map((t, i) => `
       <tr>
         ${i === 0
-          ? `<td class="bl br bt pv-l pv-cumle" colspan="11">${c.sentenceE30}${c.sentenceE31}</td>`
-          : `<td class="bl br" colspan="11"></td>`}
+          ? `<td class="bl br bt pv-l pv-cumle" colspan="9">${c.sentenceE30}${c.sentenceE31}</td>`
+          : `<td class="bl br" colspan="9"></td>`}
         <td class="bx pv-l pv-tot" colspan="2">${t[0]}</td>
         <td class="bx pv-r pv-tot">${t[1]}</td>
       </tr>`).join('');
@@ -5621,49 +5644,55 @@ function renderPrintView(c){
     <!-- ===== imza bloğu (sütun sayısı seçime göre değişir) ===== -->
     ${(()=>{
       const im = imzaSutunlari(c);
-      const N = im.length, gen = 3;
-      const sol = (N <= 2) ? 4 : (N === 3 ? 2 : 1);
-      const sag = 14 - sol - 1 - N*gen;
-      const bos = (n, sinif) => n > 0 ? `<td class="${sinif||''}" colspan="${n}"></td>` : '';
-      const sagBos = sag > 1 ? `<td colspan="${sag-1}"></td><td class="br"></td>`
-                             : (sag === 1 ? `<td class="br"></td>` : '');
-      const satir = (etiket, alan) => `<tr>
-        ${bos(sol,'bl')}
-        <td class="pv-c">${etiket}</td>
-        ${im.map(i => `<td class="pv-c" colspan="${gen}">${escapeHtml(String(alan(i)||''))}</td>`).join('')}
-        ${sagBos}
-      </tr>`;
+      const N = im.length;
+      /* İmza bloğu, belgenin SOL 9 sütununa (genişliğin %74,5'i) sığdırılır.
+         Sağdaki 3 sütun, hemen üstteki "Damga Vergisi / Net Ödenen" kutusunun
+         hizasıdır; imzalar oraya taşarsa o kutunun altında kalmış görünüyordu.
+         Sütun genişlikleri iç içe bir tabloyla veriliyor: böylece imza sayısı
+         2, 3 ya da 4 olsun sütunlar her zaman eşit ve blok aynı yerde biter. */
+      const ETIKET = 10;                    // etiket sütunu (Adı Soyadı / Unvanı / İmzası)
+      const SUTUN  = Math.min(22, Math.floor((100 - ETIKET) / N));  // her imza sütunu
+      const BOSLUK = 100 - ETIKET - N*SUTUN;                        // soldaki esnek boşluk
+      const kolonlar = `<colgroup><col style="width:${BOSLUK}%"><col style="width:${ETIKET}%">`
+                     + im.map(()=>`<col style="width:${SUTUN}%">`).join('') + `</colgroup>`;
+      const satir = (etiket, alan, sinif, satirSinif) => `<tr class="${satirSinif||''}">
+          <td></td><td class="pv-c">${etiket}</td>
+          ${im.map(i => `<td class="pv-c ${sinif||''}">${escapeHtml(String(alan(i)||''))}</td>`).join('')}
+        </tr>`;
       return `
       <tr>
-        ${bos(sol+1,'bl')}
-        ${im.map(()=>`<td class="pv-c" colspan="${gen}">${fmtDateTR(state.muhasebeTarihi)}</td>`).join('')}
-        ${sagBos}
+        <td class="bl" colspan="9" style="padding:0;">
+          <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
+            ${kolonlar}
+            ${satir('', ()=>fmtDateTR(state.muhasebeTarihi))}
+            ${satir('', i=>i.rol, 'pv-imza-rol')}
+            <tr class="pv-imza-bosluk"><td></td><td></td>${im.map(()=>'<td></td>').join('')}</tr>
+            ${satir('Adı Soyadı', i => i.ad)}
+            ${satir('Unvanı',     i => i.unvan)}
+            ${satir('İmzası',     () => '.............................................')}
+          </table>
+        </td>
+        <td colspan="2"></td><td class="br"></td>
       </tr>
       <tr>
-        ${bos(sol+1,'bl')}
-        ${im.map(i=>`<td class="pv-c" colspan="${gen}">${i.rol}</td>`).join('')}
-        ${sagBos}
-      </tr>
-      ${satir('Adı Soyadı', i => i.ad)}
-      ${satir('Unvanı',     i => i.unvan)}
-      ${satir('İmzası',     () => '.............................................')}
-      <tr>
-        <td class="bl br pv-l pv-foot pv-kirmizi" colspan="14">(*) Bu kısım bildirim sahibinin atama işleminden bilgisi olan amir tarafından imzalanacaktır.</td>
+        <td class="bl br pv-l pv-foot pv-kirmizi" colspan="12">(*) Bu kısım bildirim sahibinin atama işleminden bilgisi olan amir tarafından imzalanacaktır.</td>
       </tr>`;
     })()}
-    <!-- ===== "(*) Not:" — kutu İÇİNDE, "(*) Bu kısım..." satırının hemen altında ===== -->
+    <!-- ===== "(**) Not:" — kutu İÇİNDE, "(*) Bu kısım..." satırının hemen altında.
+         Not yazılmadıysa bu satır hiç basılmaz (ibare de görünmez). ===== -->
+    ${String(state.notMetni||'').trim() ? `
     <tr>
-      <td class="bl pv-l pv-foot pv-not" colspan="13">(**) Not: ${escapeHtml(state.notMetni||'').replace(/\n/g,'<br>')}</td>
+      <td class="bl pv-l pv-foot pv-not" colspan="11">(**) Not: ${escapeHtml(state.notMetni).replace(/\n/g,'<br>')}</td>
       <td class="br"></td>
-    </tr>
+    </tr>` : ''}
     <!-- ===== satır 37: kutuyu kapatan alt kenarlık ===== -->
     <tr>
-      <td class="bl bb" colspan="13"></td>
+      <td class="bl bb" colspan="11"></td>
       <td class="br bb"></td>
     </tr>
     <!-- ===== satır 38: kutu dışı ===== -->
     <tr>
-      <td class="pv-l pv-foot" colspan="14">M.Y.H.B.Y. Örnek No: 28</td>
+      <td class="pv-l pv-foot" colspan="12">M.Y.H.B.Y. Örnek No: 28</td>
     </tr>
   </table>
   `;
@@ -6010,32 +6039,13 @@ function applyPersonelByName(name){
      yazdıysa) önceki kişiden kalan değer temizlenir; hesap referans
      tablosundan yapılır. Aksi hâlde eski kişinin ek göstergesi yeni
      ünvana yapışıp kalırdı. */
-  const personelBilgisiniTemizle = ()=>{
-    state.personelEkGos = ''; state.personelKademe = '';
-    /* Listeden gelmiş bir T.C. varsa o da silinir — isim artık listede
-       bulunmuyor, yani numara başka birine ait demektir. Kullanıcının
-       ELLE yazdığı numaraya dokunulmaz. */
-    if(tcknListedenGeldi){ state.tckn = ''; tcknListedenGeldi = false; }
-  };
+  const personelBilgisiniTemizle = ()=>{ state.personelEkGos = ''; state.personelKademe = ''; };
   const cols = personelCols();
   if(cols.ad < 0 || !personnelState.rows.length){ personelBilgisiniTemizle(); return false; }
   const target = String(name || '').trim().toLocaleLowerCase('tr');
   if(!target){ personelBilgisiniTemizle(); return false; }
   const row = personnelState.rows.find(r => String(r[cols.ad] || '').trim().toLocaleLowerCase('tr') === target);
   if(!row){ personelBilgisiniTemizle(); return false; }
-
-  /* ---- T.C. KİMLİK NO ----
-     Listede geçerli (11 haneli) bir numara varsa forma yazılır; kişi
-     değişince yenisiyle değişir. Seçilen kişinin numarası yoksa, önceki
-     kişiden kalan numara silinir — yanlış kimlik belgeye geçmesin. */
-  const tcListeden = cols.tckn >= 0 ? tcTemizle(row[cols.tckn]) : '';
-  if(tcListeden){
-    state.tckn = tcListeden;
-    tcknListedenGeldi = true;
-  } else if(tcknListedenGeldi){
-    state.tckn = '';
-    tcknListedenGeldi = false;
-  }
 
   const rawUnvan  = cols.unvan  >= 0 ? String(row[cols.unvan]  || '').trim() : '';
   const rawDerece = cols.derece >= 0 ? String(row[cols.derece] || '').trim() : '';
@@ -6133,37 +6143,12 @@ function personelCols(){
     derece: find(['derece']),
     birim: find(['birim']),
     ogrenim: find(['öğrenim','ogrenim']),
-    // T.C. Kimlik No sütunu. Raporlarda başlık çok farklı yazılabiliyor:
-    // "T.C. Kimlik No", "TC Kimlik Numarası", "TCKN", "Kimlik No",
-    // "Vatandaşlık No"... hepsini yakalar.
-    tckn: find(['t.c. kimlik','tc kimlik','t.c kimlik','tckn','t.c.kimlik',
-                'kimlik no','kimlik numara','vatandaşlık no','vatandaslik no']),
     // Diyanet raporunda ek gösterge, derece/kademe ile birlikte
     // "(1-4-3600)" biçiminde tek hücrede tutulur. Ödeme esas alınacağı için
     // önce "Ödenilecek", yoksa "Kazanılan" sütunu kullanılır.
     odenilecekDK: find(['ödenilecek derece','odenilecek derece']),
     kazanilanDK: find(['kazanılan derece','kazanilan derece']),
   };
-}
-
-/* Personel listesindeki T.C. Kimlik No hücresini temizler.
-   Yalnızca rakamlar alınır (boşluk, nokta, tırnak atılır) ve sonuç
-   TAM 11 HANE değilse kabul EDİLMEZ. Böylece başlığı yanlış eşleşen bir
-   sütun (sicil no, tarih vb.) belgeye yanlış numara yazdıramaz. */
-/* T.C. kutularını (sol paneldeki ve Ödeme Emri'ndeki) state'ten tazeler.
-   Aranabilir personel seçicide isim YAZILIRKEN tam render yapılmadığı için
-   (imleç kaybolmasın diye) bu iki kutu elle güncellenir; aksi hâlde belgede
-   numara silinmiş görünürken kutuda eski numara kalıyordu. */
-function tcknKutulariniTazele(){
-  const v = String(state.tckn || '');
-  document.querySelectorAll('[data-k="tckn"], [data-k2="tckn"]').forEach(el=>{
-    if(el !== document.activeElement && el.value !== v) el.value = v;
-  });
-}
-
-function tcTemizle(ham){
-  const s = String(ham === null || ham === undefined ? '' : ham).replace(/\D/g, '');
-  return s.length === 11 ? s : '';
 }
 
 /* "(1-4-3600)" -> {derece:'1', kademe:'4', ekGosterge:3600}
@@ -6303,7 +6288,6 @@ function renderAdSoyadControl(){
     aktifIx = -1;
     cizListe(inp.value);
     applyPersonelByName(inp.value);   // tam isim yazıldıysa bilgiler gelsin
-    tcknKutulariniTazele();           // listeden gelen/silinen T.C. kutulara da yansısın
     updateSheet1Dynamic(compute());   // imleç kaybolmasın diye tam render yapmıyoruz
   });
 
@@ -6836,10 +6820,11 @@ function renderSheet2PrintView(c){
       <td colspan="2" class="bx oeb-c oeb-b">${E(state.adSoyad)}</td>
       <td colspan="2" class="bx oeb-c oeb-b" style="background:${OEB_YEL}">${E(state.tckn)}</td>
       <td colspan="3" class="bx oeb-c oeb-b" style="background:${OEB_YEL}">${E(state.iban)}</td>
-      <td class="bx oeb-c oeb-b">${TL(c.netOdenen)}</td>
+      <td class="bx oeb-c oeb-b">${TL(c.oebNetTutar)}</td>
       <td colspan="2" class="bx"></td><td colspan="2" class="bx"></td><td colspan="2" class="bx"></td>
-      <td colspan="2" class="bx"></td><td colspan="2" class="bx"></td>
-      <td colspan="2" class="bx oeb-c oeb-b">${TL(c.netOdenen)}</td>
+      <td colspan="2" class="bx"></td>
+      <td colspan="2" class="bx oeb-c oeb-b">${c.oebMahsup > 0 ? TL(c.oebMahsup) : ''}</td>
+      <td colspan="2" class="bx oeb-c oeb-b">${TL(c.oebOdenecek)}</td>
     </tr>
 
     <!-- ===== Ödeme Emri Detayı ===== -->
@@ -6883,7 +6868,7 @@ function renderSheet2PrintView(c){
       <td colspan="4" class="bx oeb-c oeb-b oeb-wrap">Damga Vergisi - Maaş, Ücret vb. Her Ne Adla Olursa Olsun Hizmet Karşılığı Yapılan Ödemeler (Avans Dahil) Nedeniyle Düzenlenen Makbuzlar ile Bu Mahiyetteki Kağıtlar</td>
       <td colspan="2" class="bx"></td><td colspan="2" class="bx"></td>
       <td class="bx"></td>
-      <td class="bx oeb-c oeb-b">${TL(c.R28)}</td>
+      <td class="bx oeb-c oeb-b">${TL(c.damgaMatrahi)}</td>
       <td class="bx oeb-c oeb-b">${trOran(c.damgaOrani)}</td>
       <td class="bx oeb-c oeb-b">${TL(c.damgaVergisi)}</td>
     </tr>
@@ -6907,9 +6892,9 @@ function renderSheet2PrintView(c){
       <td colspan="2" class="bx oeb-r oeb-b">${TL(c.damgaVergisi)}</td>
       <td colspan="2" class="bx oeb-r oeb-b">0,00 TL</td>
       <td colspan="2" class="bx oeb-b"></td>
-      <td colspan="2" class="bx oeb-r oeb-b">${TL(c.netOdenen)}</td>
-      <td colspan="4" class="bx oeb-r oeb-b">0,00 TL</td>
-      <td colspan="5" class="bx oeb-r oeb-b">${TL(c.netOdenen)}</td>
+      <td colspan="2" class="bx oeb-r oeb-b">${TL(c.oebNetTutar)}</td>
+      <td colspan="4" class="bx oeb-r oeb-b">${TL(c.oebMahsup)}</td>
+      <td colspan="5" class="bx oeb-r oeb-b">${TL(c.oebOdenecek)}</td>
     </tr>
 
     <tr style="height:${oebH(14.1)}"><td colspan="21"></td></tr>
@@ -6933,9 +6918,9 @@ function renderSheet2PrintView(c){
       <td colspan="2" class="bx oeb-r oeb-b">${TL(c.damgaVergisi)}</td>
       <td colspan="2" class="bx oeb-r oeb-b">0,00 TL</td>
       <td colspan="2" class="bx oeb-b"></td>
-      <td colspan="2" class="bx oeb-r oeb-b">${TL(c.netOdenen)}</td>
-      <td colspan="4" class="bx oeb-r oeb-b">0,00 TL</td>
-      <td colspan="5" class="bx oeb-r oeb-b">${TL(c.netOdenen)}</td>
+      <td colspan="2" class="bx oeb-r oeb-b">${TL(c.oebNetTutar)}</td>
+      <td colspan="4" class="bx oeb-r oeb-b">${TL(c.oebMahsup)}</td>
+      <td colspan="5" class="bx oeb-r oeb-b">${TL(c.oebOdenecek)}</td>
     </tr>
 
     <tr style="height:${oebH(14.1)}"><td colspan="21"></td></tr>
@@ -7062,11 +7047,12 @@ function buildSheet2Shell(){
     </table>
 
     <h2 class="section-title">Ödeme Emri Toplam Tutarı</h2>
-    <div class="doc-grid" style="grid-template-columns:repeat(5,1fr);">
+    <div class="doc-grid" style="grid-template-columns:repeat(6,1fr);">
       <div class="f"><div class="l">Brüt Tutar</div><div class="v" id="s2ToplamBrut"></div></div>
       <div class="f"><div class="l">Kesinti Toplamı</div><div class="v" id="s2ToplamKesinti"></div></div>
       <div class="f"><div class="l">Diğer Detay Toplamı (İndirim/Artırım)</div><div class="v">0,00 TL</div></div>
       <div class="f"><div class="l">Net Tutar</div><div class="v" id="s2ToplamNet"></div></div>
+      <div class="f"><div class="l">Mahsup Edilen Ön Ödeme Tutarı</div><div class="v" id="s2ToplamMahsup"></div></div>
       <div class="f"><div class="l">Ödenmesi Gereken Tutar</div><div class="v"><b id="s2ToplamOdenmesi"></b></div></div>
     </div>
 
@@ -7099,14 +7085,14 @@ function buildSheet2Shell(){
   `;
 
   root.querySelectorAll('[data-k2]').forEach(el=>{
-    const uygula = ()=>{
+    el.addEventListener('input', ()=>{
       state[el.dataset.k2] = el.value;
-      // VKN/TCKN kutusuna elle yazıldıysa numara "listeden gelme" sayılmaz
-      if(el.dataset.k2 === 'tckn') tcknListedenGeldi = false;
       renderAll();
-    };
-    el.addEventListener('input', uygula);
-    el.addEventListener('change', uygula);
+    });
+    el.addEventListener('change', ()=>{
+      state[el.dataset.k2] = el.value;
+      renderAll();
+    });
   });
   sheet2ShellBuilt = true;
 }
@@ -7126,15 +7112,16 @@ function renderSheet2(c){
   document.getElementById('s2Aciklama').textContent = state.adSoyad
     ? `${state.adSoyad} Sürekli Görev Yolluk Ödemesi` : 'Sürekli Görev Yolluk Ödemesi';
   document.getElementById('s2AdSoyad1').textContent = state.adSoyad || bos;
-  document.getElementById('s2NetTutar1').textContent = trMoney(c.netOdenen);
+  document.getElementById('s2NetTutar1').textContent = trMoney(c.oebNetTutar);
   document.getElementById('s2Brut1').textContent = trMoney(c.R28);
-  document.getElementById('s2DamgaEsas').textContent = trMoney(c.R28);
+  document.getElementById('s2DamgaEsas').textContent = trMoney(c.damgaMatrahi);
   document.getElementById('s2DamgaOrani').textContent = trOran(c.damgaOrani);
   document.getElementById('s2DamgaTutar').textContent = trMoney(c.damgaVergisi);
   document.getElementById('s2ToplamBrut').textContent = trMoney(c.R28);
   document.getElementById('s2ToplamKesinti').textContent = trMoney(c.damgaVergisi);
-  document.getElementById('s2ToplamNet').textContent = trMoney(c.netOdenen);
-  document.getElementById('s2ToplamOdenmesi').textContent = trMoney(c.netOdenen);
+  document.getElementById('s2ToplamNet').textContent = trMoney(c.oebNetTutar);
+  document.getElementById('s2ToplamMahsup').textContent = trMoney(c.oebMahsup);
+  document.getElementById('s2ToplamOdenmesi').textContent = trMoney(c.oebOdenecek);
   document.getElementById('s2EkBelgeTarihi').textContent = fmtDateTR(state.muhasebeTarihi);
   const gg = document.getElementById('s2GercGorevliDisp');
   if(gg) gg.textContent = state.gerceklestirmeGorevlisi || bos;
@@ -7279,9 +7266,6 @@ function loadHistoryEntry(id){
   if(!Array.isArray(state.family)) state.family = [];
   while(state.family.length < FAMILY_ROWS) state.family.push({name:'', rel:''});
   state.family = state.family.slice(0, FAMILY_ROWS);
-  /* Kayıttan gelen T.C., kaydedildiği hâliyle doğrudur; "elle yazılmış"
-     kabul edilir ki isim alanına dokunulduğunda silinmesin. */
-  tcknListedenGeldi = false;
   syncInputsFromState();
   renderAll();
   try{ localStorage.setItem(LAST_ACTIVE_KEY, state._calcId); }catch(e){}
@@ -7327,7 +7311,6 @@ function resetForNewCalculation(){
   const mAy = muhasebeAyristir(state.muhasebeGiris);
   if(mAy.tarih) state.muhasebeTarihi = mAy.tarih;
   state._calcId = newCalcId();
-  tcknListedenGeldi = false;   // form sıfırlandı, T.C. de boşaldı
 
   syncInputsFromState();
   renderAll();
@@ -7498,7 +7481,7 @@ function renderSheet5(){
       <li><b>Sarı alanlar</b> = elle veri gireceğin yerler. Boşken içlerinde soluk yazıyla ne yazman gerektiği yazar, sen yazmaya başlayınca kaybolur.</li>
       <li>Üstte 6 sekme vardır: <b>Sürekli Görev Yolluğu</b>, <b>Ödeme Emri</b>, <b>Referans Veriler</b>, <b>Personel</b>, <b>Geçmiş Hesaplamalar</b> ve <b>Kılavuz</b> (bu sayfa). Sekme çubuğu <b>sayfayı kaydırsan da üstte sabit kalır</b>; açık olan sekmenin zemini mavidir.</li>
       <li><b>Klavyeyle hızlı giriş:</b> Veri girişi alanlarında <b>↓</b> ve <b>Enter</b> bir alt alana, <b>↑</b> bir üst alana geçirir. Açılır listelerde (Tayin Türü, Taşıtın Türü, Derece...) ok tuşları seçeneği değiştirir, <b>Enter</b> ile bir sonraki alana geçersiniz. Aile fertleri listesinde de aynı şekilde satırlar arasında gezinebilirsiniz.</li>
-      <li><b>Tutar kutuları:</b> Yazıp başka bir yere tıkladığında kendiliğinden biçimlenir. <b>Para alanlarında kuruş yazılır</b> (Taşıt Ücreti, İstisna Gündelik: <i>250 → 250,00</i>), <b>sayı alanlarında yazılmaz</b> (Mesafe: <i>1250 → 1.250</i>, Avans: <i>10000 → 10.000</i>). Döviz kuruna dokunulmaz, ondalık hassasiyeti korunur. İstersen doğrudan "1.250,50" diye de yazabilirsin; program iki yazımı da anlar.</li>
+      <li><b>Tutar kutuları:</b> Yazıp başka bir yere tıkladığında kendiliğinden biçimlenir. <b>Para alanlarında kuruş yazılır</b> (Taşıt Ücreti, İstisna Gündelik: <i>250 → 250,00</i>), <b>sayı alanlarında yazılmaz</b> (Mesafe: <i>1250 → 1.250</i>, Avans: <i>10000 → 10.000</i>). İstersen doğrudan "1.250,50" diye de yazabilirsin; program iki yazımı da anlar.</li>
       <li>Sağ alt köşedeki soluk <b>Sürüm</b> rozeti, elindeki dosyanın tarihini gösterir. Bir arkadaşınla tutar farkı çıkarsa ilk bakılacak yer burasıdır. <b>Üzerine tıklarsan güncel sürüm yeni sekmede açılır.</b> Kağıda basılmaz.</li>
       <li><b>Çevrimiçi adres:</b> <a href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener">diyanetyolluk.github.io/Yolluk</a> — buradan açarsan her zaman en güncel hâlini kullanmış olursun; dosya indirmene gerek kalmaz. İnternetsiz çalışman gerekiyorsa dosyayı bilgisayarına kaydedip çift tıklayarak da açabilirsin, program çevrimdışı da tam çalışır.</li>
     </ul>
@@ -7511,7 +7494,6 @@ function renderSheet5(){
       <tr><td><b>Unvanı</b></td><td>Kutuya tıklayınca <b>tüm unvanlar listelenir</b> (kaç kez değiştirirsen değiştir). Yazmaya başlayınca süzülür; <b>↑ ↓</b> ile gez, <b>Enter</b> ile seç, <b>Esc</b> ile kapat. Liste <b>Ayrılma / Hesaplama tarihinin yılına</b> göre değişir. Personel listesi yüklüyse Adı Soyadı'ndan isim seçtiğinde <b>otomatik gelir</b></td></tr>
       <tr><td>Aylık Kadro Der. / Poz.</td><td>Derece (1-15) veya "4B Sözleşmeli"</td></tr>
       <tr><td><b>Adı Soyadı</b></td><td>Personel listesi yüklüyse <b>aramalı seçici</b> olur: kutuya tıklayınca liste açılır, <b>isim yazdıkça süzülür</b> (🔍). Fareyle tıklayarak ya da ↑ ↓ tuşları + Enter ile seçebilirsin. Liste yüklü değilse normal metin kutusudur</td></tr>
-      <tr><td><b>T.C. Kimlik No</b></td><td><b>Bu numara Sürekli Görev Yolluğu bildirimine YAZILMAZ</b> — belge, Örnek No: 28'in aslıyla birebir aynı kalır; başlıkta yalnızca Adı Soyadı görünür. Buradaki kutu, numarayı <b>Ödeme Emri sekmesindeki VKN / TCKN alanına</b> taşımak içindir; iki kere yazmanıza gerek yoktur, birini değiştirdiğinizde diğeri de güncellenir.<br><b>Personel listesi yüklüyse ve listede T.C. sütunu varsa, isim seçtiğiniz anda kendiliğinden dolar</b> — elle yazmanıza gerek kalmaz. Başka bir kişiye geçtiğinizde numara da onunla birlikte değişir; yeni kişinin numarası listede yoksa kutu <b>boşaltılır</b> (önceki kişinin numarası yeni belgeye yapışıp kalmasın diye). Kendi yazdığınız numaraya program dokunmaz</td></tr>
       <tr><td>Diğer Aile Fertleri</td><td>En fazla 10 kişi. <b>Sadece dolu satırlar görünür</b>, boşlar gizlenir. Yeni kişi için <b>"+ Kişi Ekle"</b> (imleç doğrudan yeni satıra gider), hepsini açmak için <b>"Tüm satırları göster"</b>. İsim kutularında <b>↑ ↓</b> ve <b>Enter</b> ile satırlar arasında geçebilirsin. Akrabalık derecesi <b>seçilmeyen</b> satır hesaba katılmaz</td></tr>
       <tr><td>Ek Gösterge / Gündelik</td><td>Otomatik hesaplanır. Öncelik sırası: <b>1)</b> İstisna kutusuna yazdığın değer, <b>2)</b> personel listesinden seçilen kişiye ait şahsi ek gösterge, <b>3)</b> unvan + derece tablosu.<br>
         <b>Personel listesi kullanmak zorunlu değildir</b> — hiç liste yüklemeden, sadece <b>Unvanı</b> ve <b>Aylık Kadro Derecesi</b> seçerek çalışabilirsin; değerler referans tablosundan gelir.<br>
@@ -7524,12 +7506,13 @@ function renderSheet5(){
       <tr><td><b>Atama Tarihi ve Sayısı</b></td><td>Belge başlığındaki <b>Atama Tarihi</b> hücresi ikiye bölünmüştür: solda tarih, sağda <b>sarı alan</b>. Sarı alana atama onayının sayısını yazarsanız etiket kendiliğinden <b>"Atama Tarihi ve Sayısı"</b> olur ve belgeye <i>09.08.2026 - E-12345</i> biçiminde basılır. Boş bırakırsanız sadece <b>"Atama Tarihi"</b> yazar</td></tr>
       <tr><td><b>Muhasebe Birimi ve Tarihi</b></td><td>Buraya <b>birim adını ve tarihi tek satırda</b> yazarsınız — örn. <i>Anadolu Muhasebe Müdürlüğü-15.08.2026</i>. Program metni <b>kendisi ikiye ayırır</b>: <b>tarih</b> belgedeki hücrenin <b>sağ yarısına</b>, <b>birim adı</b> ise <b>sol sarı yarısına</b> yazılır. Sadece tarih yazarsanız (<i>15.08.2026</i>) yalnız sağ yarı dolar; sadece birim adı yazarsanız tarih bugün olarak kalır. Tarihi elle yazmak istemezseniz kutunun sağındaki <b>takvim düğmesine</b> basın — seçtiğiniz tarih metnin içine yerleşir, zaten bir tarih varsa onun yerine geçer. <b>Belge üzerindeki sol sarı yarıya doğrudan da yazabilirsiniz</b>; iki kutu birbirini günceller. Belgeye <i>Anadolu Muhasebe Müdürlüğü - 15.08.2026</i> biçiminde basılır. <b>Not:</b> Buraya yazdığınız tarih aynı zamanda <b>Bütçe Yılı</b>nı ve imza bloğundaki tarihleri belirler</td></tr>
       <tr><td>Bilgi İçin</td><td><b>Sabittir</b> (Mehmet TOKTAŞ), değiştirilemez. Belgenin altında görünür</td></tr>
+      <tr><td><b>Boş satırları gizle</b></td><td>Üstteki turuncu düğme. Belgede veri girilmemiş <b>boş form satırlarını</b> saklar; <b>dolu satırlara dokunmaz</b>. Ekranda, önizlemede ve kağıtta aynı davranır, seçimin hatırlanır</td></tr>
       <tr><td>Not (elle girilir)</td><td>Belgenin altına <b>(**) Not:</b> olarak basılır. İmza altındaki <b>(*)</b> açıklamasıyla karışmaması için iki yıldızlıdır</td></tr>
     </table>
     <div class="unvan-uyari" style="display:block;">⚠️ Bazı unvanlar (İmam Hatip, Müezzin Kayyım, Kur'an Kursu Öğreticisi, Memur, Murakıp, Şef, Şoför, V.H.K.İ.) öğrenim durumuna göre farklı ek göstergeye ayrılır. Program bu durumda doğru olanı <b>kendisi bulur:</b> önce <b>ek gösterge + derece</b> ikilisinin tabloda hangi unvana birebir uyduğuna bakar; olmazsa raporun <b>"Öğrenim Durumu"</b> hücresine göre seçer (Lisans/Fakülte → Yükseköğrenim, İmam Hatip Lisesi → İmam Hatip Lisesi, diğerleri → Diğer Öğrenim). İkisi de tek bir sonuca varmazsa turuncu uyarı çıkar ve adaylar listelenir; o zaman elle seçersin. Öğrenime bakılarak seçildiyse uyarıda bunu belirtir — yanlışsa değiştirebilirsin.</div>
 
     <div class="ref-note" style="background:#e8f1fc;border-color:#a9c9ef;color:#1F3864;">
-      <b>Bu alanlar neden var?</b> <b>Not (elle girilir)</b>, <b>Düzenleyen (Mutemet)</b>, <b>Gerçekleştirme Görevlisi</b>,
+      <b>Bu alanlar neden var?</b> <b>Not (elle girilir)</b>, <b>Düzenleyen (Mutemet)</b>, <b>Gerçekleştirme Görevlisi</b>
       ve <b>Muhasebe Birimi ve Tarihi</b> gibi alanlar M.Y.H.B.Y. Örnek No: 28'in aslında zorunlu değildir; ancak
       <b>bazı muhasebe müdürlükleri bunların belgede yer almasını istiyor</b> — evrak bu yüzden iade edilebiliyor.
       Bu alanlar programa <b>isteğe bağlı</b> olarak eklendi:
@@ -7556,7 +7539,7 @@ function renderSheet5(){
     </ul>
 
     <h3 class="kg-h3">3. Ödeme Emri Sekmesi</h3>
-    <p class="kg-p">Sürekli Görev Yolluğu'nda girdiğin bilgilerden otomatik oluşur — Excel'deki resmi belgenin birebir aynısı (logo, VKN, IBAN, kesinti tablosu, imza bloğu dahil). Sadece VKN, TCKN, IBAN, Kurumsal Kod, ETTN gibi birkaç ek alanı doldurman gerekir. (<b>TCKN</b>'yi Sürekli Görev Yolluğu sekmesindeki <b>T.C. Kimlik No</b> kutusuna yazdıysan buraya kendiliğinden gelir.)</p>
+    <p class="kg-p">Sürekli Görev Yolluğu'nda girdiğin bilgilerden otomatik oluşur — Excel'deki resmi belgenin birebir aynısı (logo, VKN, IBAN, kesinti tablosu, imza bloğu dahil). Sadece VKN, TCKN, IBAN, Kurumsal Kod, ETTN gibi birkaç ek alanı doldurman gerekir.</p>
     <p class="kg-p"><b>Gerçekleştirme Görevlisi</b> adını, sayfanın en altındaki imza bloğunda "Kontrol edilmiş ve uygun görülmüştür." yazısının altındaki <b>sarı kutuya</b> yazarsın. Yazdırınca sarı zemin kaybolur, ad düz yazı olarak çıkar.</p>
 
     <h3 class="kg-h3">4. Referans Veriler Sekmesi</h3>
@@ -7582,8 +7565,7 @@ function renderSheet5(){
       <li>Kaç kayıt olursa olsun tamamı yüklenir. Veri sadece bu bilgisayarda saklanır; dosyayı başka birine verdiğinde o kendi listesini kendisi yükler.</li>
       <li>Üstte <b>"Yükleme: [tarih/saat]"</b> yazar. <b>"Temizle"</b> ile listeyi silebilirsin.</li>
       <li>Tablo çok geniş olduğu için bir satıra tıkladığında o satır <b>baştan sona mavi</b> işaretlenir — yatay çubuğu kaydırdığında hangi kişide olduğunu kaybetmezsin. Aynı satıra tekrar tıklarsan işaret kalkar.</li>
-      <li>Satırdaki <b>"Forma Aktar"</b> butonu o kişiyi Sürekli Görev Yolluğu formuna aktarır (ad, derece, unvan, ek gösterge ve varsa <b>T.C. Kimlik No</b> birlikte gelir).</li>
-      <li><b>T.C. Kimlik No otomatik gelir:</b> listede <i>"T.C. Kimlik No"</i>, <i>"TCKN"</i>, <i>"Kimlik No"</i> gibi bir sütun varsa, isim seçtiğiniz anda numara Sürekli Görev Yolluğu'ndaki <b>T.C. Kimlik No</b> kutusuna yazılır ve oradan <b>Ödeme Emri'ndeki VKN / TCKN</b> alanına geçer. (Bildirim belgesine yazılmaz.) Program yalnızca <b>11 haneli</b> numaraları kabul eder; başlığı benzeyen başka bir sütuna denk gelirse (sicil no, tarih vb.) o değeri almaz. Böyle bir sütun yoksa kutu boş kalır, elle yazarsınız.</li>
+      <li>Satırdaki <b>"Forma Aktar"</b> butonu o kişiyi Sürekli Görev Yolluğu formuna aktarır (ad, derece, unvan ve ek gösterge birlikte gelir).</li>
     </ul>
 
     <h3 class="kg-h3">6. Geçmiş Hesaplamalar Sekmesi</h3>
@@ -7600,7 +7582,6 @@ function renderSheet5(){
       <tr><td><b>🖥 Bilgisayar görünümü</b></td><td>Sadece <b>telefon ve tablette</b> görünür (mor renkli); bilgisayarda hiç çıkmaz. Basınca sayfa, bilgisayardaki düzenin aynısıyla çizilir — sol veri girişi ve belge yan yana durur; parmakla yakınlaştırıp kaydırarak kullanırsınız. Cihaza göre ayarlanır: <b>tablette</b> daha geniş ve okunaklı, <b>telefonda</b> sayfanın tamamı sığacak şekilde. Tekrar basınca <b>📱 Telefon / Tablet görünümü</b>'ne döner (alanlar alt alta). Tercihiniz hatırlanır.</td></tr>
       <tr><td><b>💾 Hesaplamayı Kaydet</b></td><td>O anki hesaplamayı <b>Geçmiş Hesaplamalar</b> listesine kaydeder/günceller. Kaydedince üstte "✔ Kaydedildi" yazısı belirir.</td></tr>
       <tr><td><b>Yeni Hesaplama</b></td><td>Kişiye özel alanları temizler (isim, unvan, mesafe, aile fertleri vb.) ama <b>Harcama Birimi / Harcama Yetkilisi gibi kurum bilgilerini korur</b>. Önceki hesaplama otomatik olarak kaydedilir.</td></tr>
-      <tr><td><b>Boş satırları gizle</b></td><td>Yalnızca <b>Sürekli Görev Yolluğu</b> sekmesinde görünür. Belgedeki tabloda, doldurulmamış boş satırlar normalde Excel'deki gibi durur — <b>Örnek No: 28'in aslı böyledir ve program açıldığında varsayılan budur.</b> Bu düğmeye basınca boş satırlar kaldırılır; hem ekranda hem kağıtta yalnızca <b>dolu satırlar</b> kalır, belge kısalır. Düğmenin yazısı <b>"Boş satırları göster"</b>e döner, basınca eski hâline geri gelirsiniz. Sadece görünümü etkiler; <b>hiçbir tutarı değiştirmez.</b> Bu tercih hatırlanmaz — program her açıldığında boş satırlar yine görünür gelir.</td></tr>
       <tr><td><b>Önizle</b></td><td>Çıktının kağıtta nasıl görüneceğini ekranda gösterir (A4 sayfa + kenar boşlukları ile birlikte). Oradan doğrudan yazdırabilir, <b>Esc</b> ile çıkabilirsiniz.</td></tr>
       <tr><td><b>Yazdır</b></td><td>O an açık olan sekmeyi yazdırır (Sürekli Görev Yolluğu yatay, diğerleri dikey A4). Kenar boşlukları: üst 2 cm, sol 1,5 cm, sağ 1 cm, alt 1 cm. Basmadan önce kayıt "Yazdırıldı" olarak işaretlenir.</td></tr>
     </table>
@@ -7626,8 +7607,6 @@ function renderSheet5(){
     <div class="kg-qa"><b>S: Not, Düzenleyen (Mutemet), Gerçekleştirme Görevlisi, Muhasebe Birimi — bunlar Örnek No: 28'de yok, neden ekli?</b><br>Çünkü <b>bazı muhasebe müdürlükleri bu bilgilerin belgede yer almasını istiyor</b>; yoksa evrakı iade edebiliyorlar. Örnek No: 28'in aslında bu alanlar zorunlu değildir, bu yüzden programa <b>isteğe bağlı</b> olarak konuldu: <b>doldurursanız belgeye çıkar, boş bırakırsanız belge yönetmelik ekindeki aslıyla birebir aynı kalır.</b> Kendi muhasebe biriminiz istemiyorsa bu alanlara hiç dokunmayın.</div>
     <div class="kg-qa"><b>S: Muhasebe Birimi'ni ve tarihini nereye yazıyorum?</b><br>Sol paneldeki <b>Muhasebe Birimi ve Tarihi</b> kutusuna <b>ikisini birden</b> yazın: <i>Anadolu Muhasebe Müdürlüğü-15.08.2026</i>. Program tarihi ayırıp belgedeki hücrenin <b>sağ yarısına</b>, birim adını <b>sol sarı yarısına</b> koyar. Tarihi yazmakla uğraşmak istemezseniz kutunun sağındaki <b>takvim düğmesine</b> basmanız yeterli. İsterseniz belgenin üstündeki <b>sol sarı yarıya doğrudan</b> da yazabilirsiniz — iki kutu birbirini günceller. Birim adını hiç yazmazsanız yalnız tarih basılır.</div>
     
-    <div class="kg-qa"><b>S: Belgedeki boş satırlar kağıda basılmasın istiyorum, olur mu?</b><br>Olur. Üstteki turuncu <b>"Boş satırları gizle"</b> düğmesine basın; doldurulmamış satırlar kalkar, belgede yalnız dolu satırlar kalır ve çıktı kısalır. Düğme <b>"Boş satırları göster"</b>e döner, tekrar basınca eski hâline geri gelir. <b>Hangisi doğru?</b> İkisi de geçerlidir — <b>Örnek No: 28'in aslında boş satırlar vardır</b>, o yüzden program varsayılan olarak onları gösterir. Muhasebe biriminiz kısa belge istiyorsa gizleyin. Bu düğme <b>hiçbir tutarı değiştirmez</b>, sadece görünümü etkiler.</div>
-    <div class="kg-qa"><b>S: Sol paneldeki T.C. Kimlik No kutusu ne işe yarıyor? Belgede görmüyorum.</b><br>Görmemeniz doğru. <b>Bu numara Sürekli Görev Yolluğu bildirimine yazılmaz</b> — belge Örnek No: 28'in aslıyla birebir aynı kalır, başlıkta yalnızca Adı Soyadı görünür. Kutunun tek işi, numarayı <b>Ödeme Emri</b> sekmesindeki <b>VKN / TCKN</b> alanına taşımaktır; orada ayrıca yazmanıza gerek kalmaz (birini değiştirdiğinizde diğeri de güncellenir).<br>Personel listeniz yüklüyse ve listede T.C. sütunu varsa <b>hiçbir şey yapmanıza gerek yok</b> — ismi seçtiğiniz anda numara kendiliğinden gelir, kişi değiştirdiğinizde de onunla birlikte değişir. Yeni kişinin numarası listede yoksa kutu boşalır; böylece önceki kişinin numarası yanlışlıkla Ödeme Emri'ne geçmez.</div>
     <div class="kg-qa"><b>S: Excel dosyasını güncellersem bu araç da güncellenir mi?</b><br>Hayır, bu araç Excel'den bağımsız çalışır. Ancak oran/katsayı güncellemelerini yukarıdaki gibi doğrudan sayfadan yapabilirsiniz.</div>
 
     <div class="footnote" style="margin-top:16px;">Bu araç, <b>M.Y.H.B.Y. Örnek No: 28</b> (Merkezî Yönetim Harcama Belgeleri Yönetmeliği eki) ve "Yolluk Hesaplama" Excel dosyasındaki hesaplama mantığı esas alınarak hazırlanmıştır.</div>
@@ -7667,36 +7646,6 @@ function updatePrintOrientation(){
 window.addEventListener('beforeprint', updatePrintOrientation);
 document.querySelectorAll('.tabbtn[data-tab]').forEach(btn=>{
   btn.addEventListener('click', updatePrintOrientation);
-  btn.addEventListener('click', bosSatirDugmesiTazele);
-});
-
-/* ------------------------------------------------------------
-   BOŞ SATIRLARI GİZLE / GÖSTER
-   Belgede doldurulmamış satırlar normalde Excel'deki gibi durur —
-   Örnek No: 28'in aslı böyledir, varsayılan da budur. Bu düğme onları
-   gizler: hem ekrandaki belge hem de kağıda basılan hâl yalnızca dolu
-   satırlardan oluşur, tablo kısalır. Düğme yalnızca "Sürekli Görev
-   Yolluğu" sekmesinde görünür; diğer sekmelerde bir işe yaramaz.
-   ------------------------------------------------------------ */
-function bosSatirDugmesiTazele(){
-  const b = document.getElementById('btnBosSatir');
-  if(!b) return;
-  const s1Acik = !!document.querySelector('#sheet-s1.active');
-  b.style.display = s1Acik ? '' : 'none';
-  b.classList.toggle('gizli-aktif', bosSatirGizli);
-  const yazi = b.querySelector('.bs-yazi');
-  if(yazi) yazi.textContent = bosSatirGizli ? 'Boş satırları göster' : 'Boş satırları gizle';
-  b.title = bosSatirGizli
-    ? 'Şu an yalnızca dolu satırlar görünüyor. Örnek No: 28\'in aslındaki gibi boş satırlar da görünsün istersen tıkla.'
-    : 'Belgedeki doldurulmamış satırları gizler; hem ekranda hem kağıtta yalnızca dolu satırlar kalır.';
-}
-
-const btnBosSatir = document.getElementById('btnBosSatir');
-if(btnBosSatir) btnBosSatir.addEventListener('click', ()=>{
-  bosSatirGizli = !bosSatirGizli;
-  bosSatirDugmesiTazele();
-  renderAll();
-  bildirimGoster(bosSatirGizli ? 'Boş satırlar gizlendi' : 'Boş satırlar geri geldi');
 });
 
 const btnYeni = document.getElementById('btnYeniHesaplama');
@@ -7743,6 +7692,33 @@ function gorunumUygula(masaustu){
   }
   try{ localStorage.setItem(GORUNUM_KEY, masaustu ? '1' : '0'); }catch(e){}
 }
+
+/* ------------------------------------------------------------
+   BOŞ SATIRLARI GİZLE / GÖSTER
+   Belgede veri girilmemiş form satırlarını saklar. Dolu satırlara
+   (kendisi + akrabalık derecesi seçilmiş aile fertleri) dokunmaz.
+   Seçim cihazda hatırlanır.
+   ------------------------------------------------------------ */
+const BOS_SATIR_KEY = 'yolluk_bos_satir_v1';
+
+function bosSatirUygula(gizle){
+  document.body.classList.toggle('bos-gizli', gizle);
+  const y = document.getElementById('btnBosSatirYazi');
+  if(y) y.textContent = gizle ? 'Boş satırları göster' : 'Boş satırları gizle';
+  const b = document.getElementById('btnBosSatir');
+  if(b) b.title = gizle
+    ? 'Şu an boş satırlar gizli. Göstermek için tıklayın. Dolu satırlar her zaman görünür.'
+    : 'Belgedeki boş satırları gizler. Dolu satırlar her zaman görünür.';
+  try{ localStorage.setItem(BOS_SATIR_KEY, gizle ? '1' : '0'); }catch(e){}
+}
+
+const btnBosSatir = document.getElementById('btnBosSatir');
+if(btnBosSatir) btnBosSatir.addEventListener('click', ()=>{
+  bosSatirUygula(!document.body.classList.contains('bos-gizli'));
+});
+try{
+  if(localStorage.getItem(BOS_SATIR_KEY) === '1') bosSatirUygula(true);
+}catch(e){}
 
 const btnGorunum = document.getElementById('btnGorunum');
 if(btnGorunum) btnGorunum.addEventListener('click', ()=>{
@@ -7850,7 +7826,6 @@ renderAdSoyadControl();
 renderSheet3();
 renderPersonelBody();
 updatePrintOrientation();
-bosSatirDugmesiTazele();
 checkDraftBanner();
 
 </script>
@@ -7884,6 +7859,6 @@ checkDraftBanner();
 </div>
 
 <a class="surum-rozet no-print" href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener"
-   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 18.08.2026 · Güncel sürüm ↗</a>
+   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 24.08.2026-2 · Güncel sürüm ↗</a>
 </body>
 </html>
