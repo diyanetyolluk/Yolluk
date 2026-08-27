@@ -1,0 +1,40 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Architectures: all
+Date: Thu, 27 Aug 2026 13:46:15 +0000
+Label: Yolluk Deposu
+Origin: Yolluk
+Suite: stable
+MD5Sum:
+ 9fa668e5b762a08c329838ce1004da79              756 Packages
+ bf49a4826cd7b12a836710fa074ea2e8              537 Packages.gz
+ 0cf57fe634f3d4c83cdf51c0f5bd37f8              107 Release
+SHA1:
+ f84867c8c3c800fce02c520683702cb1e39574e4              756 Packages
+ 781156e60b6358bdbbd62fb6cb7db888ff4289e6              537 Packages.gz
+ 6623e6b2e89fda70979f1dabea8ba4671b705531              107 Release
+SHA256:
+ e32e19aa393537624f893c741f63f5becd189f52bb80eba960e2099dd193fe61              756 Packages
+ 550b6af215cdd897c854a9bd767c62f172a50e7868d91b0334623adedab84f96              537 Packages.gz
+ 9155d06af72b3fe5d8b24e8a5e9db9acef237bab32f217c37caefaafe1e1427d              107 Release
+SHA512:
+ 1c6b17ee7a96291f904f59703fc57fcd621bf7083b99b68944980d382ef2a48dca8a1286249f6fa8c43ad97aab8f01a545f162a99436fe45f7b6281413a95419              756 Packages
+ c3ebfbb2d90f775276f5159745c75cb6562977fd52252066f44bccfbe2d32e9d25e6bd96c8fafb47f74f3a8ed699144e8363569fe9215e034ceaa7cc8c3ed3f8              537 Packages.gz
+ c65cb60d2de040de9ce4fefcead94ed236b3732eddaf8da5cb0942cf701cfb9e0849e14bdb876434a968825ff164946764b29bce705a36c377a454d7f467e5b5              107 Release
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEErOZgUvBYKunPsz/nFTkEc78fQ9wFAmqQP6cACgkQFTkEc78f
+Q9zbPg//X2rOwKmKnyCr9LBTEptXh0jrym9lmy5b8rTjxVXOkV5uimz1GbJDJ24S
+NFacQ4AUhNmGBOXbh1nDN84Endm3nOKvf8nipxDCjQc/I6tqU/B+2Df2tof/7XRd
+N58y9lHM/u6dhEkXvazlw7jZgn0WNOT12zZ+bgK/EZT4Oi474ecYe2wbrY2FH0aC
+OHr80gKBChW/lhYt0sEBOAbweCQuHqmjJjxHbPQqb9C5sjysu9LvfBCwzAJ9d5+Z
+FVfxFXFfiTDIBhUly/HTkFdg02ZOrGVgRMiZ7k2foyFOXuvzJm3FdVXd/qKgzjYt
+4VorNse4BCJd1T8Ptk/YemTkShM7x/nuWsb/ReD8cGNbSyAmKPscKJcvzZilHVBd
+g1iILJcd5AA5XeecN3mNbj46HM6NMAFoLh8yn0i+fhQpNaO06U4vLcn+g7BZm7Ly
+81ubXPvMo0vpPl4cly7FtZxrbKqNLfZVEAigJiurjYchbeadFKuuZ+c2kkDW7vB9
+XkA/03bHL+rGXD+migEsZof9NoOX4RdAsUCWF0WX6+pOVjMI3TE2MZkEtqktfOtV
+wixhZhP4uaqaQj1jQqAlEbJ1uS83AWvIp3Jk6YaSCGgxSVdSAXUrhKhGq4RMb/pS
+FK0hG1ly1s+Id6tCKQXbI3NCr6K9mc46x8tlt4ACqUMYvmkIxdg=
+=2L3Q
+-----END PGP SIGNATURE-----
