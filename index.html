@@ -587,6 +587,11 @@
   }
 
   @media print{
+    /* Yazdirmada tam-sayfa yuksekligi zorlamasini kaldir: ekranda kullanilan
+       'body{min-height:100vh}' kurali, ust kenar boslugu ile birlesince belgeyi
+       asagi itip arkada BOS ikinci sayfa cikartiyordu (WebKitGTK). Bu kural,
+       yuksekligi icerige birakarak tek yatay sayfaya sigmasini saglar. */
+    html, body{ min-height:0!important; height:auto!important; }
     body{background:#fff;}
     .tabbar,.fam-actions,.no-print{display:none!important;}
     /* İpucu (placeholder) yazıları kağıda basılmasın */
@@ -7949,6 +7954,6 @@ checkDraftBanner();
 </div>
 
 <a class="surum-rozet no-print" href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener"
-   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 27.08.2026 · Güncel sürüm ↗</a>
+   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 03.09.2026 · Güncel sürüm ↗</a>
 </body>
 </html>

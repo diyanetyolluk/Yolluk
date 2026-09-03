@@ -1,7 +1,7 @@
 {
-  "uygulama": "surekli-gorev-yollugu",
-  "surum": "2026.08.27",
-  "dosya": "index.html",
-  "sha256": "5d1615f9826d786f43462b1c3151f7850613ed9aa287c6129241efda5851cd83",
-  "notlar": "Personel sekmesine DİBBYS yönergesi eklendi; listenin tercihe bağlı olduğu belirtildi."
+ "uygulama": "surekli-gorev-yollugu",
+ "surum": "2026.09.03",
+ "dosya": "index.html",
+ "sha256": "1861717e28dc3f58baeb4a1f71034324e48972a8a699b4342e20ca2983a8a5c9",
+ "notlar": "Yazdırmada arkadan boş sayfa çıkmasına yol açan kural düzeltildi."
 }
