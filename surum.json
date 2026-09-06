@@ -1,7 +1,7 @@
 {
  "uygulama": "surekli-gorev-yollugu",
- "surum": "2026.09.05",
+ "surum": "2026.09.06",
  "dosya": "index.html",
- "sha256": "3a22c507b2f876016dca3bbccbb791b46231dab24b8fbcec04a4b68ef51dc7d5",
- "notlar": "Ünvan listesi genişletildi: Diyanet dışı kurumların ünvanları eklendi (60 → 136 ünvan). Referans veriler 01.09.2026 tarihli Excel ile eşitlendi."
+ "sha256": "9c8d83c750b949db703a07ed8439d56516fc3e1f91a89318b18807a78a4d2df4",
+ "notlar": "Ünvan listesi genişletildi (60 → 136 ünvan, Diyanet dışı kurumlar eklendi). Sürüm rozeti çevrimiçi sürümdeyken artık yeni sekme açmıyor."
 }

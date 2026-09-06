@@ -9013,6 +9013,24 @@ checkDraftBanner();
 </div>
 
 <a class="surum-rozet no-print" href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener"
-   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 05.09.2026 · Güncel sürüm ↗</a>
+   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 06.09.2026 · Güncel sürüm ↗</a>
+<script>
+/* Sürüm rozeti: nerede açıldığını bilsin.
+   - Masaüstü uygulaması (127.0.0.1) ve yerel dosya: yeni sekmede çevrimiçi sürümü aç (karşılaştırma için).
+   - Zaten çevrimiçi sürümdeyken: yeni sekme açmanın anlamı yok; "Güncel sürümdesiniz" de. */
+(function(){
+  var r = document.querySelector('a.surum-rozet');
+  if(!r) return;
+  if(location.hostname !== 'diyanetyolluk.github.io') return;
+  r.removeAttribute('target');
+  r.setAttribute('href', '#');
+  r.title = 'Bu, çevrimiçi güncel sürümdür.';
+  r.textContent = r.textContent.replace(/\s*·\s*Güncel sürüm.*$/, '') + ' · Güncel sürümdesiniz ✓';
+  r.addEventListener('click', function(e){
+    e.preventDefault();
+    if(typeof showToast === 'function') showToast('Güncel sürümdesiniz — ' + r.textContent.replace(/\s*·.*$/, '') + '.');
+  });
+})();
+</script>
 </body>
 </html>
