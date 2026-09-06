@@ -1,7 +1,7 @@
 {
  "uygulama": "surekli-gorev-yollugu",
- "surum": "2026.09.03",
+ "surum": "2026.09.05",
  "dosya": "index.html",
- "sha256": "1861717e28dc3f58baeb4a1f71034324e48972a8a699b4342e20ca2983a8a5c9",
- "notlar": "Yazdırmada arkadan boş sayfa çıkmasına yol açan kural düzeltildi."
+ "sha256": "3a22c507b2f876016dca3bbccbb791b46231dab24b8fbcec04a4b68ef51dc7d5",
+ "notlar": "Ünvan listesi genişletildi: Diyanet dışı kurumların ünvanları eklendi (60 → 136 ünvan). Referans veriler 01.09.2026 tarihli Excel ile eşitlendi."
 }
