@@ -475,6 +475,14 @@
     padding:0 16px;box-shadow:0 2px 10px rgba(0,0,0,.3);}
   body.onizleme .onizle-bar{display:flex;}
   .onizle-bar .bilgi{font-size:12.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .onizle-bar .bilgi{display:flex;align-items:center;gap:6px;}
+  /* Kenar boşluğu kutucukları (mm) */
+  .onizle-bar .kenar-input{width:40px;height:22px;background:#2a2d35;border:1px solid #454a59;color:#fff;
+    border-radius:4px;text-align:center;font-size:12px;margin:0 4px 0 2px;font-family:inherit;}
+  .onizle-bar .kenar-input:focus{outline:none;border-color:#3b82f6;}
+  .onizle-bar .kenar-input::-webkit-outer-spin-button,
+  .onizle-bar .kenar-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  .onizle-bar .kenar-input[type=number]{-moz-appearance:textfield;}
   .onizle-bar .bilgi b{font-size:13.5px;}
   .onizle-bar .btns{display:flex;gap:8px;}
   .onizle-bar button{border:none;border-radius:4px;padding:7px 16px;font-size:12.5px;
@@ -649,6 +657,11 @@
       margin-left:auto!important; margin-right:auto!important;
     }
   }
+
+  /* Ödeme Emri Belgesi — ekranda A4 dikey genişliğiyle sınırla (geliştirici, 25.08 tabanı) */
+  #sheet-s2 #s2-root{max-width:210mm;margin:0 auto;}
+  /* Ödeme Emri imza kutuları sağa yaslı (Excel'deki gibi) */
+  #sheet-s2 .sign-grid{width:55%;margin-left:auto;}
 </style>
 <!-- Kağıt yönü ve kenar boşlukları buraya JS tarafından yazılır.
      ANA STİLDEN SONRA olmak ZORUNDA: yukarıdaki "@page{margin:8mm}"
@@ -657,7 +670,15 @@
 </head>
 <body>
 <div class="onizle-bar" id="onizleBar">
-  <div class="bilgi"><b>👁 Baskı Önizleme</b> &nbsp;—&nbsp; <span id="onizleSayfa"></span> &nbsp;·&nbsp; Kenar boşlukları: üst 2 cm, sol 1,5 cm, sağ 1 cm, alt 1 cm &nbsp;·&nbsp; <span style="opacity:.85;">Fare tekerleği: yakınlaştır · Shift+tekerlek: kaydır</span></div>
+  <div class="bilgi"><b>👁 Baskı Önizleme</b> &nbsp;—&nbsp; <span id="onizleSayfa"></span> &nbsp;·&nbsp; 
+    <span id="onizleKenarBilgi" style="display:inline-flex; align-items:center;">
+      <span style="opacity:.85; margin-right:4px;">Kenar(mm):</span> 
+      Üst <input type="text" inputmode="numeric" id="kInputUst" class="kenar-input" title="Üst kenar boşluğu (mm)">
+      Sağ <input type="text" inputmode="numeric" id="kInputSag" class="kenar-input" title="Sağ kenar boşluğu (mm)">
+      Alt <input type="text" inputmode="numeric" id="kInputAlt" class="kenar-input" title="Alt kenar boşluğu (mm)">
+      Sol <input type="text" inputmode="numeric" id="kInputSol" class="kenar-input" title="Sol kenar boşluğu (mm)">
+    </span>
+    &nbsp;·&nbsp; <span style="opacity:.85;">Fare tekerleği: yakınlaştır · Shift+tekerlek: kaydır</span></div>
   <div class="ob-zoom">
     <button type="button" id="onizleUzak" title="Uzaklaştır (fare tekerleğini aşağı çevir)" aria-label="Uzaklaştır">−</button>
     <span class="oran" id="onizleOran">%100</span>
@@ -5739,7 +5760,7 @@ function buildSheet1Shell(){
             ${fieldRow('Gidilen Mesafe Km', `<input type="text" inputmode="decimal" data-tutar="1" data-k="mesafeKm" value="${state.mesafeKm}" placeholder="Gidilen mesafeyi km olarak giriniz">`)}
             ${fieldRow('Taşıt Ücreti', `<input type="text" inputmode="decimal" data-tutar="kurus" data-k="tasitUcreti" value="${state.tasitUcreti}" placeholder="Taşıt ücretini giriniz">`)}
             ${fieldRow('Adı Soyadı', `<div id="adSoyadWrap"></div>`)}
-            ${fieldRow('Nereden Nereye Gidildiği', `<input type="text" data-k="nereye" value="${state.nereye}" placeholder="Örn: Ankara/Mamak-Tekirdağ/Hayrabolu" title="Ekleri yazmana gerek yok: iki yeri arasına tire koyarak yaz, program &quot;…'tan …'ya&quot; ekini kendisi getirir." >`)}
+            ${fieldRow('Nereden Nereye Gidildiği', `<input type="text" data-k="nereye" value="${state.nereye}" placeholder="Örnek: Ankara Mamak'tan Tekirdağ Hayrabolu'ya" title="Ekleri yazmana gerek yok: iki yeri arasına tire koyarak yaz, program &quot;…'tan …'ya&quot; ekini kendisi getirir." >`)}
             ${fieldRow('Taşıtın Türü', `<select data-k="tasitTuru">${tasitOpts}</select>`)}
             ${fieldRow('Yol Süresi Gün', `<select data-k="yolSuresiGun">${yolGunOpts}</select>`)}
           </div>
@@ -5794,9 +5815,9 @@ function buildSheet1Shell(){
                </div>`)}
             ${fieldRow('Harcama Yetkilisi Adı Soyadı', `<input type="text" data-k="harcamaYetkilisi" value="${escapeHtml(state.harcamaYetkilisi||'')}" placeholder="Harcama Yetkilisi Adı Soyadı giriniz">`)}
             ${fieldRow('Harcama Yetkilisi Ünvanı', `<input type="text" data-k="harcamaYetkilisiUnvan" value="${escapeHtml(state.harcamaYetkilisiUnvan||'')}" placeholder="Harcama Yetkilisi Ünvanı giriniz" title="Vekâleten imzalanıyorsa vekâlet unvanını yazınız (örn. İlçe Müftü V.).">`)}
-            ${fieldRow('Gerçekleştirme Görevlisi Adı Soyadı', `<input type="text" data-k="gerceklestirmeGorevlisi" value="${escapeHtml(state.gerceklestirmeGorevlisi||'')}" placeholder="Yazılırsa belgeye imza sütunu eklenir" title="Boş bırakılırsa belgede bu imza sütunu hiç çıkmaz (Örnek No: 28'in aslında yoktur).">`)}
+            ${fieldRow('Gerçekleştirme Görevlisi Adı Soyadı', `<input type="text" data-k="gerceklestirmeGorevlisi" value="${escapeHtml(state.gerceklestirmeGorevlisi || '')}" placeholder="Yazılırsa belgeye imza alanı eklenir" title="Boş bırakılırsa belgede bu imza sütunu hiç çıkmaz (Örnek No: 28'in aslında yoktur).">`)}
             ${fieldRow('Gerçekleştirme Görevlisi Ünvanı', `<input type="text" data-k="gerceklestirmeUnvan" value="${escapeHtml(state.gerceklestirmeUnvan||'')}" placeholder="Ünvanını giriniz" title="İmza bloğundaki 'Gerçekleştirme Görevlisi' sütununun 'Ünvanı' satırına basılır.">`)}
-            ${fieldRow('Veri Giriş Görevlisi Adı Soyadı', `<input type="text" data-k="veriGirisGorevlisi" value="${escapeHtml(state.veriGirisGorevlisi||'')}" placeholder="Yazılırsa belgeye imza sütunu eklenir" title="Boş bırakılırsa belgede bu imza sütunu hiç çıkmaz (Örnek No: 28'in aslında yoktur).">`)}
+            ${fieldRow('Veri Giriş Görevlisi Adı Soyadı', `<input type="text" data-k="veriGirisGorevlisi" value="${escapeHtml(state.veriGirisGorevlisi || '')}" placeholder="Yazılırsa belgeye imza alanı eklenir" title="Boş bırakılırsa belgede bu imza sütunu hiç çıkmaz (Örnek No: 28'in aslında yoktur).">`)}
             ${fieldRow('Veri Giriş Görevlisi Ünvanı', `<input type="text" data-k="veriGirisUnvan" value="${escapeHtml(state.veriGirisUnvan||'')}" placeholder="Ünvanını giriniz" title="İmza bloğundaki 'Veri Giriş Görevlisi' sütununun 'Ünvanı' satırına basılır.">`)}
             ${fieldRow('Avans Almışsa Aldığı Brüt Tutar', `<input type="text" inputmode="decimal" data-tutar="1" data-k="oncedenAvans" list="avansSecenekleri" value="${escapeHtml(state.oncedenAvans||'')}" placeholder="Ödenen brüt avans tutarını yazınız ya da listeden seçiniz" title="Avans ödenirken kesilen damga vergisinden ÖNCEKİ (brüt) tutarı yazınız. SAYI yazarsanız (örn. 5.000,00) Excel'deki gibi doğrudan GENEL TOPLAM'ın içinden düşülür ve damga vergisi kalan tutardan hesaplanır. METİN yazarsanız (örn. Avans Almamıştır) hesaba karışmaz, belgenin sağ üstündeki 'Avans Almışsa Aldığı Tutar' hücresine aynen basılır. Boş bırakırsanız o hücre de boş kalır.">
                <datalist id="avansSecenekleri">
@@ -5806,7 +5827,7 @@ function buildSheet1Shell(){
             ${fieldRow('Avansın Alındığı Muhasebe Birimi ve Tarihi', `<input type="text" data-k="muhasebeBirimiTarihi" list="avansSecenekleri" value="${escapeHtml(state.muhasebeBirimiTarihi||'')}"
                  placeholder="Avans alındıysa örn: Anadolu Muhasebe Müdürlüğü - 03.08.2026"
                  title="Yalnızca AVANS alınmışsa doldurulur. Avans başka bir muhasebe biriminden alınmış olabileceği için birim adı ve tarihi buraya yazılır; belgenin sağ üstündeki 'Avans Muhasebe Birimi ve Tarihi' hücresine AYNEN basılır. Hazır seçenekler de vardır. BOŞ bırakılırsa o hücre de BOŞ kalır.">`)}
-            ${fieldRow('Not Girişi', `<textarea data-k="notMetni" rows="3" placeholder="Örn: Ankara/Mamak-Tekirdağ/Hayrabolu arası 660 km olup bir kişilik yolcu ücreti Mamak/Aşti 40 TL Ankara/Tekirdağ 1.450,00 ₺ Tekirdağ/Hayrabolu arası 60 ₺ olmak üzere 1.550,00 ₺ dir." title="Belgenin altında (**) Not: olarak görünür. Boş bırakırsan hiç basılmaz.">${state.notMetni}</textarea>`)}
+            ${fieldRow('Not Girişi', `<textarea data-k="notMetni" rows="3" placeholder="Örnek: Ankara Mamak'tan Tekirdağ Hayrabolu'ya arası 660 km olup bir kişilik yolcu ücreti Mamak/Aşti 40 TL Ankara/Tekirdağ 1.450,00 ₺ Tekirdağ/Hayrabolu arası 60 ₺ olmak üzere 1.550,00 ₺ dir." title="Belgenin altında (**) Not: olarak görünür. Boş bırakırsan hiç basılmaz.">${state.notMetni}</textarea>`)}
             ${fieldRow('Bilgi İçin', `<span class="fixed-val">${BILGI_ICIN}</span>`)}
           </div>
         </div>
@@ -5816,30 +5837,8 @@ function buildSheet1Shell(){
 
       <!-- ============ SAĞ: HESAPLAMA TABLOSU ============ -->
       <div>
-        <div class="calc-wrap">
-          <table class="calc">
-            <!-- Sütun oranları Excel'in E..R sütunlarıyla aynı (bkz. baskı görünümü) -->
-            <colgroup>
-              <col style="width:15.747%"><col style="width:11.299%"><col style="width:5.605%">
-              <col style="width:5.605%"><col style="width:5.605%"><col style="width:5.605%">
-              <col style="width:5.605%"><col style="width:5.605%">
-              <col style="width:5.605%"><col style="width:5.605%"><col style="width:5.605%">
-              <col style="width:5.605%"><col style="width:5.605%">
-              <col style="width:11.299%">
-            </colgroup>
-            <thead id="s1Thead">
-              ${CALC_STATIC_HEAD}
-            </thead>
-            <tbody id="calcBody"></tbody>
-            <tfoot id="calcTfoot"></tfoot>
-          </table>
+        <div id="ui-print-container" style="overflow-x:auto; background:#fff; margin-bottom:10px; border:1px solid var(--border-strong);">
         </div>
-
-        <div class="words-row" id="wordsRow"></div>
-        <div class="sentence-row" id="sentenceRow"></div>
-        <div class="summary-box" id="summaryBox"></div>
-        <div class="sign-grid" id="signGrid"></div>
-        <div class="footnote" id="footnote"></div>
       </div>
     </div>
 
@@ -5957,81 +5956,22 @@ function updateSheet1Dynamic(c){
   toggleIstisna('ovrGundelikInput', state.ovrGundelik);
 
 
-  /* Excel'in 10-27. satırları. "Dövizin — Cinsi / Kuru" sütunları (P, Q)
-     yurtiçi yollukta kullanılmadığı için boş kalır ama formda yerini korur. */
-  document.getElementById('calcBody').innerHTML = c.rows.map(r=>{
-    if(!r.active){
-      return `<tr class="fam-row-out bos-satir"><td colspan="14" style="color:#bbb;">&nbsp;</td></tr>`;
-    }
-    return `<tr class="${r.akraba==='Kendisi'?'self-row':'fam-row-out'}">
-      <td class="name-cell">${r.nereden}</td>
-      <td class="name-cell">${r.ad}</td>
-      <td>${r.akraba}</td>
-      <td>${r.gunSayisi}</td>
-      <td>${trMoney(r.yevmiye)}</td>
-      <td>${trMoney(r.tutar)}</td>
-      <td>${r.tasitTuru}</td>
-      <td>${trMoney(r.ucret)}</td>
-      <td>${r.sabitUnsur===''?'':trMoney(r.sabitUnsur)}</td>
-      <td>${r.mesafe === '' ? '' : trTutar(r.mesafe)}</td>
-      <td>${r.degTutar===''?'':trMoney(r.degTutar)}</td>
-      <td></td>
-      <td></td>
-      <td><b>${trMoney(r.toplam)}</b></td>
-    </tr>`;
-  }).join('');
-
-  document.getElementById('calcTfoot').innerHTML = `
-    <tr class="toplam-row">
-      <td colspan="5" style="text-align:right;">G E N E L   T O P L A M</td>
-      <td>${trMoney(c.J28)}</td>
-      <td></td>
-      <td>${trMoney(c.L28)}</td>
-      <td>${trMoney(c.M28)}</td>
-      <td></td>
-      <td>${trMoney(c.O28)}</td>
-      <td></td>
-      <td></td>
-      <td>${trMoney(c.R28)}</td>
-    </tr>
-  `;
-
-  document.getElementById('wordsRow').textContent = c.toplamYazi;
-  document.getElementById('sentenceRow').innerHTML = `<span class="cumle-ic">${c.sentenceE30}${c.sentenceE31}</span>`;
-
-  document.getElementById('summaryBox').innerHTML = `
-    ${c.avans > 0 ? `<div class="cell" title="Excel'deki gibi avans, GENEL TOPLAM'ın içinden düşülmüştür. Bu satır yalnızca ekranda görünür, kağıda basılmaz."><span class="lab">Avans (toplamdan düşüldü)</span><span class="val">${trTutar(c.avans)} TL</span></div>` : ''}
-    <div class="cell"><span class="lab">Damga Vergisi</span><span class="val">${trMoney(c.damgaVergisi)} TL</span></div>
-    <div class="cell"><span class="lab">Net Ödenen</span><span class="val">${trMoney(c.netOdenen)} TL</span></div>
-  `;
-
-  document.getElementById('netBanner').textContent = `NET ÖDENEN: ${trMoney(c.netOdenen)} TL`;
-
-  const imzalar = imzaSutunlari(c);
-  const sg = document.getElementById('signGrid');
-  sg.style.gridTemplateColumns = `repeat(${imzalar.length}, 1fr)`;
-  sg.innerHTML = imzalar.map(i => `
-    <div class="sign-box">
-      <div>${fmtDateTR(state.muhasebeTarihi)}</div>
-      <div class="role">${i.rol}</div>
-      <div class="line">${escapeHtml(i.ad||'')}<br>${escapeHtml(i.unvan||'')}</div>
-    </div>`).join('');
-
-  /* "(**) Not:" ibaresi yalnızca gerçekten not yazıldığında görünür.
-     Boşken ne ibare ne de satır basılır. */
-  const notVar = String(state.notMetni||'').trim() !== '';
-  const notHtml = notVar
-    ? `<div class="note-manual">(**) Not: ${escapeHtml(state.notMetni).replace(/\n/g,'<br>')}</div>`
-    : '';
-  document.getElementById('footnote').innerHTML = `
-    <div class="note-red">(*) Bu kısım bildirim sahibinin atama işleminden bilgisi olan amir tarafından imzalanacaktır.</div>
-    <div class="note-red">Hesaplamaya esas veriler yukarıda otomatik olarak getirilmiştir. Kontrol ediniz. İstisna Girişi kısmından farklı veri girebilirsiniz.</div>
-    ${notHtml}
-    <div>M.Y.H.B.Y. Örnek No: 28 &nbsp;|&nbsp; Bilgi İçin: ${BILGI_ICIN}</div>
-  `;
-
   renderPrintView(c);
   cumleyiSigdir();
+
+  /* Ekranda da baskı görünümünün aynısı gösterilir (geliştirici, 25.08 tabanı):
+     ayrı bir ekran tablosu tutmak yerine #print-root içeriği kopyalanır. */
+  const uiPrintContainer = document.getElementById('ui-print-container');
+  if (uiPrintContainer) {
+    uiPrintContainer.innerHTML = document.getElementById('print-root').innerHTML;
+    const table = uiPrintContainer.querySelector('table.pv-table');
+    if (table) {
+      table.style.zoom = '1.35';
+    }
+  }
+  /* Soldaki kırmızı "NET ÖDENEN" bandı — eski ekran bloğu kalkınca bu satır da
+     gitmişti; band boş kalıyordu. Geri kondu. */
+  document.getElementById('netBanner').textContent = `NET ÖDENEN: ${trMoney(c.netOdenen)} TL`;
 }
 
 /* Tahakkuk cümlesi tek satır olacağı için, uzun isim/güzergâhta kutuya
@@ -8150,7 +8090,7 @@ function renderSheet2(c){
      "HYS-2026-" gibi yarım metinler yerine düzgün bir uyarı gösterilir. */
   const bos = '—';
   document.getElementById('s2Birim1').textContent = state.birimAdi || bos;
-  document.getElementById('s2Birim2').textContent = state.birimAdi || bos;
+  document.getElementById('s2Birim2').textContent = state.baskanlikAdi || bos;
   document.getElementById('s2DuzenlemeTarihi').textContent = fmtDateTR(state.muhasebeTarihi);
   document.getElementById('s2ButceYili').textContent = c.butceYili;
   document.getElementById('s2BelgeNumarasi').textContent = state.belgeNo
@@ -8706,25 +8646,93 @@ document.querySelectorAll('.tabbtn[data-tab]').forEach(btn=>{
 /* Yazdırma: hangi sekme açıksa sadece o basılır (bkz. @media print kuralları).
    Kağıt yönünü de açık olan sekmeye göre otomatik ayarlıyoruz — Sürekli Görev
    Yolluğu geniş bir tablo olduğu için yatay, diğer iki sekme dikey basılır. */
-/* Kağıt yönü ve kenar boşlukları.
-   Kenar boşlukları (CSS sırası: üst sağ alt sol):
-     üst 2 cm, sağ 1 cm, alt 1 cm, sol 1,5 cm
-   Belge, kalan alanın tam ortasına yerleşir (bkz. @media print .app kuralı). */
-const SAYFA_KENAR = '20mm 10mm 10mm 15mm';
+/* =========================================================================
+       YAZDIRMA İÇİN KENAR BOŞLUKLARI AYARLARI
+       Değerleri aşağıdaki kısımdan değiştirebilirsiniz.
+       Kenar boşlukları CSS sırasına göre: 'Üst Sağ Alt Sol' şeklindedir.
+       Örneğin: '25mm 20mm 20mm 20mm' = Üst 2.5cm, Sağ 2cm, Alt 2cm, Sol 2cm
+       ========================================================================= */
 
-function updatePrintOrientation(){
-  const active = document.querySelector('.sheet.active');
-  const id = active ? active.id : 'sheet-s1';
-  const styleEl = document.getElementById('dynamic-page-style');
-  if(!styleEl) return;
-  styleEl.textContent = (id === 'sheet-s1')
-    ? `@page{size:A4 landscape;margin:${SAYFA_KENAR};}`
-    : `@page{size:A4 portrait;margin:${SAYFA_KENAR};}`;
-}
-window.addEventListener('beforeprint', updatePrintOrientation);
-document.querySelectorAll('.tabbtn[data-tab]').forEach(btn=>{
-  btn.addEventListener('click', updatePrintOrientation);
-});
+    // Sürekli Görev Yolluğu (Yatay Sayfa) için varsayılan kenar boşlukları
+    // İstenen: Üst 3cm, Alt 1.5cm, Sol 1.5cm, Sağ 1.5cm
+    // CSS Sırası (Üst Sağ Alt Sol): '30mm 15mm 15mm 15mm'
+    const KENAR_SUREKLI_GOREV = '30mm 15mm 15mm 15mm';
+
+    // Ödeme Emri (Dikey Sayfa) için varsayılan kenar boşlukları
+    // İstenen: Üst 2cm, Alt 2cm, Sol 2cm, Sağ 1.5cm
+    // CSS Sırası (Üst Sağ Alt Sol): '20mm 15mm 20mm 20mm'
+    const KENAR_ODEME_EMRI = '20mm 15mm 20mm 20mm';
+
+    // Diğer sayfalar için varsayılan kenar boşluğu
+    // İstenen: Her yerden 1.5cm
+    // CSS Sırası (Üst Sağ Alt Sol): '15mm 15mm 15mm 15mm'
+    const KENAR_VARSAYILAN = '15mm 15mm 15mm 15mm';
+
+    function updatePrintOrientation() {
+      const active = document.querySelector('.sheet.active');
+      const id = active ? active.id : 'sheet-s1';
+      const styleEl = document.getElementById('dynamic-page-style');
+      if (!styleEl) return;
+
+      let aktifKenar = KENAR_VARSAYILAN;
+
+      if (id === 'sheet-s1') {
+        // Sürekli Görev Yolluğu
+        aktifKenar = KENAR_SUREKLI_GOREV;
+      } else if (id === 'sheet-s2') {
+        // Ödeme Emri
+        aktifKenar = KENAR_ODEME_EMRI;
+      } else {
+        // Diğer Sekmeler
+        aktifKenar = KENAR_VARSAYILAN;
+      }
+
+      // Varsayılan ölçüleri (mm cinsinden) diziye dönüştür
+      let defaultMargins = aktifKenar.split(' ').map(s => parseInt(s.replace('mm', '')));
+
+      const inputUst = document.getElementById('kInputUst');
+      const inputSag = document.getElementById('kInputSag');
+      const inputAlt = document.getElementById('kInputAlt');
+      const inputSol = document.getElementById('kInputSol');
+      const bilgiContainer = document.getElementById('onizleKenarBilgi');
+
+      // Sekme değiştiğinde kutucukları varsayılanlarla doldur
+      if (bilgiContainer) {
+        let lastId = bilgiContainer.getAttribute('data-last-id');
+        if (lastId !== id) {
+          if (inputUst) inputUst.value = defaultMargins[0];
+          if (inputSag) inputSag.value = defaultMargins[1];
+          if (inputAlt) inputAlt.value = defaultMargins[2];
+          if (inputSol) inputSol.value = defaultMargins[3];
+          bilgiContainer.setAttribute('data-last-id', id);
+        }
+      }
+
+      // Kutucuklardaki güncel değerleri oku
+      let u = (inputUst && inputUst.value !== '') ? inputUst.value : '0';
+      let s = (inputSag && inputSag.value !== '') ? inputSag.value : '0';
+      let a = (inputAlt && inputAlt.value !== '') ? inputAlt.value : '0';
+      let l = (inputSol && inputSol.value !== '') ? inputSol.value : '0';
+
+      aktifKenar = `${u}mm ${s}mm ${a}mm ${l}mm`;
+
+      let sayfaYonu = (id === 'sheet-s1') ? 'landscape' : 'portrait';
+      let cssText = `@page{size:A4 ${sayfaYonu};margin:${aktifKenar};}`;
+
+      // Önizleme görünümünde sayfa kenar boşluklarının doğru yansıması için padding ekle
+      cssText += `\n    body.onizleme .app { padding: ${aktifKenar} !important; }`;
+
+      styleEl.textContent = cssText;
+    }
+
+    // Kutucuklardaki değer değiştiğinde anında uygula
+    document.querySelectorAll('.kenar-input').forEach(input => {
+      input.addEventListener('input', updatePrintOrientation);
+    });
+    window.addEventListener('beforeprint', updatePrintOrientation);
+    document.querySelectorAll('.tabbtn[data-tab]').forEach(btn => {
+      btn.addEventListener('click', updatePrintOrientation);
+    });
 
 const btnYeni = document.getElementById('btnYeniHesaplama');
 if(btnYeni) btnYeni.addEventListener('click', resetForNewCalculation);
@@ -8942,6 +8950,8 @@ document.addEventListener('wheel', (e)=>{
 /* Klavye: + / − yakınlaştırır, 0 gerçek boyuta döner */
 document.addEventListener('keydown', (e)=>{
   if(!document.body.classList.contains('onizleme')) return;
+  // Kullanıcı bir girdi alanındaysa kısayolları yoksay (özellikle 0 tuşu için)
+  if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
   if(e.key === '+' || e.key === '=') { e.preventDefault(); olcekAyarla(onizlemeOlcek * 1.1); }
   else if(e.key === '-' || e.key === '_') { e.preventDefault(); olcekAyarla(onizlemeOlcek / 1.1); }
   else if(e.key === '0') { e.preventDefault(); olcekAyarla(1); }
@@ -9013,7 +9023,7 @@ checkDraftBanner();
 </div>
 
 <a class="surum-rozet no-print" href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener"
-   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 06.09.2026 · Güncel sürüm ↗</a>
+   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 07.09.2026 · Güncel sürüm ↗</a>
 <script>
 /* Sürüm rozeti: nerede açıldığını bilsin.
    - Masaüstü uygulaması (127.0.0.1) ve yerel dosya: yeni sekmede çevrimiçi sürümü aç (karşılaştırma için).

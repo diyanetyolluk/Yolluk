@@ -1,7 +1,7 @@
 {
  "uygulama": "surekli-gorev-yollugu",
- "surum": "2026.09.06",
+ "surum": "2026.09.07",
  "dosya": "index.html",
- "sha256": "9c8d83c750b949db703a07ed8439d56516fc3e1f91a89318b18807a78a4d2df4",
- "notlar": "Ünvan listesi genişletildi (60 → 136 ünvan, Diyanet dışı kurumlar eklendi). Sürüm rozeti çevrimiçi sürümdeyken artık yeni sekme açmıyor."
+ "sha256": "3f266626075ef88f867b4fbea736257bf835ac179a258ed4b574b10c162f49e2",
+ "notlar": "Baskı önizlemede kenar boşlukları ayarlanabilir (mm). Ekran görünümü kağıt çıktısıyla aynı. Ödeme Emri ekranda A4 dikey düzende. Ünvan listesi 136 ünvan."
 }
