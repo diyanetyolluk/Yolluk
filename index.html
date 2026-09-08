@@ -474,6 +474,9 @@
     background:#1F3864;color:#fff;display:none;align-items:center;justify-content:space-between;
     padding:0 16px;box-shadow:0 2px 10px rgba(0,0,0,.3);}
   body.onizleme .onizle-bar{display:flex;}
+  /* Alt ünvan seçilmeyi bekliyor — Excel'de B7'nin kırmızı olmasının karşılığı */
+  #unvanAltSec.alt-bekliyor{border:1.5px solid var(--red);background:#fff5f4;}
+  #unvanAltSec:disabled{background:#f2f2f2;color:#999;}
   .onizle-bar .bilgi{font-size:12.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .onizle-bar .bilgi{display:flex;align-items:center;gap:6px;}
   /* Kenar boşluğu kutucukları (mm) */
@@ -838,7 +841,7 @@ if(xr(e,"index.xml"))throw new Error("Unsupported NUMBERS 09 file");throw new Er
 
 // 2022 ve öncesi: [Ünvan, Derece, Ek Gösterge]
 const OLD_ROWS = [
-  // Bu blok 05.09.2026 tarihinde yolluk-sync.py ile Excel'den üretildi.
+  // Bu blok 08.09.2026 tarihinde yolluk-sync.py ile Excel'den üretildi.
   // Elle düzenlemeyin; yeni Excel gelince aracı tekrar çalıştırın.
   ["Aşçı", 1, null],
   ["Aşçı", 2, null],
@@ -1778,51 +1781,96 @@ const OLD_ROWS = [
   ["Tabip Pratisyen", 6, 1750],
   ["Tabip Pratisyen", 7, 1550],
   ["Tabip Pratisyen", 8, 1450],
-  ["Tekniker", 1, 2200],
-  ["Tekniker", 2, 1600],
-  ["Tekniker", 3, 1100],
-  ["Tekniker", 4, 800],
-  ["Tekniker", 5, null],
-  ["Tekniker", 6, null],
-  ["Tekniker", 7, null],
-  ["Tekniker", 8, null],
-  ["Tekniker", 9, null],
-  ["Tekniker", 10, null],
-  ["Tekniker", 11, null],
-  ["Tekniker", 12, null],
-  ["Tekniker", 13, null],
-  ["Tekniker", 14, null],
-  ["Tekniker", 15, null],
-  ["Teknisyen", 1, 2200],
-  ["Teknisyen", 2, 1600],
-  ["Teknisyen", 3, 1100],
-  ["Teknisyen", 4, 800],
-  ["Teknisyen", 5, null],
-  ["Teknisyen", 6, null],
-  ["Teknisyen", 7, null],
-  ["Teknisyen", 8, null],
-  ["Teknisyen", 9, null],
-  ["Teknisyen", 10, null],
-  ["Teknisyen", 11, null],
-  ["Teknisyen", 12, null],
-  ["Teknisyen", 13, null],
-  ["Teknisyen", 14, null],
-  ["Teknisyen", 15, null],
-  ["Teknisyen EML", 1, 1500],
-  ["Teknisyen EML", 2, 1100],
-  ["Teknisyen EML", 3, 800],
-  ["Teknisyen EML", 4, 650],
-  ["Teknisyen EML", 5, null],
-  ["Teknisyen EML", 6, null],
-  ["Teknisyen EML", 7, null],
-  ["Teknisyen EML", 8, null],
-  ["Teknisyen EML", 9, null],
-  ["Teknisyen EML", 10, null],
-  ["Teknisyen EML", 11, null],
-  ["Teknisyen EML", 12, null],
-  ["Teknisyen EML", 13, null],
-  ["Teknisyen EML", 14, null],
-  ["Teknisyen EML", 15, null],
+  ["Tekniker Yükseköğrenim", 1, 2200],
+  ["Tekniker Yükseköğrenim", 2, 1600],
+  ["Tekniker Yükseköğrenim", 3, 1100],
+  ["Tekniker Yükseköğrenim", 4, 800],
+  ["Tekniker Yükseköğrenim", 5, null],
+  ["Tekniker Yükseköğrenim", 6, null],
+  ["Tekniker Yükseköğrenim", 7, null],
+  ["Tekniker Yükseköğrenim", 8, null],
+  ["Tekniker Yükseköğrenim", 9, null],
+  ["Tekniker Yükseköğrenim", 10, null],
+  ["Tekniker Yükseköğrenim", 11, null],
+  ["Tekniker Yükseköğrenim", 12, null],
+  ["Tekniker Yükseköğrenim", 13, null],
+  ["Tekniker Yükseköğrenim", 14, null],
+  ["Tekniker Yükseköğrenim", 15, null],
+  ["Teknisyen Yükseköğrenim", 1, 2200],
+  ["Teknisyen Yükseköğrenim", 2, 1600],
+  ["Teknisyen Yükseköğrenim", 3, 1100],
+  ["Teknisyen Yükseköğrenim", 4, 800],
+  ["Teknisyen Yükseköğrenim", 5, null],
+  ["Teknisyen Yükseköğrenim", 6, null],
+  ["Teknisyen Yükseköğrenim", 7, null],
+  ["Teknisyen Yükseköğrenim", 8, null],
+  ["Teknisyen Yükseköğrenim", 9, null],
+  ["Teknisyen Yükseköğrenim", 10, null],
+  ["Teknisyen Yükseköğrenim", 11, null],
+  ["Teknisyen Yükseköğrenim", 12, null],
+  ["Teknisyen Yükseköğrenim", 13, null],
+  ["Teknisyen Yükseköğrenim", 14, null],
+  ["Teknisyen Yükseköğrenim", 15, null],
+  ["Teknisyen Diğer Öğrenim", 1, 1500],
+  ["Teknisyen Diğer Öğrenim", 2, 1100],
+  ["Teknisyen Diğer Öğrenim", 3, 800],
+  ["Teknisyen Diğer Öğrenim", 4, 650],
+  ["Teknisyen Diğer Öğrenim", 5, null],
+  ["Teknisyen Diğer Öğrenim", 6, null],
+  ["Teknisyen Diğer Öğrenim", 7, null],
+  ["Teknisyen Diğer Öğrenim", 8, null],
+  ["Teknisyen Diğer Öğrenim", 9, null],
+  ["Teknisyen Diğer Öğrenim", 10, null],
+  ["Teknisyen Diğer Öğrenim", 11, null],
+  ["Teknisyen Diğer Öğrenim", 12, null],
+  ["Teknisyen Diğer Öğrenim", 13, null],
+  ["Teknisyen Diğer Öğrenim", 14, null],
+  ["Teknisyen Diğer Öğrenim", 15, null],
+  ["Uzman Merkez Kariyer Uzmanı", 1, 3600],
+  ["Uzman Merkez Kariyer Uzmanı", 2, 3000],
+  ["Uzman Merkez Kariyer Uzmanı", 3, 2200],
+  ["Uzman Merkez Kariyer Uzmanı", 4, 1600],
+  ["Uzman Merkez Kariyer Uzmanı", 5, 1300],
+  ["Uzman Merkez Kariyer Uzmanı", 6, 1150],
+  ["Uzman Merkez Kariyer Uzmanı", 7, 950],
+  ["Uzman Merkez Kariyer Uzmanı", 8, null],
+  ["Uzman Merkez Kariyer Uzmanı", 9, null],
+  ["Uzman Taşra Kariyer Uzmanı", 1, 3000],
+  ["Uzman Taşra Kariyer Uzmanı", 2, 2400],
+  ["Uzman Taşra Kariyer Uzmanı", 3, 1600],
+  ["Uzman Taşra Kariyer Uzmanı", 4, 1500],
+  ["Uzman Taşra Kariyer Uzmanı", 5, 1200],
+  ["Uzman Taşra Kariyer Uzmanı", 6, 1100],
+  ["Uzman Taşra Kariyer Uzmanı", 7, 900],
+  ["Uzman Taşra Kariyer Uzmanı", 8, 800],
+  ["Uzman Taşra Kariyer Uzmanı", 9, null],
+  ["Uzman Akademik Uzman", 1, 4200],
+  ["Uzman Akademik Uzman", 2, 3300],
+  ["Uzman Akademik Uzman", 3, 2900],
+  ["Uzman Akademik Uzman", 4, 2900],
+  ["Uzman Akademik Uzman", 5, 2900],
+  ["Uzman Akademik Uzman", 6, 2900],
+  ["Uzman Akademik Uzman", 7, 2900],
+  ["Uzman Akademik Uzman", 8, 2900],
+  ["Uzman Akademik Uzman", 9, 2900],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 1, 2200],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 2, 1600],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 3, 1100],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 4, 800],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 5, null],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 6, null],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 7, null],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 8, null],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 9, null],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 1, 2200],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 2, 1600],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 3, 1100],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 4, 800],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 5, null],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 6, null],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 7, null],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 8, null],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 9, null],
   ["V.H.K.İ. Yükseköğrenim", 1, 2200],
   ["V.H.K.İ. Yükseköğrenim", 2, 1600],
   ["V.H.K.İ. Yükseköğrenim", 3, 1100],
@@ -1951,11 +1999,11 @@ const OLD_ROWS = [
   ["Doktor Öğretim Üyesi", 3, 4200],
   ["Doktor Öğretim Üyesi", 4, 4200],
   ["Doktor Öğretim Üyesi", 5, 4200],
-  ["Yrd.Doç.", 1, 4200],
-  ["Yrd.Doç.", 2, 4200],
-  ["Yrd.Doç.", 3, 4200],
-  ["Yrd.Doç.", 4, 4200],
-  ["Yrd.Doç.", 5, 4200],
+  ["Yardımcı Doçent", 1, 4200],
+  ["Yardımcı Doçent", 2, 4200],
+  ["Yardımcı Doçent", 3, 4200],
+  ["Yardımcı Doçent", 4, 4200],
+  ["Yardımcı Doçent", 5, 4200],
   ["Araştırma Görevlisi", 1, 4200],
   ["Araştırma Görevlisi", 2, 3300],
   ["Araştırma Görevlisi", 3, 2900],
@@ -1971,21 +2019,36 @@ const OLD_ROWS = [
   ["Araştırma Görevlisi", 13, null],
   ["Araştırma Görevlisi", 14, null],
   ["Araştırma Görevlisi", 15, null],
-  ["Öğretim Görevlisi, Okutman, Uzman", 1, 4200],
-  ["Öğretim Görevlisi, Okutman, Uzman", 2, 3300],
-  ["Öğretim Görevlisi, Okutman, Uzman", 3, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 4, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 5, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 6, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 7, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 8, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 9, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 10, null],
-  ["Öğretim Görevlisi, Okutman, Uzman", 11, null],
-  ["Öğretim Görevlisi, Okutman, Uzman", 12, null],
-  ["Öğretim Görevlisi, Okutman, Uzman", 13, null],
-  ["Öğretim Görevlisi, Okutman, Uzman", 14, null],
-  ["Öğretim Görevlisi, Okutman, Uzman", 15, null],
+  ["Öğretim Görevlisi", 1, 4200],
+  ["Öğretim Görevlisi", 2, 3300],
+  ["Öğretim Görevlisi", 3, 2900],
+  ["Öğretim Görevlisi", 4, 2900],
+  ["Öğretim Görevlisi", 5, 2900],
+  ["Öğretim Görevlisi", 6, 2900],
+  ["Öğretim Görevlisi", 7, 2900],
+  ["Öğretim Görevlisi", 8, 2900],
+  ["Öğretim Görevlisi", 9, 2900],
+  ["Öğretim Görevlisi", 10, null],
+  ["Öğretim Görevlisi", 11, null],
+  ["Öğretim Görevlisi", 12, null],
+  ["Öğretim Görevlisi", 13, null],
+  ["Öğretim Görevlisi", 14, null],
+  ["Öğretim Görevlisi", 15, null],
+  ["Okutman", 1, 4200],
+  ["Okutman", 2, 3300],
+  ["Okutman", 3, 2900],
+  ["Okutman", 4, 2900],
+  ["Okutman", 5, 2900],
+  ["Okutman", 6, 2900],
+  ["Okutman", 7, 2900],
+  ["Okutman", 8, 2900],
+  ["Okutman", 9, 2900],
+  ["Okutman", 10, null],
+  ["Okutman", 11, null],
+  ["Okutman", 12, null],
+  ["Okutman", 13, null],
+  ["Okutman", 14, null],
+  ["Okutman", 15, null],
   ["Genel Sekreter Üniversite", 1, 4400],
   ["Genel Sekreter Yardımcısı Üniversite", 1, 3600],
   ["Fakülte Sekreteri", 1, 3600],
@@ -1998,7 +2061,7 @@ const OLD_ROWS = [
 
 // 2023 ve sonrası: [Ünvan, Derece, Ek Gösterge]
 const NEW_ROWS = [
-  // Bu blok 05.09.2026 tarihinde yolluk-sync.py ile Excel'den üretildi.
+  // Bu blok 08.09.2026 tarihinde yolluk-sync.py ile Excel'den üretildi.
   // Elle düzenlemeyin; yeni Excel gelince aracı tekrar çalıştırın.
   ["Araştırmacı", 1, 2800],
   ["Araştırmacı", 2, 2200],
@@ -3209,78 +3272,96 @@ const NEW_ROWS = [
   ["Tahsildar Diğer Öğrenim", 13, null],
   ["Tahsildar Diğer Öğrenim", 14, null],
   ["Tahsildar Diğer Öğrenim", 15, null],
-  ["Tekniker", 1, 2800],
-  ["Tekniker", 2, 2200],
-  ["Tekniker", 3, 1700],
-  ["Tekniker", 4, 1400],
-  ["Tekniker", 5, null],
-  ["Tekniker", 6, null],
-  ["Tekniker", 7, null],
-  ["Tekniker", 8, null],
-  ["Tekniker", 9, null],
-  ["Tekniker", 10, null],
-  ["Tekniker", 11, null],
-  ["Tekniker", 12, null],
-  ["Tekniker", 13, null],
-  ["Tekniker", 14, null],
-  ["Tekniker", 15, null],
-  ["Teknisyen", 1, 2800],
-  ["Teknisyen", 2, 2200],
-  ["Teknisyen", 3, 1700],
-  ["Teknisyen", 4, 1400],
-  ["Teknisyen", 5, null],
-  ["Teknisyen", 6, null],
-  ["Teknisyen", 7, null],
-  ["Teknisyen", 8, null],
-  ["Teknisyen", 9, null],
-  ["Teknisyen", 10, null],
-  ["Teknisyen", 11, null],
-  ["Teknisyen", 12, null],
-  ["Teknisyen", 13, null],
-  ["Teknisyen", 14, null],
-  ["Teknisyen", 15, null],
-  ["Teknisyen EML", 1, 2100],
-  ["Teknisyen EML", 2, 1700],
-  ["Teknisyen EML", 3, 1400],
-  ["Teknisyen EML", 4, 1250],
-  ["Teknisyen EML", 5, null],
-  ["Teknisyen EML", 6, null],
-  ["Teknisyen EML", 7, null],
-  ["Teknisyen EML", 8, null],
-  ["Teknisyen EML", 9, null],
-  ["Teknisyen EML", 10, null],
-  ["Teknisyen EML", 11, null],
-  ["Teknisyen EML", 12, null],
-  ["Teknisyen EML", 13, null],
-  ["Teknisyen EML", 14, null],
-  ["Teknisyen EML", 15, null],
-  ["Uzman Kariyer", 1, 4200],
-  ["Uzman Kariyer", 2, 3600],
-  ["Uzman Kariyer", 3, 2800],
-  ["Uzman Kariyer", 4, 2200],
-  ["Uzman Kariyer", 5, 1900],
-  ["Uzman Kariyer", 6, 1750],
-  ["Uzman Kariyer", 7, 1550],
-  ["Uzman Kariyer", 8, null],
-  ["Uzman Kariyer", 9, null],
-  ["Uzman Yükseköğrenim", 1, 2800],
-  ["Uzman Yükseköğrenim", 2, 2200],
-  ["Uzman Yükseköğrenim", 3, 1700],
-  ["Uzman Yükseköğrenim", 4, 1400],
-  ["Uzman Yükseköğrenim", 5, null],
-  ["Uzman Yükseköğrenim", 6, null],
-  ["Uzman Yükseköğrenim", 7, null],
-  ["Uzman Yükseköğrenim", 8, null],
-  ["Uzman Yükseköğrenim", 9, null],
-  ["Uzman Yardımcısı Kariyer", 1, 2800],
-  ["Uzman Yardımcısı Kariyer", 2, 2200],
-  ["Uzman Yardımcısı Kariyer", 3, 1700],
-  ["Uzman Yardımcısı Kariyer", 4, 1400],
-  ["Uzman Yardımcısı Kariyer", 5, null],
-  ["Uzman Yardımcısı Kariyer", 6, null],
-  ["Uzman Yardımcısı Kariyer", 7, null],
-  ["Uzman Yardımcısı Kariyer", 8, null],
-  ["Uzman Yardımcısı Kariyer", 9, null],
+  ["Tekniker Yükseköğrenim", 1, 2800],
+  ["Tekniker Yükseköğrenim", 2, 2200],
+  ["Tekniker Yükseköğrenim", 3, 1700],
+  ["Tekniker Yükseköğrenim", 4, 1400],
+  ["Tekniker Yükseköğrenim", 5, null],
+  ["Tekniker Yükseköğrenim", 6, null],
+  ["Tekniker Yükseköğrenim", 7, null],
+  ["Tekniker Yükseköğrenim", 8, null],
+  ["Tekniker Yükseköğrenim", 9, null],
+  ["Tekniker Yükseköğrenim", 10, null],
+  ["Tekniker Yükseköğrenim", 11, null],
+  ["Tekniker Yükseköğrenim", 12, null],
+  ["Tekniker Yükseköğrenim", 13, null],
+  ["Tekniker Yükseköğrenim", 14, null],
+  ["Tekniker Yükseköğrenim", 15, null],
+  ["Teknisyen Yükseköğrenim", 1, 2800],
+  ["Teknisyen Yükseköğrenim", 2, 2200],
+  ["Teknisyen Yükseköğrenim", 3, 1700],
+  ["Teknisyen Yükseköğrenim", 4, 1400],
+  ["Teknisyen Yükseköğrenim", 5, null],
+  ["Teknisyen Yükseköğrenim", 6, null],
+  ["Teknisyen Yükseköğrenim", 7, null],
+  ["Teknisyen Yükseköğrenim", 8, null],
+  ["Teknisyen Yükseköğrenim", 9, null],
+  ["Teknisyen Yükseköğrenim", 10, null],
+  ["Teknisyen Yükseköğrenim", 11, null],
+  ["Teknisyen Yükseköğrenim", 12, null],
+  ["Teknisyen Yükseköğrenim", 13, null],
+  ["Teknisyen Yükseköğrenim", 14, null],
+  ["Teknisyen Yükseköğrenim", 15, null],
+  ["Teknisyen Diğer Öğrenim", 1, 2100],
+  ["Teknisyen Diğer Öğrenim", 2, 1700],
+  ["Teknisyen Diğer Öğrenim", 3, 1400],
+  ["Teknisyen Diğer Öğrenim", 4, 1250],
+  ["Teknisyen Diğer Öğrenim", 5, null],
+  ["Teknisyen Diğer Öğrenim", 6, null],
+  ["Teknisyen Diğer Öğrenim", 7, null],
+  ["Teknisyen Diğer Öğrenim", 8, null],
+  ["Teknisyen Diğer Öğrenim", 9, null],
+  ["Teknisyen Diğer Öğrenim", 10, null],
+  ["Teknisyen Diğer Öğrenim", 11, null],
+  ["Teknisyen Diğer Öğrenim", 12, null],
+  ["Teknisyen Diğer Öğrenim", 13, null],
+  ["Teknisyen Diğer Öğrenim", 14, null],
+  ["Teknisyen Diğer Öğrenim", 15, null],
+  ["Uzman Merkez Kariyer Uzmanı", 1, 4200],
+  ["Uzman Merkez Kariyer Uzmanı", 2, 3600],
+  ["Uzman Merkez Kariyer Uzmanı", 3, 2800],
+  ["Uzman Merkez Kariyer Uzmanı", 4, 2200],
+  ["Uzman Merkez Kariyer Uzmanı", 5, 1900],
+  ["Uzman Merkez Kariyer Uzmanı", 6, 1750],
+  ["Uzman Merkez Kariyer Uzmanı", 7, 1550],
+  ["Uzman Merkez Kariyer Uzmanı", 8, null],
+  ["Uzman Merkez Kariyer Uzmanı", 9, null],
+  ["Uzman Taşra Kariyer Uzmanı", 1, 3600],
+  ["Uzman Taşra Kariyer Uzmanı", 2, 3000],
+  ["Uzman Taşra Kariyer Uzmanı", 3, 2200],
+  ["Uzman Taşra Kariyer Uzmanı", 4, 2100],
+  ["Uzman Taşra Kariyer Uzmanı", 5, 1800],
+  ["Uzman Taşra Kariyer Uzmanı", 6, 1700],
+  ["Uzman Taşra Kariyer Uzmanı", 7, 1500],
+  ["Uzman Taşra Kariyer Uzmanı", 8, 1400],
+  ["Uzman Taşra Kariyer Uzmanı", 9, null],
+  ["Uzman Akademik Uzman", 1, 4200],
+  ["Uzman Akademik Uzman", 2, 3300],
+  ["Uzman Akademik Uzman", 3, 2900],
+  ["Uzman Akademik Uzman", 4, 2900],
+  ["Uzman Akademik Uzman", 5, 2900],
+  ["Uzman Akademik Uzman", 6, 2900],
+  ["Uzman Akademik Uzman", 7, 2900],
+  ["Uzman Akademik Uzman", 8, 2900],
+  ["Uzman Akademik Uzman", 9, 2900],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 1, 2800],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 2, 2200],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 3, 1700],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 4, 1400],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 5, null],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 6, null],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 7, null],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 8, null],
+  ["Uzman Genel İdare Hizmetleri Uzmanı", 9, null],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 1, 2800],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 2, 2200],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 3, 1700],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 4, 1400],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 5, null],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 6, null],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 7, null],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 8, null],
+  ["Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı", 9, null],
   ["V.H.K.İ. Yükseköğrenim", 1, 2800],
   ["V.H.K.İ. Yükseköğrenim", 2, 2200],
   ["V.H.K.İ. Yükseköğrenim", 3, 1700],
@@ -3469,11 +3550,11 @@ const NEW_ROWS = [
   ["Doktor Öğretim Üyesi", 3, 4200],
   ["Doktor Öğretim Üyesi", 4, 4200],
   ["Doktor Öğretim Üyesi", 5, 4200],
-  ["Yrd.Doç.", 1, 4200],
-  ["Yrd.Doç.", 2, 4200],
-  ["Yrd.Doç.", 3, 4200],
-  ["Yrd.Doç.", 4, 4200],
-  ["Yrd.Doç.", 5, 4200],
+  ["Yardımcı Doçent", 1, 4200],
+  ["Yardımcı Doçent", 2, 4200],
+  ["Yardımcı Doçent", 3, 4200],
+  ["Yardımcı Doçent", 4, 4200],
+  ["Yardımcı Doçent", 5, 4200],
   ["Araştırma Görevlisi", 1, 4200],
   ["Araştırma Görevlisi", 2, 3300],
   ["Araştırma Görevlisi", 3, 2900],
@@ -3489,23 +3570,39 @@ const NEW_ROWS = [
   ["Araştırma Görevlisi", 13, null],
   ["Araştırma Görevlisi", 14, null],
   ["Araştırma Görevlisi", 15, null],
-  ["Öğretim Görevlisi, Okutman, Uzman", 1, 4200],
-  ["Öğretim Görevlisi, Okutman, Uzman", 2, 3300],
-  ["Öğretim Görevlisi, Okutman, Uzman", 3, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 4, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 5, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 6, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 7, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 8, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 9, 2900],
-  ["Öğretim Görevlisi, Okutman, Uzman", 10, null],
-  ["Öğretim Görevlisi, Okutman, Uzman", 11, null],
-  ["Öğretim Görevlisi, Okutman, Uzman", 12, null],
-  ["Öğretim Görevlisi, Okutman, Uzman", 13, null],
-  ["Öğretim Görevlisi, Okutman, Uzman", 14, null],
-  ["Öğretim Görevlisi, Okutman, Uzman", 15, null],
+  ["Öğretim Görevlisi", 1, 4200],
+  ["Öğretim Görevlisi", 2, 3300],
+  ["Öğretim Görevlisi", 3, 2900],
+  ["Öğretim Görevlisi", 4, 2900],
+  ["Öğretim Görevlisi", 5, 2900],
+  ["Öğretim Görevlisi", 6, 2900],
+  ["Öğretim Görevlisi", 7, 2900],
+  ["Öğretim Görevlisi", 8, 2900],
+  ["Öğretim Görevlisi", 9, 2900],
+  ["Öğretim Görevlisi", 10, null],
+  ["Öğretim Görevlisi", 11, null],
+  ["Öğretim Görevlisi", 12, null],
+  ["Öğretim Görevlisi", 13, null],
+  ["Öğretim Görevlisi", 14, null],
+  ["Öğretim Görevlisi", 15, null],
+  ["Okutman", 1, 4200],
+  ["Okutman", 2, 3300],
+  ["Okutman", 3, 2900],
+  ["Okutman", 4, 2900],
+  ["Okutman", 5, 2900],
+  ["Okutman", 6, 2900],
+  ["Okutman", 7, 2900],
+  ["Okutman", 8, 2900],
+  ["Okutman", 9, 2900],
+  ["Okutman", 10, null],
+  ["Okutman", 11, null],
+  ["Okutman", 12, null],
+  ["Okutman", 13, null],
+  ["Okutman", 14, null],
+  ["Okutman", 15, null],
   ["Genel Sekreter Üniversite", 1, 4400],
   ["Genel Sekreter Yardımcısı Üniversite", 1, 3600],
+  ["Daire Başkanı", 1, 4200],
   ["Fakülte Sekreteri", 1, 3600],
   ["Fakülte Sekreteri", 2, 3600],
   ["Enstitü Sekreteri", 1, 3600],
@@ -3527,6 +3624,7 @@ const UNVAN_LIST = [
   "Bilgisayar İşletmeni Diğer Öğrenim",
   "Bilgisayar İşletmeni Yükseköğrenim",
   "Cezaevi Vaizi",
+  "Daire Başkanı",
   "Daktilograf Diğer Öğrenim",
   "Daktilograf Yükseköğrenim",
   "Defterdarlık Uzman Yardımcısı",
@@ -3581,6 +3679,7 @@ const UNVAN_LIST = [
   "Müfettiş",
   "Müfettiş Yardımcısı",
   "Mühendis",
+  "Okutman",
   "Orman Muhafaza Memuru Diğer Öğrenim",
   "Orman Muhafaza Memuru Yükseköğrenim",
   "Peyzaj Mimarı",
@@ -3611,10 +3710,18 @@ const UNVAN_LIST = [
   "Tahsildar Diğer Öğrenim",
   "Tahsildar Yükseköğrenim",
   "Tekniker",
+  "Tekniker Yükseköğrenim",
   "Teknisyen",
+  "Teknisyen Diğer Öğrenim",
   "Teknisyen EML",
+  "Teknisyen Yükseköğrenim",
+  "Uzman Akademik Uzman",
+  "Uzman Genel İdare Hizmetleri Uzmanı",
   "Uzman Kariyer",
+  "Uzman Merkez Kariyer Uzmanı",
+  "Uzman Taşra Kariyer Uzmanı",
   "Uzman Yardımcısı Kariyer",
+  "Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı",
   "Uzman Yükseköğrenim",
   "V.H.K.İ. Diğer Öğrenim",
   "V.H.K.İ. Yükseköğrenim",
@@ -3626,10 +3733,12 @@ const UNVAN_LIST = [
   "Veteriner Sağlık Teknikeri Yükseköğrenim",
   "Veteriner Sağlık Teknisyeni Diğer Öğrenim",
   "Veteriner Sağlık Teknisyeni Yükseköğrenim",
+  "Yardımcı Doçent",
   "Yrd.Doç.",
   "Yüksek Okul Sekreteri",
   "Çarşı Mahalle Bekçisi Diğer Öğrenim",
   "Çarşı Mahalle Bekçisi Yükseköğrenim",
+  "Öğretim Görevlisi",
   "Öğretim Görevlisi, Okutman, Uzman",
   "Öğretmen",
   "Öğretmen (Başöğretmen)",
@@ -3685,6 +3794,153 @@ function buildTitleList(rows){
   }
   return out.sort((a,b)=>a.localeCompare(b,'tr'));
 }
+/* ------------------------------------------------------------
+   ALT ÜNVAN YAPISI  (Excel'deki "Üst Ünvan" / "Ünvan Alt Seçim")
+   Her ünvanın alt ünvanı yoktur. Burada YALNIZCA alt ünvanı olanlar
+   bulunur; listede olmayan bir ünvan seçilince alt ünvan kutusu kapalı
+   kalır. Bu bloklar yolluk-sync.py tarafından Excel'den üretilir.
+   ------------------------------------------------------------ */
+const UNVAN_PARCA_YENI = {
+  "Bilgisayar İşletmeni": {"Diğer Öğrenim": "Bilgisayar İşletmeni Diğer Öğrenim", "Yükseköğrenim": "Bilgisayar İşletmeni Yükseköğrenim"},
+  "Daktilograf": {"Diğer Öğrenim": "Daktilograf Diğer Öğrenim", "Yükseköğrenim": "Daktilograf Yükseköğrenim"},
+  "Genel Sekreter": {"Üniversite": "Genel Sekreter Üniversite"},
+  "Genel Sekreter Yardımcısı": {"Üniversite": "Genel Sekreter Yardımcısı Üniversite"},
+  "Hemşire": {"Lisans": "Hemşire Lisans", "Lise": "Hemşire Lise", "Ortaokul": "Hemşire Ortaokul", "Ön Lisans": "Hemşire Ön Lisans"},
+  "K.K. Öğreticisi": {"Diğer Öğrenim": "K.K. Öğreticisi Diğer Öğrenim", "Yükseköğrenim": "K.K. Öğreticisi Yükseköğrenim", "İmam Hatip Lisesi": "K.K. Öğreticisi İmam Hatip Lisesi"},
+  "Kaymakam": {"1/4 Derece Kademe": "Kaymakam 1/4 Derece Kademe", "Diğer Derece Kademe": "Kaymakam Diğer Derece Kademe"},
+  "Koruma ve Güvenlik Görevlisi": {"Diğer Öğrenim": "Koruma ve Güvenlik Görevlisi Diğer Öğrenim", "Yükseköğrenim": "Koruma ve Güvenlik Görevlisi Yükseköğrenim"},
+  "Kütüphaneci": {"Yükseköğrenim": "Kütüphaneci Yükseköğrenim"},
+  "Memur": {"Diğer Öğrenim": "Memur Diğer Öğrenim", "Yükseköğrenim": "Memur Yükseköğrenim"},
+  "Murakıp": {"Diğer Öğrenim": "Murakıp Diğer Öğrenim", "Yükseköğrenim": "Murakıp Yükseköğrenim", "İmam Hatip Lisesi": "Murakıp İmam Hatip Lisesi"},
+  "Mutemet": {"Diğer Öğrenim": "Mutemet Diğer Öğrenim", "Yükseköğrenim": "Mutemet Yükseköğrenim"},
+  "Müezzin Kayyım": {"Diğer Öğrenim": "Müezzin Kayyım Diğer Öğrenim", "Yükseköğrenim": "Müezzin Kayyım Yükseköğrenim", "İmam Hatip Lisesi": "Müezzin Kayyım İmam Hatip Lisesi"},
+  "Orman Muhafaza Memuru": {"Diğer Öğrenim": "Orman Muhafaza Memuru Diğer Öğrenim", "Yükseköğrenim": "Orman Muhafaza Memuru Yükseköğrenim"},
+  "Polis": {"Diğer Öğrenim": "Polis Diğer Öğrenim", "Yükseköğrenim": "Polis Yükseköğrenim"},
+  "Profesör": {"3 Yılını Dolduran": "Profesör 3 Yılını Dolduran", "3 Yılını Doldurmayan": "Profesör 3 Yılını Doldurmayan", "4 Yılını Dolduran": "Profesör 4 Yılını Dolduran", "Bölüm Başkanı 3 Yılını Dolduran": "Profesör Bölüm Başkanı 3 Yılını Dolduran", "Bölüm Başkanı 3 Yılını Doldurmayan": "Profesör Bölüm Başkanı 3 Yılını Doldurmayan", "Bölüm Başkanı 4 Yılını Dolduran": "Profesör Bölüm Başkanı 4 Yılını Dolduran", "Dekan 3 Yılını Dolduran": "Profesör Dekan 3 Yılını Dolduran", "Dekan 3 Yılını Doldurmayan": "Profesör Dekan 3 Yılını Doldurmayan", "Dekan Yrd.- 3 Yılını Dolduran": "Profesör Dekan Yrd.- 3 Yılını Dolduran", "Dekan Yrd.- 3 Yılını Doldurmayan": "Profesör Dekan Yrd.- 3 Yılını Doldurmayan", "Rektör": "Profesör Rektör", "Rektör Yrd. 3 Yılını Dolduran": "Profesör Rektör Yrd. 3 Yılını Dolduran", "Rektör Yrd. 3 Yılını Doldurmayan": "Profesör Rektör Yrd. 3 Yılını Doldurmayan", "Yüksek Okul Müdürü 3 Yılını Dolduran": "Profesör Yüksek Okul Müdürü 3 Yılını Dolduran", "Yüksek Okul Müdürü 3 Yılını Doldurmayan": "Profesör Yüksek Okul Müdürü 3 Yılını Doldurmayan"},
+  "Sağlık Memuru": {"Yükseköğrenim": "Sağlık Memuru Yükseköğrenim"},
+  "Tabip": {"Asistan": "Tabip Asistan", "Pratisyen": "Tabip Pratisyen", "Uzman": "Tabip Uzman"},
+  "Tahsildar": {"Diğer Öğrenim": "Tahsildar Diğer Öğrenim", "Yükseköğrenim": "Tahsildar Yükseköğrenim"},
+  "Tekniker": {"Yükseköğrenim": "Tekniker Yükseköğrenim"},
+  "Teknisyen": {"Diğer Öğrenim": "Teknisyen Diğer Öğrenim", "Yükseköğrenim": "Teknisyen Yükseköğrenim"},
+  "Uzman": {"Akademik Uzman": "Uzman Akademik Uzman", "Genel İdare Hizmetleri Uzmanı": "Uzman Genel İdare Hizmetleri Uzmanı", "Merkez Kariyer Uzmanı": "Uzman Merkez Kariyer Uzmanı", "Taşra Kariyer Uzmanı": "Uzman Taşra Kariyer Uzmanı"},
+  "Uzman Yardımcısı": {"Merkez Kariyer Uzmanı Yardımcısı": "Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı"},
+  "V.H.K.İ.": {"Diğer Öğrenim": "V.H.K.İ. Diğer Öğrenim", "Yükseköğrenim": "V.H.K.İ. Yükseköğrenim"},
+  "Veteriner Sağlık Teknikeri": {"Diğer Öğrenim": "Veteriner Sağlık Teknikeri Diğer Öğrenim", "Yükseköğrenim": "Veteriner Sağlık Teknikeri Yükseköğrenim"},
+  "Veteriner Sağlık Teknisyeni": {"Diğer Öğrenim": "Veteriner Sağlık Teknisyeni Diğer Öğrenim", "Yükseköğrenim": "Veteriner Sağlık Teknisyeni Yükseköğrenim"},
+  "Çarşı Mahalle Bekçisi": {"Diğer Öğrenim": "Çarşı Mahalle Bekçisi Diğer Öğrenim", "Yükseköğrenim": "Çarşı Mahalle Bekçisi Yükseköğrenim"},
+  "İl Müftüsü": {"Ankara-İstanbul-İzmir": "İl Müftüsü (Ankara-İstanbul-İzmir)", "Diğer Büyükşehir": "İl Müftüsü (Diğer Büyükşehir)", "Diğer İller": "İl Müftüsü (Diğer İller)"},
+  "İmam Hatip": {"Diğer Öğrenim": "İmam Hatip Diğer Öğrenim", "Yükseköğrenim": "İmam Hatip Yükseköğrenim", "İmam Hatip Lisesi": "İmam Hatip İmam Hatip Lisesi"},
+  "Şef": {"Diğer Öğrenim": "Şef Diğer Öğrenim", "Yükseköğrenim": "Şef Yükseköğrenim"},
+  "Şoför": {"Diğer Öğrenim": "Şoför Diğer Öğrenim", "Yükseköğrenim": "Şoför Yükseköğrenim"},
+};
+const UNVAN_PARCA_ESKI = {
+  "Bilgisayar İşletmeni": {"Diğer Öğrenim": "Bilgisayar İşletmeni Diğer Öğrenim", "Yükseköğrenim": "Bilgisayar İşletmeni Yükseköğrenim"},
+  "Daktilograf": {"Diğer Öğrenim": "Daktilograf Diğer Öğrenim", "Yükseköğrenim": "Daktilograf Yükseköğrenim"},
+  "Genel Sekreter": {"Üniversite": "Genel Sekreter Üniversite"},
+  "Genel Sekreter Yardımcısı": {"Üniversite": "Genel Sekreter Yardımcısı Üniversite"},
+  "Hemşire": {"Lisans": "Hemşire Lisans", "Lise": "Hemşire Lise", "Ön Lisans": "Hemşire Ön Lisans"},
+  "K.K. Öğreticisi": {"Diğer Lisans / Ön Lisans": "K.K. Öğreticisi Diğer Lisans / Ön Lisans", "Diğer Öğrenim": "K.K. Öğreticisi Diğer Öğrenim", "İlahiyat Lisans": "K.K. Öğreticisi İlahiyat Lisans", "İmam Hatip Lisesi": "K.K. Öğreticisi İmam Hatip Lisesi"},
+  "Memur": {"Diğer Öğrenim": "Memur Diğer Öğrenim", "Yükseköğrenim": "Memur Yükseköğrenim"},
+  "Murakıp": {"Diğer Öğrenim": "Murakıp Diğer Öğrenim", "Yükseköğrenim": "Murakıp Yükseköğrenim", "İmam Hatip Lisesi": "Murakıp İmam Hatip Lisesi"},
+  "Mutemet": {"Diğer Öğrenim": "Mutemet Diğer Öğrenim", "Yükseköğrenim": "Mutemet Yükseköğrenim"},
+  "Müezzin Kayyım": {"Diğer Lisans / Ön Lisans": "Müezzin Kayyım Diğer Lisans / Ön Lisans", "Diğer Öğrenim": "Müezzin Kayyım Diğer Öğrenim", "İlahiyat Lisans": "Müezzin Kayyım İlahiyat Lisans", "İmam Hatip Lisesi": "Müezzin Kayyım İmam Hatip Lisesi"},
+  "Orman Muhafaza Memuru": {"Diğer Öğrenim": "Orman Muhafaza Memuru Diğer Öğrenim", "Yükseköğrenim": "Orman Muhafaza Memuru Yükseköğrenim"},
+  "Polis": {"Diğer Öğrenim": "Polis Diğer Öğrenim", "Yükseköğrenim": "Polis Yükseköğrenim"},
+  "Profesör": {"3 Yılını Dolduran": "Profesör 3 Yılını Dolduran", "3 Yılını Doldurmayan": "Profesör 3 Yılını Doldurmayan", "4 Yılını Dolduran": "Profesör 4 Yılını Dolduran", "Bölüm Başkanı 3 Yılını Dolduran": "Profesör Bölüm Başkanı 3 Yılını Dolduran", "Bölüm Başkanı 3 Yılını Doldurmayan": "Profesör Bölüm Başkanı 3 Yılını Doldurmayan", "Bölüm Başkanı 4 Yılını Dolduran": "Profesör Bölüm Başkanı 4 Yılını Dolduran", "Dekan 3 Yılını Dolduran": "Profesör Dekan 3 Yılını Dolduran", "Dekan 3 Yılını Doldurmayan": "Profesör Dekan 3 Yılını Doldurmayan", "Dekan Yrd.- 3 Yılını Dolduran": "Profesör Dekan Yrd.- 3 Yılını Dolduran", "Dekan Yrd.- 3 Yılını Doldurmayan": "Profesör Dekan Yrd.- 3 Yılını Doldurmayan", "Rektör": "Profesör Rektör", "Rektör Yrd. 3 Yılını Dolduran": "Profesör Rektör Yrd. 3 Yılını Dolduran", "Rektör Yrd. 3 Yılını Doldurmayan": "Profesör Rektör Yrd. 3 Yılını Doldurmayan", "Yüksek Okul Müdürü 3 Yılını Dolduran": "Profesör Yüksek Okul Müdürü 3 Yılını Dolduran", "Yüksek Okul Müdürü 3 Yılını Doldurmayan": "Profesör Yüksek Okul Müdürü 3 Yılını Doldurmayan"},
+  "Tabip": {"Asistan": "Tabip Asistan", "Pratisyen": "Tabip Pratisyen", "Uzman": "Tabip Uzman"},
+  "Tekniker": {"Yükseköğrenim": "Tekniker Yükseköğrenim"},
+  "Teknisyen": {"Diğer Öğrenim": "Teknisyen Diğer Öğrenim", "Yükseköğrenim": "Teknisyen Yükseköğrenim"},
+  "Uzman": {"Akademik Uzman": "Uzman Akademik Uzman", "Genel İdare Hizmetleri Uzmanı": "Uzman Genel İdare Hizmetleri Uzmanı", "Merkez Kariyer Uzmanı": "Uzman Merkez Kariyer Uzmanı", "Taşra Kariyer Uzmanı": "Uzman Taşra Kariyer Uzmanı"},
+  "Uzman Yardımcısı": {"Merkez Kariyer Uzmanı Yardımcısı": "Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı"},
+  "V.H.K.İ.": {"Diğer Öğrenim": "V.H.K.İ. Diğer Öğrenim", "Yükseköğrenim": "V.H.K.İ. Yükseköğrenim"},
+  "Çarşı Mahalle Bekçisi": {"Diğer Öğrenim": "Çarşı Mahalle Bekçisi Diğer Öğrenim", "Yükseköğrenim": "Çarşı Mahalle Bekçisi Yükseköğrenim"},
+  "İl Müftüsü": {"Ankara-İstanbul-İzmir": "İl Müftüsü (Ankara-İstanbul-İzmir)", "Diğer Büyükşehir": "İl Müftüsü (Diğer Büyükşehir)", "Diğer İller": "İl Müftüsü (Diğer İller)"},
+  "İmam Hatip": {"Diğer Lisans / Ön Lisans": "İmam Hatip Diğer Lisans / Ön Lisans", "Diğer Öğrenim": "İmam Hatip Diğer Öğrenim", "İlahiyat Lisans": "İmam Hatip İlahiyat Lisans", "İmam Hatip Lisesi": "İmam Hatip İmam Hatip Lisesi"},
+  "Şef": {"Diğer Öğrenim": "Şef Diğer Öğrenim", "Yükseköğrenim": "Şef Yükseköğrenim"},
+  "Şoför": {"Diğer Öğrenim": "Şoför Diğer Öğrenim", "Yükseköğrenim": "Şoför Yükseköğrenim"},
+};
+
+function unvanParcaYil(yil){
+  return (parseInt(yil,10) >= 2023) ? UNVAN_PARCA_YENI : UNVAN_PARCA_ESKI;
+}
+/* Tam ünvan adından üst/alt parçalarını bulur. */
+function unvanParcala(tam, yil){
+  const P = unvanParcaYil(yil === undefined ? hesapYili() : yil);
+  for(const ust in P){
+    for(const alt in P[ust]){
+      if(P[ust][alt] === tam) return {ust:ust, alt:alt};
+    }
+  }
+  return {ust: tam || '', alt: ''};
+}
+/* Üst ünvanın alt seçenekleri (yoksa boş dizi). */
+function altUnvanlar(ust, yil){
+  const P = unvanParcaYil(yil === undefined ? hesapYili() : yil);
+  return P[ust] ? Object.keys(P[ust]) : [];
+}
+/* Ekranda gösterilecek ÜST ünvan listesi: alt ünvanı olanlar tek satıra iner. */
+/* Üst + alt seçimden HESAPTA kullanılacak tam ünvan adını kurar.
+   Alt ünvanı olan bir üst ünvan seçilip alt seçilmemişse BOŞ döner —
+   Excel'de B7'nin kırmızı kalıp "seçiniz!" demesinin karşılığıdır. */
+function unvanTamAdi(){
+  const ust = state.unvanUst || '';
+  if(!ust) return '';
+  const P = unvanParcaYil(hesapYili());
+  if(!P[ust]) return ust;                       // alt ünvanı yok
+  return (state.unvanAlt && P[ust][state.unvanAlt]) ? P[ust][state.unvanAlt] : '';
+}
+
+/* state.unvan (tam ad) ile ekrandaki iki kutuyu eşitler. Personel
+   listesinden aktarma, geçmişten yükleme gibi programatik değişikliklerde
+   kutuların doğru dolması için gerekir. */
+function unvanAlanlariniEsitle(){
+  let tam = String(state.unvan || '');
+  if(!tam) return;
+  /* Kayıtlı eski hesaplamalarda ünvan eski adıyla durabilir
+     (ör. "Uzman Kariyer"). Yeni adına sessizce taşınır ki ekrandaki
+     kutular ve alt ünvan listesi doğru dolsun. */
+  const yeniAd = ESKI_YAZIM[tam];
+  if(yeniAd){ tam = yeniAd; state.unvan = yeniAd; }
+  const pr = unvanParcala(tam);
+  state.unvanUst = pr.ust;
+  state.unvanAlt = pr.alt;
+}
+
+/* "Ünvan Alt Seçim" kutusunu seçili üst ünvana göre yeniden doldurur.
+   Alt ünvanı olmayan ünvanlarda kutu KAPALI kalır. */
+function altSecimGuncelle(){
+  const sec = document.getElementById('unvanAltSec');
+  if(!sec) return;
+  const ust  = state.unvanUst || '';
+  const alts = altUnvanlar(ust);
+  if(!alts.length){
+    sec.innerHTML = '<option value="">— yok —</option>';
+    sec.value = '';
+    sec.disabled = true;
+    sec.classList.remove('alt-bekliyor');
+    sec.title = ust ? 'Bu ünvanın alt seçimi yoktur.' : 'Önce ünvan seçiniz.';
+    return;
+  }
+  sec.disabled = false;
+  sec.title = 'Alt ünvan seçiniz.';
+  const secili = alts.indexOf(state.unvanAlt) >= 0 ? state.unvanAlt : '';
+  sec.innerHTML = `<option value="">Seçiniz…</option>` +
+    alts.map(a=>`<option value="${escapeHtml(a)}"${a===secili?' selected':''}>${escapeHtml(a)}</option>`).join('');
+  sec.value = secili;
+  sec.classList.toggle('alt-bekliyor', !secili);
+}
+
+function aktifUstUnvanListesi(){
+  const P = unvanParcaYil(hesapYili());
+  const cikan = [], gorulen = Object.create(null);
+  for(const t of aktifUnvanListesi()){
+    const u = unvanParcala(t).ust;
+    if(!gorulen[u]){ gorulen[u] = 1; cikan.push(u); }
+  }
+  for(const u in P){ if(!gorulen[u]){ gorulen[u] = 1; cikan.push(u); } }
+  return cikan.sort((a,b)=>a.localeCompare(b,'tr'));
+}
+
 const UNVAN_LIST_ESKI = buildTitleList(OLD_ROWS);  // 2022 ve öncesi
 const UNVAN_LIST_YENI = buildTitleList(NEW_ROWS);  // 2023 ve sonrası
 
@@ -3712,6 +3968,16 @@ const ESKI_YAZIM = {
   'İmam-Hatip Yükseköğrenim'            : 'İmam Hatip Yükseköğrenim',
   'Müezzin Kayyım (Baş Müezzin Kayım)'  : 'Müezzin Kayyım (Baş Müezzin Kayyım)',
   'Öğretmen (Baş Öğretmen)'             : 'Öğretmen (Başöğretmen)',
+  /* 02.09.2026 Excel'inde yeniden adlandırılan ünvanlar. Listeden kaldırıldı
+     ama kayıtlı eski hesaplamalar bozulmasın diye buradan yönlendiriliyor. */
+  'Yrd.Doç.'                           : 'Yardımcı Doçent',
+  'Öğretim Görevlisi, Okutman, Uzman'  : 'Öğretim Görevlisi',
+  'Uzman Kariyer'                      : 'Uzman Merkez Kariyer Uzmanı',
+  'Uzman Yardımcısı Kariyer'           : 'Uzman Yardımcısı Merkez Kariyer Uzmanı Yardımcısı',
+  'Uzman Yükseköğrenim'                : 'Uzman Genel İdare Hizmetleri Uzmanı',
+  'Tekniker'                           : 'Tekniker Yükseköğrenim',
+  'Teknisyen'                          : 'Teknisyen Yükseköğrenim',
+  'Teknisyen EML'                      : 'Teknisyen Diğer Öğrenim',
 };
 
 /* ------------------------------------------------------------
@@ -4855,7 +5121,7 @@ function unvanYilaUyarla(unvan, yil){
    girilen tarihe eşit veya ondan önceki en yakın satırı kullanır.
    ------------------------------------------------------------ */
 const GUNDELIK_TABLOSU = [
-  // Bu blok 05.09.2026 tarihinde yolluk-sync.py ile Excel'den üretildi.
+  // Bu blok 08.09.2026 tarihinde yolluk-sync.py ile Excel'den üretildi.
   // Elle düzenlemeyin; yeni Excel gelince aracı tekrar çalıştırın.
   {date:"2001-01-01", a:null, b:null, c:null, d:null, e:null, damga:0.006},
   {date:"2002-01-01", a:null, b:null, c:null, d:null, e:null, damga:0.006},
@@ -4909,7 +5175,7 @@ const GUNDELIK_TABLOSU = [
    Memur maaş katsayıları — bkz. yukarıdaki açıklama.
    ------------------------------------------------------------ */
 const MAAS_KATSAYILARI = [
-  // Bu blok 05.09.2026 tarihinde yolluk-sync.py ile Excel'den üretildi.
+  // Bu blok 08.09.2026 tarihinde yolluk-sync.py ile Excel'den üretildi.
   // Elle düzenlemeyin; yeni Excel gelince aracı tekrar çalıştırın.
   ["1970-03", 7, null, null],
   ["1971-03", 7, null, null],
@@ -5314,7 +5580,9 @@ function makeDefaultState(){
   tarih: todayISO(-1),          // "Ayrılma / Hesaplama" — Excel B3 (tek tarih alanı)
   muhasebeTarihi: todayISO(0),
   tayinTuru: 'Normal Tayin',
-  unvan: '',
+  unvan: '',            // TAM ünvan adı (hesapta kullanılan) — üst + alt birleşimi
+  unvanUst: '',         // ekrandaki "Ünvanı" kutusu
+  unvanAlt: '',         // ekrandaki "Ünvan Alt Seçim" kutusu (yoksa boş)
   pozisyon: '1',
   mesafeKm: '',
   tasitUcreti: '',
@@ -5332,12 +5600,12 @@ function makeDefaultState(){
   harcamaYetkilisiUnvan: '',
   bilgiIcin: BILGI_ICIN,
   // belgede görünen ama formülsüz (elle doldurulan) iki bilgi alanı
-  oncedenAvans: '',
+  oncedenAvans: 'Almamıştır',
   /* Belgedeki "Muhasebe Birimi ve Tarihi" kutusu. Normalde BOŞTUR; yalnızca
      AVANS alınmışsa doldurulur — avans başka bir muhasebe biriminden alınmış
      olabileceği için birim adı ve tarihi elle yazılır. Sol paneldeki
      "Önceden Avans Almışsa Aldığı" kutusunun hemen altındaki alanla eşlidir. */
-  muhasebeBirimiTarihi: '',
+  muhasebeBirimiTarihi: 'Almamıştır',
   // Belgenin altına elle yazılan serbest not
   notMetni: '',
   // Belgede imzası görünecek görevliler (boşsa o sütun hiç çıkmaz)
@@ -5434,6 +5702,8 @@ function compute(){
   // BELİRSİZDİR. Aksi halde varsayılan derece "1" yüzünden sistem
   // kendiliğinden "d) Poz. 1-4" kademesine düşer ve boş formda bile
   // sabit bir tutar görünürdü. Bu durumda 0 kullanılır ve ekranda "-" yazar.
+  /* Excel F4/F5: =IFERROR(B41*1,"Bulunamadı!") — ünvan çözülemediğinde
+     belgede sayı değil "Bulunamadı!" yazar. */
   c.gundelikBelirsiz = (
     state.ovrGundelik === '' &&
     state.ovrEkGosterge === '' &&
@@ -5539,10 +5809,16 @@ function compute(){
   c.avans = /\d/.test(c.avansMetin) ? Math.max(0, numTR(c.avansMetin)) : 0;   // R3
   /* Para sütunu olduğu için kuruşuyla yazılır (GENEL TOPLAM / Damga / Net ile aynı biçim) */
   c.avansGosterim = (c.avans > 0) ? trMoney(c.avans) : c.avansMetin;
-  c.R28 = round2(Math.max(0, c.satirToplami - c.avans));
+  /* 02.09.2026 Excel'i: avans tahakkuktan fazlaysa R28 EKSİ çıkar.
+     Eskiden sıfıra kırpılıyordu; artık Excel ile birebir. */
+  c.R28 = round2(c.satirToplami - c.avans);
+  c.eksiMi = c.R28 < 0;
 
   // ---- yazıyla toplam, damga vergisi, net ödenen ----
-  c.toplamYazi = tutarYaziyla(c.R28);
+  /* Excel E28: eksiyse başına "Eksi " gelir. E31'in iade cümlesi ise
+     "Eksi " atılmış halini kullanır (SUBSTITUTE(E28,"Eksi ","")). */
+  c.toplamYaziMutlak = tutarYaziyla(Math.abs(c.R28));
+  c.toplamYazi = (c.eksiMi ? 'Eksi ' : '') + c.toplamYaziMutlak;
   /* Excel R29 formülü oranı B4 = MUHASEBE TARİHİ'nden okur (ayrılma tarihinden
      değil). Muhasebe tarihi girilmemişse ayrılma tarihine düşülür. */
   const damgaTarihi = state.muhasebeTarihi || c.tarih;
@@ -5559,9 +5835,9 @@ function compute(){
      düşüldükten sonra KALAN tutar üzerinden hesaplanır.
      Avans girilmemişse davranış eskisiyle birebir aynıdır. */
   c.damgaMatrahi = c.R28;                           // avans zaten R28'in içinde düşüldü
-  c.damgaVergisi = round2(c.damgaMatrahi * damgaOraniSayisal);   // Excel R29
+  c.damgaVergisi = c.eksiMi ? 0 : round2(c.damgaMatrahi * damgaOraniSayisal);   // Excel R29
   c.damgaOrani = damgaOraniSayisal;
-  c.netOdenen = round2(c.damgaMatrahi - c.damgaVergisi);         // Excel R30
+  c.netOdenen = c.eksiMi ? 0 : round2(c.damgaMatrahi - c.damgaVergisi);         // Excel R30
   /* ---- ÖDEME EMRİ BELGESİ — Excel ile birebir ----
      Excel'de (Ödeme Emri Belgesi sayfası) eşleşme şöyledir:
         H23 Brüt Tutar              = 'Sürekli Görev Yolluğu'!R28
@@ -5579,8 +5855,13 @@ function compute(){
   c.oebMahsup   = c.avans;                          // Excel R18 / M27  (= R3)
   c.oebOdenecek = c.netOdenen;                      // Excel T18 / Q27  (= I18)
 
-  c.sentenceE30 = `${yonelmeEkle(state.nereye)} atanan ${state.adSoyad} ve aile fertleri için sürekli görev yolluğu olarak tahakkuk eden `;
-  c.sentenceE31 = `${trMoney(c.R28)} Türk lirasını (${c.toplamYazi}) gösterir bildirimdir.`;
+  /* Excel E30/E31 — avans fazlaysa belge "iade alınması gerekmektedir" der. */
+  c.sentenceE30 = c.eksiMi
+    ? `${yonelmeEkle(state.nereye)} atanan ${state.adSoyad} ve aile fertleri için ödenen avans tutarı, tahakkuk tutarından fazladır.`
+    : `${yonelmeEkle(state.nereye)} atanan ${state.adSoyad} ve aile fertleri için sürekli görev yolluğu olarak tahakkuk eden `;
+  c.sentenceE31 = c.eksiMi
+    ? `İlgiliden ${trMoney(Math.abs(c.R28))} TL'nin (${c.toplamYaziMutlak}) iade alınması gerekmektedir.`
+    : `${trMoney(c.R28)} TL'yi (${c.toplamYazi}) gösterir bildirimdir.`;
 
   return c;
 }
@@ -5652,19 +5933,19 @@ function docHeadRows(c){
       <td class="dh-l">Aylık Kadro Der. / Pozisyonu</td>
       <td class="dh-v" colspan="2">${state.pozisyon || bos}</td>
       <td class="dh-sub" colspan="8">(${state.tayinTuru})</td>
-      <td class="dh-l" colspan="2">Avans Almışsa Aldığı Tutar</td>
+      <td class="dh-l" colspan="2">Avans Almışsa Aldığı Brüt Tutar</td>
       <td class="dh-v">${escapeHtml(c.avansGosterim) || bos}</td>
     </tr>
     <tr>
       <td class="dh-l">Ek Göstergesi</td>
-      <td class="dh-v" colspan="2">${c.ekGosterge}</td>
+      <td class="dh-v" colspan="2">${c.gundelikBelirsiz ? 'Bulunamadı!' : c.ekGosterge}</td>
       <td class="dh-mid" colspan="8"></td>
       <td class="dh-l" colspan="2">Avans Muhasebe Birimi ve Tarihi</td>
       <td class="dh-v">${escapeHtml(state.muhasebeBirimiTarihi||'') || bos}</td>
     </tr>
     <tr>
       <td class="dh-l">Gündeliği</td>
-      <td class="dh-v" colspan="2">${c.gundelikBelirsiz ? '-' : trMoney(c.gundelik)}</td>
+      <td class="dh-v" colspan="2">${c.gundelikBelirsiz ? 'Bulunamadı!' : trMoney(c.gundelik)}</td>
       <td class="dh-mid dh-bot" colspan="8"></td>
       <td class="dh-l" colspan="2">${atamaBilgi().etiket}</td>
       <td class="dh-v">${escapeHtml(atamaBilgi().deger) || bos}</td>
@@ -5745,17 +6026,18 @@ function buildSheet1Shell(){
         <div class="panel">
           <div class="panel-head">VERİ GİRİŞİ</div>
           <div class="panel-body">
-            ${fieldRow('Atama Tarihi', `<input type="text" data-k="atamaTarihi" value="${escapeHtml(state.atamaTarihi||'')}"
+            ${fieldRow('Atama Tarihi ve Sayısı', `<input type="text" data-k="atamaTarihi" value="${escapeHtml(state.atamaTarihi||'')}"
                  placeholder="Örn: 01.08.2026  ya da  01.08.2026-548785"
                  title="Serbest alandır, hesaba girmez. Yalnız tarih yazarsanız belgede &quot;Atama Tarihi&quot; olur; tarihten sonra atama onayının sayısını da yazarsanız &quot;Atama Tarihi ve Sayısı&quot; olur ve yazdığınız metin aynen basılır.">`)}
-            ${fieldRow('Ayrılma / Hesaplama', `<input type="date" data-k="tarih" value="${state.tarih}">`)}
+            ${fieldRow('Ayrılma / Hesaplama Tarihi', `<input type="date" data-k="tarih" value="${state.tarih}">`)}
             ${fieldRow('Muhasebe Tarihi', `<input type="date" data-k="muhasebeTarihi" value="${state.muhasebeTarihi}" title="Bütçe Yılı, damga vergisi oranı ve imza bloğundaki tarihler bu tarihe göre belirlenir.">`)}
             ${fieldRow('Tayin Türü', `<select data-k="tayinTuru">${tayinOpts}</select>`)}
-            ${fieldRow('Ünvanı', `<div class="combo" id="unvanCombo">
-                 <input type="text" data-k="unvan" autocomplete="off" value="${state.unvan}" placeholder="Ünvan seçiniz veya yazınız">
+            ${fieldRow('Ünvan Seçiniz', `<div class="combo" id="unvanCombo">
+                 <input type="text" data-k="unvanUst" autocomplete="off" value="${escapeHtml(state.unvanUst||'')}" placeholder="Ünvan seçiniz veya yazınız">
                  <span class="combo-ok" id="unvanCaret">▾</span>
                  <div class="combo-liste" id="unvanListe"></div>
                </div>`)}
+            ${fieldRow('Ünvan Alt Seçim', `<select id="unvanAltSec" data-k="unvanAlt"></select>`)}
             ${fieldRow('Aylık Kadro Derecesi ve Pozisyonu', `<select data-k="pozisyon">${pozOpts}</select>`)}
             ${fieldRow('Gidilen Mesafe Km', `<input type="text" inputmode="decimal" data-tutar="1" data-k="mesafeKm" value="${state.mesafeKm}" placeholder="Gidilen mesafeyi km olarak giriniz">`)}
             ${fieldRow('Taşıt Ücreti', `<input type="text" inputmode="decimal" data-tutar="kurus" data-k="tasitUcreti" value="${state.tasitUcreti}" placeholder="Taşıt ücretini giriniz">`)}
@@ -5931,8 +6213,8 @@ function updateSheet1Dynamic(c){
   mpU.textContent = c.unvanEfektif || '-';
   mpU.title = (c.unvanTam && c.unvanTam !== c.unvanEfektif)
             ? 'Ek gösterge tablosundaki karşılığı: ' + c.unvanTam : '';
-  document.getElementById('mpEkGos').textContent = c.ekGosterge;
-  document.getElementById('mpGundelik').textContent = c.gundelikBelirsiz ? '-' : trMoney(c.gundelik);
+  document.getElementById('mpEkGos').textContent = c.gundelikBelirsiz ? 'Bulunamadı!' : c.ekGosterge;
+  document.getElementById('mpGundelik').textContent = c.gundelikBelirsiz ? 'Bulunamadı!' : trMoney(c.gundelik);
 
   const uyariEl = document.getElementById('unvanUyari');
   if(uyariEl){
@@ -6192,7 +6474,7 @@ function bindUnvanCombo(root){
   const kap = (root || document).querySelector('#unvanCombo');
   if(!kap || kap.dataset.bagli) return;
   kap.dataset.bagli = '1';
-  const inp    = kap.querySelector('input[data-k="unvan"]');
+  const inp    = kap.querySelector('input[data-k="unvanUst"]');
   const liste  = kap.querySelector('#unvanListe');
   const caret  = kap.querySelector('#unvanCaret');
   let secIdx = -1;
@@ -6201,7 +6483,7 @@ function bindUnvanCombo(root){
                      .replace(/i̇/g,'i').replace(/\s+/g,' ').trim();
 
   function ciz(suz){
-    const tum = aktifUnvanListesi();
+    const tum = aktifUstUnvanListesi();
     const q = norm(suz);
     const veri = q ? tum.filter(u => norm(u).includes(q)) : tum;
     secIdx = -1;
@@ -6306,7 +6588,16 @@ function bindInputs(root){
       /* Kullanıcı Ünvanı ya da Aylık Kadro Derecesi'ni ELLE değiştirdiyse,
          personel raporundan gelen şahsi ek gösterge artık geçerli değildir;
          hesap doğrudan referans tablosundan yapılır. */
-      if(el.dataset.k === 'unvan' || el.dataset.k === 'pozisyon'){
+      if(el.dataset.k === 'unvanUst' || el.dataset.k === 'unvanAlt' || el.dataset.k === 'pozisyon'){
+        if(el.dataset.k === 'unvanUst'){
+          /* Üst ünvan değişti: tek alt seçeneği varsa kendiliğinden seçilir,
+             birden fazlaysa kullanıcı seçene kadar hesap beklemeye alınır. */
+          const alts = altUnvanlar(el.value);
+          state.unvanAlt = (alts.length === 1) ? alts[0]
+                         : (alts.indexOf(state.unvanAlt) >= 0 ? state.unvanAlt : '');
+        }
+        state.unvan = unvanTamAdi();
+        altSecimGuncelle();
         state.personelEkGos = '';
         state.personelKademe = '';
         state.unvanUyari = '';
@@ -6502,13 +6793,13 @@ function renderPrintView(c){
       <td class="bx pv-l">Aylık Kadro Der. / Pozisyonu</td>
       <td class="bx pv-c" colspan="2">${state.pozisyon}</td>
       <td class="bl br pv-sub" colspan="8">(${state.tayinTuru})</td>
-      <td class="bx pv-l" colspan="2">Avans Almışsa Aldığı Tutar</td>
+      <td class="bx pv-l" colspan="2">Avans Almışsa Aldığı Brüt Tutar</td>
       <td class="bx pv-c">${escapeHtml(c.avansGosterim)}</td>
     </tr>
     <!-- ===== satır 4 ===== -->
     <tr>
       <td class="bx pv-l">Ek Göstergesi</td>
-      <td class="bx pv-c" colspan="2">${c.ekGosterge}</td>
+      <td class="bx pv-c" colspan="2">${c.gundelikBelirsiz ? 'Bulunamadı!' : c.ekGosterge}</td>
       <td class="bl br" colspan="8"></td>
       <td class="bx pv-l" colspan="2">Avans Muhasebe Birimi ve Tarihi</td>
       <td class="bx pv-c">${escapeHtml(state.muhasebeBirimiTarihi || '')}</td>
@@ -6516,7 +6807,7 @@ function renderPrintView(c){
     <!-- ===== satır 5 ===== -->
     <tr>
       <td class="bx pv-l">Gündeliği</td>
-      <td class="bx pv-c" colspan="2">${trMoney(c.gundelik)}</td>
+      <td class="bx pv-c" colspan="2">${c.gundelikBelirsiz ? 'Bulunamadı!' : trMoney(c.gundelik)}</td>
       <td class="bl br" colspan="8"></td>
       <td class="bl bt br pv-l" colspan="2">${atamaBilgi().etiket}</td>
       <td class="bl bt br pv-c">${escapeHtml(atamaBilgi().deger)}</td>
@@ -8174,6 +8465,8 @@ function syncInputsFromState(){
 }
 
 function renderAll(){
+  unvanAlanlariniEsitle();
+  altSecimGuncelle();
   const c = renderSheet1();
   renderSheet2(c);
   syncInputsFromState();
@@ -8485,10 +8778,16 @@ function renderSheet5(){
     <h3 class="kg-h3">2. Sürekli Görev Yolluğu Sekmesi</h3>
     <table class="kg-table">
       <tr><th style="width:30%;">Alan</th><th>Açıklama</th></tr>
-      <tr><td>Atama Tarihi / Ayrılma-Hesaplama</td><td>Takvimli tarih kutusudur, otomatik bugüne göre dolar, istersen değiştirebilirsin</td></tr>
+      <tr><td><b>Atama Tarihi ve Sayısı</b> / <b>Ayrılma / Hesaplama Tarihi</b></td><td>Ayrılma / Hesaplama ile Muhasebe Tarihi takvimli kutulardır, otomatik bugüne göre dolar, istersen değiştirebilirsin. <b>Atama Tarihi ve Sayısı</b> ise serbest metindir (bkz. 8. bölüm)</td></tr>
       <tr><td>Tayin Türü</td><td>Normal Tayin / Eş Durumu Tayini / Gündelik + Yol</td></tr>
-      <tr><td><b>Ünvanı</b></td><td>Kutuya tıklayınca <b>tüm unvanlar listelenir</b> (kaç kez değiştirirsen değiştir). Yazmaya başlayınca süzülür; <b>↑ ↓</b> ile gez, <b>Enter</b> ile seç, <b>Esc</b> ile kapat. Liste <b>Ayrılma / Hesaplama tarihinin yılına</b> göre değişir. Personel listesi yüklüyse Adı Soyadı'ndan isim seçtiğinde <b>otomatik gelir</b></td></tr>
+      <tr><td><b>Ünvan Seçiniz</b></td><td>Kutuya tıklayınca <b>tüm unvanlar listelenir</b> (kaç kez değiştirirsen değiştir). Yazmaya başlayınca süzülür; <b>↑ ↓</b> ile gez, <b>Enter</b> ile seç, <b>Esc</b> ile kapat. Liste <b>Ayrılma / Hesaplama tarihinin yılına</b> göre değişir. Personel listesi yüklüyse Adı Soyadı'ndan isim seçtiğinde <b>otomatik gelir</b></td></tr>
+      <tr><td><b>Ünvan Alt Seçim</b></td><td>Excel'deki gibi bazı unvanlar ikiye ayrılır: önce üst unvanı, sonra alt seçimini yaparsın.<br>
+        • <b>Alt seçimi olmayan</b> unvanlarda (Ayniyat Saymanı, İlçe Müftüsü, Şube Müdürü gibi) bu kutu <b>kapalı</b> kalır ve <i>— yok —</i> yazar; yapacağın bir şey yoktur.<br>
+        • <b>Alt seçimi olan</b> unvanlarda kutu açılır ve seçim yapılana kadar <b style="color:#c0392b;">kırmızı</b> kalır — bu süre boyunca Ek Gösterge ve Gündelik <b>"Bulunamadı!"</b> gösterir. Seçince hesap tamamlanır.<br>
+        • Tek alt seçeneği varsa (örn. <i>Kütüphaneci → Yükseköğrenim</i>) kendiliğinden seçilir.<br>
+        Örnek: <i>İmam Hatip</i> → Yükseköğrenim / İmam Hatip Lisesi / Diğer Öğrenim. <i>Uzman</i> → Merkez Kariyer / Taşra Kariyer / Akademik / Genel İdare — <b>ek göstergeleri farklıdır</b>, doğru olanı seçmek tutarı değiştirir</td></tr>
       <tr><td>Aylık Kadro Der. / Poz.</td><td>Derece (1-15) veya "4B Sözleşmeli"</td></tr>
+      <tr><td><b>"Bulunamadı!" yazısı</b></td><td>Belgenin sol üstündeki <b>Ek Göstergesi</b> ve <b>Gündeliği</b> satırlarında görürsen, program o unvan için tabloda karşılık bulamamış demektir. Sebebi genellikle şudur: unvan hiç seçilmemiştir ya da <b>alt seçimi bekleyen</b> bir unvan seçilip alt seçim yapılmamıştır. Alt seçimi tamamlayınca kendiliğinden düzelir. Excel'deki davranışın aynısıdır</td></tr>
       <tr><td><b>Nereden Nereye Gidildiği</b></td><td><b>Ekleri yazmana gerek yok.</b> İki yeri arasına <b>tire</b> koyarak yazman yeterlidir — örn. <i>Ankara/Mamak-Kırıkkale/Merkez</i>. Program ekleri <b>kelimelere göre</b> kendisi getirir; ünlü uyumuna ve sert sessize bakarak <b>-dan / -den / -tan / -ten</b> ve <b>-a / -e / -ya / -ye</b> doğru seçilir:
         <table class="kg-table" style="margin:6px 0;">
           <tr><th style="width:34%;">Yazdığın</th><th style="width:33%;">Belge tablosunda</th><th>Tahakkuk cümlesinde</th></tr>
@@ -8506,7 +8805,7 @@ function renderSheet5(){
         <b>Personel listesi kullanmak zorunlu değildir</b> — hiç liste yüklemeden, sadece <b>Ünvanı</b> ve <b>Aylık Kadro Derecesi</b> seçerek çalışabilirsin; değerler referans tablosundan gelir.<br>
         Listeden bir kişi seçtikten sonra <b>Ünvanı veya dereceyi elle değiştirirsen</b>, o kişiye ait şahsi ek gösterge devreden çıkar ve hesap yeniden referans tablosuna göre yapılır. Aynı şekilde Adı Soyadı'nı elle yazıp listede bulunmayan bir isim girersen de tablo kullanılır</td></tr>
       <tr><td><b>İstisna Girişi</b></td><td>Otomatik gelen değeri değiştirmek istersen ilgili kutuya yaz — o kutunun zemini <b>kırmızıya</b> döner ve senin değerin kullanılır. Boşaltırsan otomatiğe geri döner</td></tr>
-      <tr><td><b>Avans Almışsa Aldığı Brüt Tutar</b><br><span style="color:#555;">(belgede: <i>Avans Almışsa Aldığı Tutar</i>)</span></td><td>Kişiye ödenen avansın <b>brüt</b> (avans ödenirken kesilen damga vergisinden önceki) tutarını yazarsınız — Excel'in R3 hücresi de budur. Bu kutuya <b>hem sayı hem metin</b> yazabilirsin; ayrıca tıklayınca <b>"Avans Almamıştır" / "Almamıştır"</b> hazır seçenekleri açılır.<br><b>Metin yazarsan</b> (örn. <i>Avans Almamıştır</i>) hesaba hiç karışmaz, belgenin sağ üstündeki <b>Avans Almışsa Aldığı Tutar</b> hücresine <b>aynen</b> basılır.<br><b>Boş bırakırsan</b> belgedeki hücre de <b>boş</b> kalır — hiçbir şey basılmaz.<br><b>Sayı yazarsan</b> avans hesabı çalışır: kişiye daha önce yolluk avansı ödendiyse tutarı buraya yaz. <b>Excel'deki gibi</b> (R28 = SUM(R10:R27) − R3) doğrudan <b>GENEL TOPLAM'ın içinden</b> düşülür: belgedeki GENEL TOPLAM, yazıyla tutar ve tahakkuk cümlesi bu <b>düşülmüş</b> tutarı gösterir; damga vergisi de onun üzerinden hesaplanır (bkz. 8. bölüm). Tutarın kendisi belgenin sağ üstündeki <b>"Avans Almışsa Aldığı Tutar"</b> hücresinde, Ödeme Emri'nde ise <b>"Mahsup Edilen Ön Ödeme Tutarı"</b> sütununda görünür. Boşsa hiçbir şey değişmez</td></tr>
+      <tr><td><b>Avans Almışsa Aldığı Brüt Tutar</b><br><span style="color:#555;">(belgede: <i>Avans Almışsa Aldığı Brüt Tutar</i>)</span></td><td>Kişiye ödenen avansın <b>brüt</b> (avans ödenirken kesilen damga vergisinden önceki) tutarını yazarsınız — Excel'in R3 hücresi de budur. Bu kutuya <b>hem sayı hem metin</b> yazabilirsin; ayrıca tıklayınca <b>"Avans Almamıştır" / "Almamıştır"</b> hazır seçenekleri açılır.<br><b>Metin yazarsan</b> (örn. <i>Avans Almamıştır</i>) hesaba hiç karışmaz, belgenin sağ üstündeki <b>Avans Almışsa Aldığı Brüt Tutar</b> hücresine <b>aynen</b> basılır.<br><b>Varsayılan olarak <i>"Almamıştır"</i> yazılı gelir</b> (Excel'de de öyledir); avans yoksa dokunmana gerek yok. Kutuyu tamamen boşaltırsan belgedeki hücre de boş kalır.<br><b>Sayı yazarsan</b> avans hesabı çalışır: kişiye daha önce yolluk avansı ödendiyse tutarı buraya yaz. <b>Excel'deki gibi</b> (R28 = SUM(R10:R27) − R3) doğrudan <b>GENEL TOPLAM'ın içinden</b> düşülür: belgedeki GENEL TOPLAM, yazıyla tutar ve tahakkuk cümlesi bu <b>düşülmüş</b> tutarı gösterir; damga vergisi de onun üzerinden hesaplanır (bkz. 8. bölüm). Tutarın kendisi belgenin sağ üstündeki <b>"Avans Almışsa Aldığı Brüt Tutar"</b> hücresinde, Ödeme Emri'nde ise <b>"Mahsup Edilen Ön Ödeme Tutarı"</b> sütununda görünür.<br><b>Avans, tahakkuk eden tutardan fazlaysa</b> belge kendiliğinden <b>iade belgesine</b> döner: GENEL TOPLAM eksi çıkar, damga vergisi ve net ödenen <b>0,00</b> olur ve altta <i>"İlgiliden … TL'nin (…) iade alınması gerekmektedir."</i> yazar (bkz. 8. bölüm)</td></tr>
       <tr><td><b>Harcama Birimi Adı</b></td><td>Türkiye'deki <b>81 il ve 921 ilçe müftülüğü</b> listeden seçilir (toplam 1002 kayıt). Kutuya tıklayınca liste açılır, yazdıkça süzülür. Aynı adlı ilçeler için sağda bağlı olduğu il gösterilir (örn. <i>Gölbaşı İlçe Müftülüğü — Ankara / — Adıyaman</i>). Listede yoksa elle de yazabilirsin</td></tr>
       <tr><td><b>Harcama Yetkilisi Adı Soyadı</b><br><b>Harcama Yetkilisi Ünvanı</b></td><td>İkisi de <b>elle yazılır</b>. Vekâleten imzalanıyorsa unvan kutusuna <b>vekâlet unvanını</b> yazın (örn. <i>İlçe Müftü V.</i>) — belgeye ne yazarsanız o basılır. Bu iki bilgi kurumsal sayıldığı için <b>"Yeni Hesaplama"</b> ile silinmez</td></tr>
       <tr><td><b>Gerçekleştirme Görevlisi Adı Soyadı</b> (+ Ünvanı)<br><b>Veri Giriş Görevlisi Adı Soyadı</b> (+ Ünvanı)</td><td>Adı ve unvanı elle yazılır. <b>Adı doldurursanız</b> belgenin imza bloğuna ayrı birer sütun olarak eklenir ve o sütunun "Ünvanı" satırına yazdığınız unvan basılır; <b>adı boş bırakırsanız</b> o sütun hiç çıkmaz ve belge M.Y.H.B.Y. Örnek No: 28'in aslıyla birebir aynı kalır. Bu bilgiler kurumsal sayıldığı için <b>"Yeni Hesaplama"</b> ile silinmez</td></tr>
@@ -8515,7 +8814,7 @@ function renderSheet5(){
         <br>• Tarihten sonra atama onayının sayısını da yazarsanız (<i>01.08.2026-548785</i>) etiket kendiliğinden <b>"Atama Tarihi ve Sayısı"</b> olur ve yazdığınız metin <b>aynen</b> basılır.
         <br>Örnek No: 28'in aslında sayı alanı yoktur; muhasebe biriminiz istemiyorsa yalnız tarihi yazmanız yeterlidir</td></tr>
       <tr><td><b>Muhasebe Tarihi</b></td><td>Veri girişindeki <b>takvim kutusundan</b> seçilir ve belgedeki <i>Muhasebe Birimi ve Tarihi</i> kutusuna kendiliğinden yazılır. <b>Not:</b> Bu tarih aynı zamanda <b>Bütçe Yılı</b>nı, <b>damga vergisi oranını</b> ve imza bloğundaki tarihleri belirler</td></tr>
-      <tr><td><b>Avansın Alındığı Muhasebe Birimi ve Tarihi</b><br><span style="color:#555;">(belgede: <i>Avans Muhasebe Birimi ve Tarihi</i>)</span></td><td>Bu kutu <b>yalnızca AVANS alınmışsa</b> doldurulur; boş bırakılırsa belgenin sağ üstündeki <i>Avans Muhasebe Birimi ve Tarihi</i> hücresi de <b>boş kalır</b>. Kişi <b>ayrıldığı yerden</b> avans alıp <b>gittiği yerde</b> bu hesaplama yapılmış olabilir; bu durumda avansın alındığı muhasebe birimi, belgeyi düzenleyen muhasebe biriminden farklıdır. Bu yüzden alan <b>serbesttir</b>: birim adını ve avans tarihini birlikte yazarsınız (örn. <i>Reyhanlı Muhasebe Müdürlüğü - 20.07.2026</i>) ve belgeye <b>aynen</b> basılır. Veri girişinde <b>Avans Almışsa Aldığı Brüt Tutar</b> kutusunun hemen altındadır. <b>Boş bırakırsanız hücre de boş kalır</b> — hiçbir şey basılmaz. Avans alınmamışsa buraya <b>"Avans Almamıştır"</b> gibi bir metin de yazabilirsiniz; hazır seçenekler kutuya tıklayınca açılır. <b>Not:</b> Buraya yazdığınız tarih hesaba girmez; Bütçe Yılı ve damga vergisi oranı yine soldaki <b>Muhasebe Tarihi</b>ne göre belirlenir</td></tr>
+      <tr><td><b>Avansın Alındığı Muhasebe Birimi ve Tarihi</b><br><span style="color:#555;">(belgede: <i>Avans Muhasebe Birimi ve Tarihi</i>)</span></td><td>Bu kutu <b>yalnızca AVANS alınmışsa</b> doldurulur; boş bırakılırsa belgenin sağ üstündeki <i>Avans Muhasebe Birimi ve Tarihi</i> hücresi de <b>boş kalır</b>. Kişi <b>ayrıldığı yerden</b> avans alıp <b>gittiği yerde</b> bu hesaplama yapılmış olabilir; bu durumda avansın alındığı muhasebe birimi, belgeyi düzenleyen muhasebe biriminden farklıdır. Bu yüzden alan <b>serbesttir</b>: birim adını ve avans tarihini birlikte yazarsınız (örn. <i>Reyhanlı Muhasebe Müdürlüğü - 20.07.2026</i>) ve belgeye <b>aynen</b> basılır. Veri girişinde <b>Avans Almışsa Aldığı Brüt Tutar</b> kutusunun hemen altındadır. <b>Varsayılan olarak <i>"Almamıştır"</i> yazılı gelir</b>; avans yoksa dokunmanıza gerek yoktur. Kutuyu tamamen boşaltırsanız belgedeki hücre de boş kalır. Hazır seçenekler kutuya tıklayınca açılır. <b>Not:</b> Buraya yazdığınız tarih hesaba girmez; Bütçe Yılı ve damga vergisi oranı yine soldaki <b>Muhasebe Tarihi</b>ne göre belirlenir</td></tr>
       <tr><td>Bilgi İçin</td><td><b>Sabittir</b> (Mehmet TOKTAŞ), değiştirilemez. Belgenin altında görünür</td></tr>
       <tr><td>Not Girişi</td><td>Belgenin altına <b>(**) Not:</b> olarak basılır. İmza altındaki <b>(*)</b> açıklamasıyla karışmaması için iki yıldızlıdır. <b>Boş bırakırsan "(**) Not:" ibaresi de basılmaz</b> — ne önizlemede ne kağıtta görünür.<br>Kutunun içindeki <b>silik örnek</b> ne yazılacağını gösterir: <i>"Ankara/Mamak-Tekirdağ/Hayrabolu arası 660 km olup bir kişilik yolcu ücreti Mamak/Aşti 40 TL Ankara/Tekirdağ 1.450,00 ₺ Tekirdağ/Hayrabolu arası 60 ₺ olmak üzere 1.550,00 ₺ dir."</i></td></tr>
     </table>
@@ -8600,6 +8899,15 @@ function renderSheet5(){
     <p class="kg-p"><b>Kaldığın Yerden Devam Et:</b> yarım bıraktığın bir hesaplama varken sayfayı kapatıp tekrar açarsan, üstte mavi bir bant çıkar. <b>Devam Et</b> dersen forma geri gelir, <b>Yeni Başla</b> dersen boş formla devam edersin.</p>
 
     <h3 class="kg-h3">8. Sık Sorulan Sorular</h3>
+    <div class="kg-qa"><b>S: Ek Göstergesi ve Gündeliği "Bulunamadı!" yazıyor, hata mı?</b><br>
+      Hayır. Program o unvan için referans tablosunda karşılık bulamamış demektir. En sık iki sebebi vardır: <b>1)</b> henüz unvan seçilmemiştir, <b>2)</b> alt seçimi olan bir unvan seçilmiş ama <b>Ünvan Alt Seçim</b> kutusundan seçim yapılmamıştır — o kutu seçim yapılana kadar <b style="color:#c0392b;">kırmızı</b> durur. Seçimi tamamlayınca yazı kendiliğinden kaybolur. Excel de aynı durumda "Bulunamadı!" gösterir.</div>
+
+    <div class="kg-qa"><b>S: "Ünvan Alt Seçim" kutusu kapalı, seçim yapamıyorum.</b><br>
+      Seçtiğin unvanın alt seçimi yoktur; kutuda <i>— yok —</i> yazar ve yapılacak bir şey kalmaz. Alt seçimi olan unvanlarda (İmam Hatip, Müezzin Kayyım, Uzman, Profesör, Tabip, Hemşire, Polis, Şef, Şoför gibi) kutu kendiliğinden açılır. <b>Dikkat:</b> bazı alt seçimlerin <b>ek göstergesi farklıdır</b> — örneğin <i>Uzman → Merkez Kariyer Uzmanı</i> ile <i>Uzman → Taşra Kariyer Uzmanı</i> aynı tutarı vermez. Doğru olanı seçmek gerekir.</div>
+
+    <div class="kg-qa"><b>S: Avans, hesaplanan yolluktan fazla çıktı. Belge ne yapıyor?</b><br>
+      Belge kendiliğinden <b>iade belgesine</b> döner: GENEL TOPLAM <b>eksi</b> görünür, <b>damga vergisi ve net ödenen 0,00</b> olur, altta da <i>"…ödenen avans tutarı, tahakkuk tutarından fazladır."</i> ve <i>"İlgiliden … TL'nin (…) iade alınması gerekmektedir."</i> yazar. Yani kişiye ödeme yapılmaz, fazla ödenen avansın iadesi istenir. Excel'in yaptığının aynısıdır.</div>
+
     <div class="kg-qa"><b>S: Verilerim internete gidiyor mu?</b><br>Hayır. Her şey kendi bilgisayarının tarayıcısında kalır, program tamamen çevrimdışı çalışır.</div>
     <div class="kg-qa"><b>S: Arkadaşıma dosyayı gönderirsem benim verilerim de gider mi?</b><br>Hayır. Sadece HTML dosyasını gönderirsin, içinde senin girdiğin veriler bulunmaz.</div>
     <div class="kg-qa"><b>S: Telefonda Yazdır'a basıyorum ama hiçbir şey olmuyor.</b><br>Dosyayı WhatsApp / Telegram gibi bir uygulamanın kendi mini tarayıcısında açmış olabilirsiniz; bu mini tarayıcılar yazdırmayı desteklemez. Sağ üstteki "..." menüsünden <b>"Safari'de Aç" / "Tarayıcıda Aç"</b> deyip tekrar deneyin. <b>Önizle</b> ise her yerde çalışır.</div>
@@ -8622,7 +8930,7 @@ function renderSheet5(){
     <div class="kg-qa"><b>S: Ünvan seçtim ama belgeye eksik yazıldı, hata mı?</b><br>Hayır. Ek gösterge tablosundaki "Memur Yükseköğrenim", "İmam Hatip Diğer Öğrenim" gibi adların sonundaki ek <b>öğrenim durumudur, unvanın parçası değildir</b>. Belgeye kişinin unvanı yazılır: "Memur", "İmam Hatip". Hesaplama seçtiğiniz tam satıra göre yapılır.</div>
     <div class="kg-qa"><b>S: Gündelik yıl ortasında değişti, tabloya nasıl işlerim?</b><br>Referans Veriler → Gündelik ve Damga Vergisi Oranları'nda <b>"+ Satır Ekle"</b> deyip yeni satırın tarihini değişikliğin yürürlük tarihi yapın (örn. 07.07.2027) ve tutarları girin. Program, hesaplama tarihine göre <b>o tarihe eşit veya ondan önceki en yakın satırı</b> kullanır.</div>
     <div class="kg-qa"><b>S: Not, Veri Giriş Görevlisi, Gerçekleştirme Görevlisi, Muhasebe Birimi — bunlar Örnek No: 28'de yok, neden ekli?</b><br>Çünkü <b>bazı muhasebe müdürlükleri bu bilgilerin belgede yer almasını istiyor</b>; yoksa evrakı iade edebiliyorlar. Örnek No: 28'in aslında bu alanlar zorunlu değildir, bu yüzden programa <b>isteğe bağlı</b> olarak konuldu: <b>doldurursanız belgeye çıkar, boş bırakırsanız belge yönetmelik ekindeki aslıyla birebir aynı kalır.</b> Kendi muhasebe biriminiz istemiyorsa bu alanlara hiç dokunmayın.</div>
-    <div class="kg-qa"><b>S: Belgenin sağ üstündeki "Avans Muhasebe Birimi ve Tarihi" hücresi neden boş?</b><br>Çünkü <b>öyle olmalı</b> — bu kutu yalnızca <b>avans alınmışsa</b> doldurulur. Avans varsa, veri girişinde <b>Avans Almışsa Aldığı Brüt Tutar</b> kutusunun hemen altındaki <b>Avansın Alındığı Muhasebe Birimi ve Tarihi</b> alanına birim adını ve tarihi yazın (örn. <i>Reyhanlı Muhasebe Müdürlüğü - 20.07.2026</i>); belgeye aynen basılır. Avans başka bir ilden/muhasebe biriminden alınmış olabileceği için bu alan bilerek serbest bırakılmıştır. Avans yoksa buraya <b>"Avans Almamıştır"</b> gibi bir metin de yazabilirsiniz — kutuya tıklayınca hazır seçenekler açılır.</div>
+    <div class="kg-qa"><b>S: Belgenin sağ üstündeki "Avans Muhasebe Birimi ve Tarihi" hücresinde "Almamıştır" yazıyor.</b><br>Doğrusu budur — bu iki kutu <b>varsayılan olarak "Almamıştır"</b> gelir (Excel'de de öyledir) ve yalnızca <b>avans alınmışsa</b> doldurulur. Avans varsa, veri girişinde <b>Avans Almışsa Aldığı Brüt Tutar</b> kutusunun hemen altındaki <b>Avansın Alındığı Muhasebe Birimi ve Tarihi</b> alanına birim adını ve tarihi yazın (örn. <i>Reyhanlı Muhasebe Müdürlüğü - 20.07.2026</i>); belgeye aynen basılır. Avans başka bir ilden/muhasebe biriminden alınmış olabileceği için bu alan bilerek serbest bırakılmıştır. Avans yoksa buraya <b>"Avans Almamıştır"</b> gibi bir metin de yazabilirsiniz — kutuya tıklayınca hazır seçenekler açılır.</div>
     <div class="kg-qa"><b>S: Baskı önizlemede yazılar çok küçük görünüyor, büyütebilir miyim?</b><br>Evet. <b>Önizle</b>'yi açtıktan sonra <b>fare tekerleğini yukarı</b> çevirince yaklaşır, <b>aşağı</b> çevirince uzaklaşır — imlecin bulunduğu yere doğru yaklaşır. Üstteki mavi çubuktaki <b>−&nbsp;/&nbsp;+</b> düğmeleri, <b>Sığdır</b> (sayfayı ekran genişliğine oturtur) ve <b>%100</b> (gerçek boyut) düğmeleri de aynı işi yapar; klavyeden <b>+</b>, <b>−</b> ve <b>0</b> tuşları da çalışır. Önizlemede <b>kaydırmak</b> için <b>Shift</b>'e basılı tutarak tekerleği çevirin. Bu yakınlaştırma <b>yalnızca ekranı</b> ilgilendirir: kağıda her zaman aynı ölçekte basılır.</div>
     
     <div class="kg-qa"><b>S: Excel dosyasını güncellersem bu araç da güncellenir mi?</b><br>Hayır, bu araç Excel'den bağımsız çalışır. Ancak oran/katsayı güncellemelerini yukarıdaki gibi doğrudan sayfadan yapabilirsiniz.</div>
@@ -9023,7 +9331,7 @@ checkDraftBanner();
 </div>
 
 <a class="surum-rozet no-print" href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener"
-   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 07.09.2026 · Güncel sürüm ↗</a>
+   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 08.09.2026 · Güncel sürüm ↗</a>
 <script>
 /* Sürüm rozeti: nerede açıldığını bilsin.
    - Masaüstü uygulaması (127.0.0.1) ve yerel dosya: yeni sekmede çevrimiçi sürümü aç (karşılaştırma için).
