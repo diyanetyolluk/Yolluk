@@ -1,7 +1,7 @@
 {
  "uygulama": "surekli-gorev-yollugu",
- "surum": "2026.09.08",
+ "surum": "2026.09.09",
  "dosya": "index.html",
- "sha256": "b1d4cc012875dfd6b492be499de086932722903033a67a353f31b1117c2681d6",
- "notlar": "Avans tahakkuktan fazlaysa belge iade tutarını gösteriyor (damga ve net 0). Ünvan seçimi üst/alt olarak ayrıldı; alt ünvanı olmayanlarda kutu kapalı. Avans kutuları varsayılan 'Almamıştır', etiket 'Brüt Tutar'. Ünvan çözülemeyince 'Bulunamadı!' yazıyor. Ünvan tabloları 02.09.2026 Excel'i ile eşitlendi. Kullanım kılavuzu bu değişikliklere göre güncellendi."
+ "sha256": "91d8a73cdb84dd44f21cbb3985cde625c537dcd53671eeb02765f83ba9af9b9d",
+ "notlar": "Ünvan adları Excel ile birebir yapıldı: kısaltmalar (K.K., V.H.K.İ.) ve parantezli yazımlar kaldırıldı. Alt ünvan seçenekleri Excel'deki sırayla listeleniyor (üst öğrenimden alt öğrenime). Eski adlarla kayıtlı hesaplamalar otomatik yeni adlarına taşınıyor. Kullanım kılavuzu güncellendi."
 }
