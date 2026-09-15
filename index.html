@@ -363,7 +363,7 @@
   table.personel-table tbody tr.satir-secili td{background:#2b6cb0!important;color:#fff!important;font-weight:bold;}
   table.personel-table tbody tr.satir-secili .btn{background:#fff;color:#1a3a5c;border-color:#fff;}
 
-  /* ---- print-only official document view (Excel E1:R38 birebir) ---- */
+  /* ---- print-only official document view (Excel E1:R32 birebir) ---- */
   .print-only{display:none;}
   .pv-table{width:100%;border-collapse:collapse;table-layout:fixed;
     font-family:Arial, Helvetica, sans-serif;font-size:8px;color:#000;}
@@ -5529,7 +5529,7 @@ function lookupApprox(dateISO, field){
   return matched ? res : undefined;
 }
 
-/* Türkçe sayıyı yazıya çevirme (E29 formülünün eşdeğeri) */
+/* Türkçe sayıyı yazıya çevirme (Excel E22 formülünün eşdeğeri) */
 const ONES = ["","Bir","İki","Üç","Dört","Beş","Altı","Yedi","Sekiz","Dokuz"];
 const TENS = ["","On","Yirmi","Otuz","Kırk","Elli","Altmış","Yetmiş","Seksen","Doksan"];
 function threeDigitsTR(n){
@@ -5570,11 +5570,14 @@ function tutarYaziyla(tutar){
    ============================================================ */
 /* Ekrandaki aile ferdi giriş satırı sayısı.
    Yazdırma görünümünde Excel'in tablo yüksekliği korunsun diye
-   PRINT_FAMILY_ROWS kadar satır basılır (fazlası boş görünür). */
-const FAMILY_ROWS = 10;
+   PRINT_FAMILY_ROWS kadar satır basılır (fazlası boş görünür).
+   15.09.2026: Manisa'dan gelen Excel'de bildirim tablosu kısaltıldı
+   (A16:B32 -> A16:B26, baskı alanı E1:R38 -> E1:R32), bu iki sayı da
+   ona göre 11'e çekildi. */
+const FAMILY_ROWS = 11;
 let aileHepsiGoster = false;   // boş aile satırları görünsün mü?
 let aileEkstraSatir = 0;       // "+ Kişi Ekle" ile açılan fazladan satır
-const PRINT_FAMILY_ROWS = 17;
+const PRINT_FAMILY_ROWS = 11;
 
 /* Her "hesaplama oturumu" için benzersiz kimlik — Geçmiş Hesaplamalar
    kaydının hangi girdiye karşılık geldiğini takip etmek için kullanılır. */
@@ -5633,9 +5636,9 @@ function makeDefaultState(){
   // personelEkGos, ünvan tablosundaki tahmine göre önceliklidir (bkz. compute()).
   personelEkGos: '',
   personelKademe: '',
-  // aile fertleri — ekranda 10 satır. (Excel'de A15:B31 = 17 satırlık alan vardı;
+  // aile fertleri — ekranda 11 satır. (Excel'de A16:B26 = 11 satırlık alan var;
   // kağıt çıktısındaki tablo yüksekliği bozulmasın diye yazdırma görünümünde
-  // 17 satırlık ızgara korunur, fazlası boş satır olarak basılır.)
+  // 11 satırlık ızgara korunur, fazlası boş satır olarak basılır.)
   family: (()=>{
     const arr = [];
     while(arr.length<FAMILY_ROWS) arr.push({name:'', rel:''});
@@ -5686,7 +5689,7 @@ function compute(){
   // ünvanda ise öğrenim eki belgeye taşınmaz.
   c.unvanEfektif = state.ovrUnvan ? state.ovrUnvan : belgeUnvani(c.unvanTam);
 
-  // B40: Ek Göstergesi
+  // B35 (eski B41): Ek Göstergesi
   // Öncelik sırası:
   //   1) İstisna Girişi (kullanıcı elle yazdıysa her şeyin üstündedir)
   //   2) 4/B sözleşmeli -> ek gösterge yok
@@ -5711,13 +5714,13 @@ function compute(){
   }
   c.ekGosterge = ekgos;
 
-  // B41: Gündeliği
+  // B36 (eski B42): Gündeliği
   // Hesabın dayanacağı hiçbir veri girilmemişse (ne ünvan, ne personel
   // listesinden gelen ek gösterge, ne de istisna girişi) gündelik
   // BELİRSİZDİR. Aksi halde varsayılan derece "1" yüzünden sistem
   // kendiliğinden "d) Poz. 1-4" kademesine düşer ve boş formda bile
   // sabit bir tutar görünürdü. Bu durumda 0 kullanılır ve ekranda "-" yazar.
-  /* Excel F4/F5: =IFERROR(B41*1,"Bulunamadı!") — ünvan çözülemediğinde
+  /* Excel F4/F5: =IFERROR(B35*1,"Bulunamadı!") — ünvan çözülemediğinde
      belgede sayı değil "Bulunamadı!" yazar. */
   c.gundelikBelirsiz = (
     state.ovrGundelik === '' &&
@@ -5750,7 +5753,10 @@ function compute(){
   const H10 = yolGun*1;
   const I10 = gundelik*1;
   const J10 = round2(H10*I10);
-  const L10 = num(state.tasitUcreti)*1;
+  /* Excel L10 = IF(J10=0;0;IFERROR(B10*1;0))
+     Gün sayısı (ya da gündelik) sıfırsa yolculuk yok sayılır; taşıt ücreti
+     de hesaba katılmaz. 15.09.2026'da Excel ile eşitlendi. */
+  const L10 = (J10 === 0) ? 0 : num(state.tasitUcreti)*1;
   const M10 = (state.tayinTuru === 'Gündelik + Yol') ? 0 : round2(20*gundelik);
   const N10 = num(state.mesafeKm)*1;
   let katsayi;
@@ -5768,7 +5774,7 @@ function compute(){
     active:true
   });
 
-  // ---- aile fertleri (rows 11-27, max 17) ----
+  // ---- aile fertleri (Excel satır 11-21, en çok 11 kişi) ----
   let famActiveCount = 0;
   state.family.forEach((f, idx)=>{
     const active = !!(f.rel && f.rel.trim() !== '');
@@ -5778,7 +5784,9 @@ function compute(){
       return;
     }
     famActiveCount++;
-    const Hf = H10, If = I10, Jf = J10, Lf = L10;
+    const Hf = H10, If = I10, Jf = J10;
+    // Excel L11 = IF(J11=0;0;IFERROR(IF(E11="";"";$L$10*1);0)) — aynı koruma
+    const Lf = (Jf === 0) ? 0 : L10;
     // Excel'de M sütununda formül yalnızca M10:M14 aralığında var.
     // Yani "Sabit Unsur" sadece kendisi + ilk 4 aile ferdi için hesaplanır;
     // 5. aile ferdinden itibaren hücre boştur (gri dolgulu).
@@ -5801,22 +5809,31 @@ function compute(){
   rows.forEach(r => { if(r.active) r.nereden = guzergahTablo; });
   c.rows = rows;
 
-  // ---- GENEL TOPLAM (row28) ----
+  /* ---- GENEL TOPLAM ----
+     DİKKAT (15.09.2026): Aşağıdaki c.J28 / c.L28 / c.M28 / c.O28 / c.R28 /
+     c.R29 / c.R30 değişken adları Excel'in ESKİ satır numaralarından gelir.
+     Manisa'dan gelen 08.09.2026 tarihli Excel'de bildirim tablosu kısaltıldığı
+     için bu hücreler 6 satır yukarı kaydı. Adlar kodun her yerinde kullanıldığı
+     için değiştirilmedi; güncel Excel karşılıkları şöyledir:
+         c.J28 -> J22     c.L28 -> L22     c.M28 -> M22     c.O28 -> O22
+         c.R28 -> R22     c.R29 -> R23     c.R30 -> R24
+         sentenceE30 -> E24    sentenceE31 -> E25    toplamYazi -> E22
+     Formüllerin MANTIĞI değişmedi; yalnızca hücre adresleri kaydı. */
   const sum = (sel)=> rows.reduce((a,r)=> a + (typeof r[sel]==='number'? r[sel]:0), 0);
   c.J28 = round2(sum('tutar'));
   c.L28 = round2(sum('ucret'));
-  // M28: Excel formülü SUM(M10:M14) — yani kendisi + ilk 4 aile ferdi.
+  // M22 (eski M28): Excel formülü SUM(M10:M14) — yani kendisi + ilk 4 aile ferdi.
   // Bu bir kısıt değil, M sütununda formül zaten sadece bu aralıkta olduğu için tutarlıdır.
   let m28 = M10;
   for(let i=0;i<4;i++){ if(rows[i+1] && typeof rows[i+1].sabitUnsur==='number') m28 += rows[i+1].sabitUnsur; }
   c.M28 = round2(m28);
   c.O28 = O10;
-  /* Excel R28 = ROUND(SUM(R10:R27) - R3, 2)
+  /* Excel R22 = ROUND(SUM(R10:R21) - R3, 2)
      Yani AVANS (R3), GENEL TOPLAM hücresinin İÇİNDEN düşülür; belgede ayrıca
      bir "avans" satırı yoktur — avans tutarı zaten sağ üstteki
-     "Avans Almışsa Aldığı Tutar" hücresinde yazar. Yazıyla tutar ve tahakkuk
-     cümlesi de (E29/E31) bu düşülmüş tutarı kullanır. */
-  c.satirToplami = round2(sum('toplam'));           // SUM(R10:R27)
+     "Önceden Avans Almışsa Aldığı Brüt Tutar" hücresinde yazar. Yazıyla tutar ve tahakkuk
+     cümlesi de (E24/E25) bu düşülmüş tutarı kullanır. */
+  c.satirToplami = round2(sum('toplam'));           // SUM(R10:R21)
   /* Avans kutusuna SAYI da METİN de yazılabilir:
        "5.000,00"        -> hesaba girer, toplamdan düşülür
        "Avans Almamıştır"-> hesaba girmez, belgeye aynen basılır          */
@@ -5824,17 +5841,17 @@ function compute(){
   c.avans = /\d/.test(c.avansMetin) ? Math.max(0, numTR(c.avansMetin)) : 0;   // R3
   /* Para sütunu olduğu için kuruşuyla yazılır (GENEL TOPLAM / Damga / Net ile aynı biçim) */
   c.avansGosterim = (c.avans > 0) ? trMoney(c.avans) : c.avansMetin;
-  /* 02.09.2026 Excel'i: avans tahakkuktan fazlaysa R28 EKSİ çıkar.
+  /* 02.09.2026 Excel'i: avans tahakkuktan fazlaysa R22 (eski R28) EKSİ çıkar.
      Eskiden sıfıra kırpılıyordu; artık Excel ile birebir. */
   c.R28 = round2(c.satirToplami - c.avans);
   c.eksiMi = c.R28 < 0;
 
   // ---- yazıyla toplam, damga vergisi, net ödenen ----
-  /* Excel E28: eksiyse başına "Eksi " gelir. E31'in iade cümlesi ise
-     "Eksi " atılmış halini kullanır (SUBSTITUTE(E28,"Eksi ","")). */
+  /* Excel E22 (eski E28): eksiyse başına "Eksi " gelir. E25'in iade cümlesi ise
+     "Eksi " atılmış halini kullanır (SUBSTITUTE(E22,"Eksi ","")). */
   c.toplamYaziMutlak = tutarYaziyla(Math.abs(c.R28));
   c.toplamYazi = (c.eksiMi ? 'Eksi ' : '') + c.toplamYaziMutlak;
-  /* Excel R29 formülü oranı B4 = MUHASEBE TARİHİ'nden okur (ayrılma tarihinden
+  /* Excel R23 (eski R29) formülü oranı B4 = MUHASEBE TARİHİ'nden okur (ayrılma tarihinden
      değil). Muhasebe tarihi girilmemişse ayrılma tarihine düşülür. */
   const damgaTarihi = state.muhasebeTarihi || c.tarih;
   c.damgaTarihi = damgaTarihi;
@@ -5849,28 +5866,28 @@ function compute(){
      aşamasında ise mükerrer vergi olmaması için damga vergisi, avans
      düşüldükten sonra KALAN tutar üzerinden hesaplanır.
      Avans girilmemişse davranış eskisiyle birebir aynıdır. */
-  c.damgaMatrahi = c.R28;                           // avans zaten R28'in içinde düşüldü
-  c.damgaVergisi = c.eksiMi ? 0 : round2(c.damgaMatrahi * damgaOraniSayisal);   // Excel R29
+  c.damgaMatrahi = c.R28;                           // avans zaten R22'nin içinde düşüldü
+  c.damgaVergisi = c.eksiMi ? 0 : round2(c.damgaMatrahi * damgaOraniSayisal);   // Excel R23
   c.damgaOrani = damgaOraniSayisal;
-  c.netOdenen = c.eksiMi ? 0 : round2(c.damgaMatrahi - c.damgaVergisi);         // Excel R30
+  c.netOdenen = c.eksiMi ? 0 : round2(c.damgaMatrahi - c.damgaVergisi);         // Excel R24
   /* ---- ÖDEME EMRİ BELGESİ — Excel ile birebir ----
      Excel'de (Ödeme Emri Belgesi sayfası) eşleşme şöyledir:
-        H23 Brüt Tutar              = 'Sürekli Görev Yolluğu'!R28
-        U24 Kesinti (damga)         = R29
-        I18/K27 Net Tutar           = R30
-        R18/M27 Mahsup Ed. Ön Ödeme = R3  (Avans Almışsa Aldığı Tutar)
+        H23 Brüt Tutar              = 'Sürekli Görev Yolluğu'!R22
+        U24 Kesinti (damga)         = R23
+        I18/K27 Net Tutar           = R24
+        R18/M27 Mahsup Ed. Ön Ödeme = R3  (Önceden Avans Almışsa Aldığı Brüt Tutar)
         T18/Q27 Ödenmesi Gereken    = I18 (= Net Tutar)
-     Excel'de R28 = SUM(R10:R27) − R3, yani AVANS zaten GENEL TOPLAM'ın
+     Excel'de R22 = SUM(R10:R21) − R3, yani AVANS zaten GENEL TOPLAM'ın
      içinden düşülmüştür; burada bunun karşılığı damgaMatrahi'dir.
      Böylece satır kendi içinde tutar: Brüt − Kesinti = Net Tutar.
      Mahsup sütunu yalnızca bilgi amaçlıdır, tekrar düşülmez. */
-  c.oebBrut     = c.damgaMatrahi;                   // Excel H23 / C27  (= R28)
-  c.oebKesinti  = c.damgaVergisi;                   // Excel U24 / E27  (= R29)
-  c.oebNetTutar = c.netOdenen;                      // Excel I18 / K27  (= R30)
+  c.oebBrut     = c.damgaMatrahi;                   // Excel H23 / C27  (= R22)
+  c.oebKesinti  = c.damgaVergisi;                   // Excel U24 / E27  (= R23)
+  c.oebNetTutar = c.netOdenen;                      // Excel I18 / K27  (= R24)
   c.oebMahsup   = c.avans;                          // Excel R18 / M27  (= R3)
   c.oebOdenecek = c.netOdenen;                      // Excel T18 / Q27  (= I18)
 
-  /* Excel E30/E31 — avans fazlaysa belge "iade alınması gerekmektedir" der. */
+  /* Excel E24/E25 (eski E30/E31) — avans fazlaysa belge "iade alınması gerekmektedir" der. */
   c.sentenceE30 = c.eksiMi
     ? `${yonelmeEkle(state.nereye)} atanan ${state.adSoyad} ve aile fertleri için ödenen avans tutarı, tahakkuk tutarından fazladır.`
     : `${yonelmeEkle(state.nereye)} atanan ${state.adSoyad} ve aile fertleri için sürekli görev yolluğu olarak tahakkuk eden `;
@@ -5948,7 +5965,7 @@ function docHeadRows(c){
       <td class="dh-l">Aylık Kadro Der. / Pozisyonu</td>
       <td class="dh-v" colspan="2">${state.pozisyon || bos}</td>
       <td class="dh-sub" colspan="8">(${state.tayinTuru})</td>
-      <td class="dh-l" colspan="2">Avans Almışsa Aldığı Brüt Tutar</td>
+      <td class="dh-l" colspan="2">Önceden Avans Almışsa Aldığı Brüt Tutar</td>
       <td class="dh-v">${escapeHtml(c.avansGosterim) || bos}</td>
     </tr>
     <tr>
@@ -6116,7 +6133,7 @@ function buildSheet1Shell(){
             ${fieldRow('Gerçekleştirme Görevlisi Ünvanı', `<input type="text" data-k="gerceklestirmeUnvan" value="${escapeHtml(state.gerceklestirmeUnvan||'')}" placeholder="Ünvanını giriniz" title="İmza bloğundaki 'Gerçekleştirme Görevlisi' sütununun 'Ünvanı' satırına basılır.">`)}
             ${fieldRow('Veri Giriş Görevlisi Adı Soyadı', `<input type="text" data-k="veriGirisGorevlisi" value="${escapeHtml(state.veriGirisGorevlisi || '')}" placeholder="Yazılırsa belgeye imza alanı eklenir" title="Boş bırakılırsa belgede bu imza sütunu hiç çıkmaz (Örnek No: 28'in aslında yoktur).">`)}
             ${fieldRow('Veri Giriş Görevlisi Ünvanı', `<input type="text" data-k="veriGirisUnvan" value="${escapeHtml(state.veriGirisUnvan||'')}" placeholder="Ünvanını giriniz" title="İmza bloğundaki 'Veri Giriş Görevlisi' sütununun 'Ünvanı' satırına basılır.">`)}
-            ${fieldRow('Avans Almışsa Aldığı Brüt Tutar', `<input type="text" inputmode="decimal" data-tutar="1" data-k="oncedenAvans" list="avansSecenekleri" value="${escapeHtml(state.oncedenAvans||'')}" placeholder="Ödenen brüt avans tutarını yazınız ya da listeden seçiniz" title="Avans ödenirken kesilen damga vergisinden ÖNCEKİ (brüt) tutarı yazınız. SAYI yazarsanız (örn. 5.000,00) Excel'deki gibi doğrudan GENEL TOPLAM'ın içinden düşülür ve damga vergisi kalan tutardan hesaplanır. METİN yazarsanız (örn. Avans Almamıştır) hesaba karışmaz, belgenin sağ üstündeki 'Avans Almışsa Aldığı Tutar' hücresine aynen basılır. Boş bırakırsanız o hücre de boş kalır.">
+            ${fieldRow('Önceden Avans Almışsa Aldığı Brüt Tutar', `<input type="text" inputmode="decimal" data-tutar="1" data-k="oncedenAvans" list="avansSecenekleri" value="${escapeHtml(state.oncedenAvans||'')}" placeholder="Ödenen brüt avans tutarını yazınız ya da listeden seçiniz" title="Avans ödenirken kesilen damga vergisinden ÖNCEKİ (brüt) tutarı yazınız. SAYI yazarsanız (örn. 5.000,00) Excel'deki gibi doğrudan GENEL TOPLAM'ın içinden düşülür ve damga vergisi kalan tutardan hesaplanır. METİN yazarsanız (örn. Avans Almamıştır) hesaba karışmaz, belgenin sağ üstündeki 'Önceden Avans Almışsa Aldığı Brüt Tutar' hücresine aynen basılır. Boş bırakırsanız o hücre de boş kalır.">
                <datalist id="avansSecenekleri">
                  <option value="Avans Almamıştır"></option>
                  <option value="Almamıştır"></option>
@@ -6714,7 +6731,7 @@ function bindFamilyInputs(root){
 }
 
 /* ============================================================
-   PRINT VIEW — Excel "Sürekli Görev Yolluğu" sayfası E1:R38 alanının
+   PRINT VIEW — Excel "Sürekli Görev Yolluğu" sayfası E1:R32 alanının
    hücre birleştirmeleri, kenarlıkları, hizalamaları ve dolguları ile
    BİREBİR kopyası.
    Kenarlık sınıfları: bl=sol bt=üst br=sağ bb=alt bx=dört kenar
@@ -6727,8 +6744,8 @@ function renderPrintView(c){
   const YEL  = 'background:#FFFFCC;';
   const BLUE = 'background:#DBEEF4;';
 
-  /* ---- veri satırları (Excel 10:27 = kendisi + 17 aile ferdi) ----
-     Ekranda 10 aile ferdi satırı var; kağıttaki tablo yüksekliği Excel ile
+  /* ---- veri satırları (Excel 10:21 = kendisi + 11 aile ferdi) ----
+     Ekranda 11 aile ferdi satırı var; kağıttaki tablo yüksekliği Excel ile
      aynı kalsın diye eksik satırlar boş olarak tamamlanır. */
   const printRows = c.rows.slice();
   while(printRows.length < PRINT_FAMILY_ROWS + 1){
@@ -6736,7 +6753,7 @@ function renderPrintView(c){
   }
   const bodyRows = printRows.map((r, i)=>{
     const isSelf = (i === 0);
-    const famIdx = i - 1;                 // 0..16
+    const famIdx = i - 1;                 // 0..10
     // Excel'de M sütununda formül yalnız M10:M14'te var (kendisi + ilk 4 aile ferdi)
     const mHasCell = isSelf || famIdx < 4;
     // N,O sütunlarında formül yalnız 10. satırda var
@@ -6808,7 +6825,7 @@ function renderPrintView(c){
       <td class="bx pv-l">Aylık Kadro Der. / Pozisyonu</td>
       <td class="bx pv-c" colspan="2">${state.pozisyon}</td>
       <td class="bl br pv-sub" colspan="8">(${state.tayinTuru})</td>
-      <td class="bx pv-l" colspan="2">Avans Almışsa Aldığı Brüt Tutar</td>
+      <td class="bx pv-l" colspan="2">Önceden Avans Almışsa Aldığı Brüt Tutar</td>
       <td class="bx pv-c">${escapeHtml(c.avansGosterim)}</td>
     </tr>
     <!-- ===== satır 4 ===== -->
@@ -6866,7 +6883,7 @@ function renderPrintView(c){
 
     ${bodyRows}
 
-    <!-- ===== satır 28: GENEL TOPLAM ===== -->
+    <!-- ===== satır 22: GENEL TOPLAM ===== -->
     <tr class="pv-tot">
       <td class="bx pv-c pv-sp" colspan="5">GENEL TOPLAM</td>
       <td class="bx pv-r">${trMoney(c.J28)}</td>
@@ -6884,9 +6901,9 @@ function renderPrintView(c){
          (E30 + E31 — Excel'de de böyledir), sağda Damga Vergisi / Net Ödenen.
          29. satırın solu Excel'de boştur. -->
     ${(()=>{
-      /* Excel'de bu sütunda yalnız iki satır vardır: P29 Damga Vergisi (R29)
-         ve P30 Net Ödenen (R30). Avans ayrı satır olarak basılmaz — tutarı
-         sağ üstteki "Avans Almışsa Aldığı Tutar" hücresinde görünür ve
+      /* Excel'de bu sütunda yalnız iki satır vardır: P23 Damga Vergisi (R23)
+         ve P24 Net Ödenen (R24). Avans ayrı satır olarak basılmaz — tutarı
+         sağ üstteki "Önceden Avans Almışsa Aldığı Brüt Tutar" hücresinde görünür ve
          GENEL TOPLAM'ın içinden zaten düşülmüştür. */
       const toplamlar = [];
       toplamlar.push(['Damga Vergisi', trMoney(c.damgaVergisi)]);
@@ -6957,12 +6974,12 @@ function renderPrintView(c){
       <td class="bl pv-l pv-foot pv-not" colspan="13">(**) Not: ${escapeHtml(state.notMetni).replace(/\n/g,'<br>')}</td>
       <td class="br"></td>
     </tr>` : ''}
-    <!-- ===== satır 37: kutuyu kapatan alt kenarlık ===== -->
+    <!-- ===== satır 31: kutuyu kapatan alt kenarlık ===== -->
     <tr>
       <td class="bl bb" colspan="13"></td>
       <td class="br bb"></td>
     </tr>
-    <!-- ===== satır 38: kutu dışı ===== -->
+    <!-- ===== satır 32: kutu dışı ===== -->
     <tr>
       <td class="pv-l pv-foot" colspan="14">M.Y.H.B.Y. Örnek No: 28</td>
     </tr>
@@ -8813,15 +8830,16 @@ function renderSheet5(){
         </table>
         Belge tablosundaki sütunda <b>tire korunur</b>, tahakkuk cümlesinde ise <b>boşluk</b> olur. Ekleri kendin yazdıysan (<i>Reyhanlı'dan Antakya'ya</i>) metnine <b>dokunulmaz</b>; tek yer yazarsan yalnızca yönelme eki eklenir</td></tr>
       <tr><td>Taşıtın Türü</td><td>Excel'deki listenin aynısı: <b>Otobüs, Tren, Vapur, Otomobil, Taksi, Uçak</b></td></tr>
+      <tr><td><b>Yol Süresi Gün</b> / <b>Taşıt Ücreti</b></td><td><b>Yol Süresi Gün</b>, yevmiye ile çarpılarak gündelik tutarını verir (Excel <i>J10 = H10 × I10</i>).<br><b>Önemli:</b> Yol süresi <b>0 gün</b> ise — ya da gündelik bulunamadıysa — gündelik tutarı sıfır olur ve Excel'deki <i>IF(J10=0;0;…)</i> kuralı gereği <b>taşıt ücreti de hesaba katılmaz</b>, belgede 0,00 basılır. Yolculuk yok sayıldığı için taşıt ücreti de ödenmez. Ücreti girdiğiniz halde tabloda 0,00 görüyorsanız önce <b>Yol Süresi Gün</b> alanını kontrol edin</td></tr>
       <tr><td>Dövizin Cinsi / Kuru</td><td>Belgedeki <b>"Dövizin — Cinsi / Kuru"</b> sütunları, Excel'deki (ve M.Y.H.B.Y. Örnek No: 28'deki) form düzeniyle birebir aynı olsun diye <b>yerinde durur ve boş basılır</b>. Bu program yalnızca <b>yurtiçi</b> sürekli görev yolluğu hesapladığı için döviz kullanılmaz; <b>veri girişinde bu alanlar yoktur</b>, hesaba da katılmaz</td></tr>
       <tr><td>Akrabalık Derecesi</td><td>Excel'deki listenin aynısı: <b>Eşi, Çocuğu, Annesi, Babası, Kardeşi</b>. Eski kayıtlarında listede olmayan bir değer varsa (örn. <i>Kızı</i>, <i>Oğlu</i>) <b>silinmez</b> — o satıra özel olarak listeye eklenir ve belgeye aynen basılır</td></tr>
       <tr><td><b>Adı Soyadı</b></td><td>Personel listesi yüklüyse <b>aramalı seçici</b> olur: kutuya tıklayınca liste açılır, <b>isim yazdıkça süzülür</b> (🔍). Fareyle tıklayarak ya da ↑ ↓ tuşları + Enter ile seçebilirsin. Liste yüklü değilse normal metin kutusudur</td></tr>
-      <tr><td>Diğer Aile Fertleri</td><td>En fazla 10 kişi. <b>Sadece dolu satırlar görünür</b>, boşlar gizlenir. Yeni kişi için <b>"+ Kişi Ekle"</b> (imleç doğrudan yeni satıra gider), hepsini açmak için <b>"Tüm satırları göster"</b>. İsim kutularında <b>↑ ↓</b> ve <b>Enter</b> ile satırlar arasında geçebilirsin. Akrabalık derecesi <b>seçilmeyen</b> satır hesaba katılmaz</td></tr>
+      <tr><td>Diğer Aile Fertleri</td><td>En fazla 11 kişi (Excel'deki <i>A16:B26</i> alanının aynısı). <b>Sadece dolu satırlar görünür</b>, boşlar gizlenir. Yeni kişi için <b>"+ Kişi Ekle"</b> (imleç doğrudan yeni satıra gider), hepsini açmak için <b>"Tüm satırları göster"</b>. İsim kutularında <b>↑ ↓</b> ve <b>Enter</b> ile satırlar arasında geçebilirsin. Akrabalık derecesi <b>seçilmeyen</b> satır hesaba katılmaz</td></tr>
       <tr><td>Ek Gösterge / Gündelik</td><td>Otomatik hesaplanır. Öncelik sırası: <b>1)</b> İstisna kutusuna yazdığın değer, <b>2)</b> personel listesinden seçilen kişiye ait şahsi ek gösterge, <b>3)</b> unvan + derece tablosu.<br>
         <b>Personel listesi kullanmak zorunlu değildir</b> — hiç liste yüklemeden, sadece <b>Ünvanı</b> ve <b>Aylık Kadro Derecesi</b> seçerek çalışabilirsin; değerler referans tablosundan gelir.<br>
         Listeden bir kişi seçtikten sonra <b>Ünvanı veya dereceyi elle değiştirirsen</b>, o kişiye ait şahsi ek gösterge devreden çıkar ve hesap yeniden referans tablosuna göre yapılır. Aynı şekilde Adı Soyadı'nı elle yazıp listede bulunmayan bir isim girersen de tablo kullanılır</td></tr>
       <tr><td><b>İstisna Girişi</b></td><td>Otomatik gelen değeri değiştirmek istersen ilgili kutuya yaz — o kutunun zemini <b>kırmızıya</b> döner ve senin değerin kullanılır. Boşaltırsan otomatiğe geri döner</td></tr>
-      <tr><td><b>Avans Almışsa Aldığı Brüt Tutar</b><br><span style="color:#555;">(belgede: <i>Avans Almışsa Aldığı Brüt Tutar</i>)</span></td><td>Kişiye ödenen avansın <b>brüt</b> (avans ödenirken kesilen damga vergisinden önceki) tutarını yazarsınız — Excel'in R3 hücresi de budur. Bu kutuya <b>hem sayı hem metin</b> yazabilirsin; ayrıca tıklayınca <b>"Avans Almamıştır" / "Almamıştır"</b> hazır seçenekleri açılır.<br><b>Metin yazarsan</b> (örn. <i>Avans Almamıştır</i>) hesaba hiç karışmaz, belgenin sağ üstündeki <b>Avans Almışsa Aldığı Brüt Tutar</b> hücresine <b>aynen</b> basılır.<br><b>Varsayılan olarak <i>"Almamıştır"</i> yazılı gelir</b> (Excel'de de öyledir); avans yoksa dokunmana gerek yok. Kutuyu tamamen boşaltırsan belgedeki hücre de boş kalır.<br><b>Sayı yazarsan</b> avans hesabı çalışır: kişiye daha önce yolluk avansı ödendiyse tutarı buraya yaz. <b>Excel'deki gibi</b> (R28 = SUM(R10:R27) − R3) doğrudan <b>GENEL TOPLAM'ın içinden</b> düşülür: belgedeki GENEL TOPLAM, yazıyla tutar ve tahakkuk cümlesi bu <b>düşülmüş</b> tutarı gösterir; damga vergisi de onun üzerinden hesaplanır (bkz. 8. bölüm). Tutarın kendisi belgenin sağ üstündeki <b>"Avans Almışsa Aldığı Brüt Tutar"</b> hücresinde, Ödeme Emri'nde ise <b>"Mahsup Edilen Ön Ödeme Tutarı"</b> sütununda görünür.<br><b>Avans, tahakkuk eden tutardan fazlaysa</b> belge kendiliğinden <b>iade belgesine</b> döner: GENEL TOPLAM eksi çıkar, damga vergisi ve net ödenen <b>0,00</b> olur ve altta <i>"İlgiliden … TL'nin (…) iade alınması gerekmektedir."</i> yazar (bkz. 8. bölüm)</td></tr>
+      <tr><td><b>Önceden Avans Almışsa Aldığı Brüt Tutar</b><br><span style="color:#555;">(belgede: <i>Önceden Avans Almışsa Aldığı Brüt Tutar</i>)</span></td><td>Kişiye ödenen avansın <b>brüt</b> (avans ödenirken kesilen damga vergisinden önceki) tutarını yazarsınız — Excel'in R3 hücresi de budur. Bu kutuya <b>hem sayı hem metin</b> yazabilirsin; ayrıca tıklayınca <b>"Avans Almamıştır" / "Almamıştır"</b> hazır seçenekleri açılır.<br><b>Metin yazarsan</b> (örn. <i>Avans Almamıştır</i>) hesaba hiç karışmaz, belgenin sağ üstündeki <b>Önceden Avans Almışsa Aldığı Brüt Tutar</b> hücresine <b>aynen</b> basılır.<br><b>Varsayılan olarak <i>"Almamıştır"</i> yazılı gelir</b> (Excel'de de öyledir); avans yoksa dokunmana gerek yok. Kutuyu tamamen boşaltırsan belgedeki hücre de boş kalır.<br><b>Sayı yazarsan</b> avans hesabı çalışır: kişiye daha önce yolluk avansı ödendiyse tutarı buraya yaz. <b>Excel'deki gibi</b> (R22 = SUM(R10:R21) − R3) doğrudan <b>GENEL TOPLAM'ın içinden</b> düşülür: belgedeki GENEL TOPLAM, yazıyla tutar ve tahakkuk cümlesi bu <b>düşülmüş</b> tutarı gösterir; damga vergisi de onun üzerinden hesaplanır (bkz. 8. bölüm). Tutarın kendisi belgenin sağ üstündeki <b>"Önceden Avans Almışsa Aldığı Brüt Tutar"</b> hücresinde, Ödeme Emri'nde ise <b>"Mahsup Edilen Ön Ödeme Tutarı"</b> sütununda görünür.<br><b>Avans, tahakkuk eden tutardan fazlaysa</b> belge kendiliğinden <b>iade belgesine</b> döner: GENEL TOPLAM eksi çıkar, damga vergisi ve net ödenen <b>0,00</b> olur ve altta <i>"İlgiliden … TL'nin (…) iade alınması gerekmektedir."</i> yazar (bkz. 8. bölüm)</td></tr>
       <tr><td><b>Harcama Birimi Adı</b></td><td>Türkiye'deki <b>81 il ve 921 ilçe müftülüğü</b> listeden seçilir (toplam 1002 kayıt). Kutuya tıklayınca liste açılır, yazdıkça süzülür. Aynı adlı ilçeler için sağda bağlı olduğu il gösterilir (örn. <i>Gölbaşı İlçe Müftülüğü — Ankara / — Adıyaman</i>). Listede yoksa elle de yazabilirsin</td></tr>
       <tr><td><b>Harcama Yetkilisi Adı Soyadı</b><br><b>Harcama Yetkilisi Ünvanı</b></td><td>İkisi de <b>elle yazılır</b>. Vekâleten imzalanıyorsa unvan kutusuna <b>vekâlet unvanını</b> yazın (örn. <i>İlçe Müftü V.</i>) — belgeye ne yazarsanız o basılır. Bu iki bilgi kurumsal sayıldığı için <b>"Yeni Hesaplama"</b> ile silinmez</td></tr>
       <tr><td><b>Gerçekleştirme Görevlisi Adı Soyadı</b> (+ Ünvanı)<br><b>Veri Giriş Görevlisi Adı Soyadı</b> (+ Ünvanı)</td><td>Adı ve unvanı elle yazılır. <b>Adı doldurursanız</b> belgenin imza bloğuna ayrı birer sütun olarak eklenir ve o sütunun "Ünvanı" satırına yazdığınız unvan basılır; <b>adı boş bırakırsanız</b> o sütun hiç çıkmaz ve belge M.Y.H.B.Y. Örnek No: 28'in aslıyla birebir aynı kalır. Bu bilgiler kurumsal sayıldığı için <b>"Yeni Hesaplama"</b> ile silinmez</td></tr>
@@ -8830,7 +8848,7 @@ function renderSheet5(){
         <br>• Tarihten sonra atama onayının sayısını da yazarsanız (<i>01.08.2026-548785</i>) etiket kendiliğinden <b>"Atama Tarihi ve Sayısı"</b> olur ve yazdığınız metin <b>aynen</b> basılır.
         <br>Örnek No: 28'in aslında sayı alanı yoktur; muhasebe biriminiz istemiyorsa yalnız tarihi yazmanız yeterlidir</td></tr>
       <tr><td><b>Muhasebe Tarihi</b></td><td>Veri girişindeki <b>takvim kutusundan</b> seçilir ve belgedeki <i>Muhasebe Birimi ve Tarihi</i> kutusuna kendiliğinden yazılır. <b>Not:</b> Bu tarih aynı zamanda <b>Bütçe Yılı</b>nı, <b>damga vergisi oranını</b> ve imza bloğundaki tarihleri belirler</td></tr>
-      <tr><td><b>Avansın Alındığı Muhasebe Birimi ve Tarihi</b><br><span style="color:#555;">(belgede: <i>Avans Muhasebe Birimi ve Tarihi</i>)</span></td><td>Bu kutu <b>yalnızca AVANS alınmışsa</b> doldurulur; boş bırakılırsa belgenin sağ üstündeki <i>Avans Muhasebe Birimi ve Tarihi</i> hücresi de <b>boş kalır</b>. Kişi <b>ayrıldığı yerden</b> avans alıp <b>gittiği yerde</b> bu hesaplama yapılmış olabilir; bu durumda avansın alındığı muhasebe birimi, belgeyi düzenleyen muhasebe biriminden farklıdır. Bu yüzden alan <b>serbesttir</b>: birim adını ve avans tarihini birlikte yazarsınız (örn. <i>Reyhanlı Muhasebe Müdürlüğü - 20.07.2026</i>) ve belgeye <b>aynen</b> basılır. Veri girişinde <b>Avans Almışsa Aldığı Brüt Tutar</b> kutusunun hemen altındadır. <b>Varsayılan olarak <i>"Almamıştır"</i> yazılı gelir</b>; avans yoksa dokunmanıza gerek yoktur. Kutuyu tamamen boşaltırsanız belgedeki hücre de boş kalır. Hazır seçenekler kutuya tıklayınca açılır. <b>Not:</b> Buraya yazdığınız tarih hesaba girmez; Bütçe Yılı ve damga vergisi oranı yine soldaki <b>Muhasebe Tarihi</b>ne göre belirlenir</td></tr>
+      <tr><td><b>Avansın Alındığı Muhasebe Birimi ve Tarihi</b><br><span style="color:#555;">(belgede: <i>Avans Muhasebe Birimi ve Tarihi</i>)</span></td><td>Bu kutu <b>yalnızca AVANS alınmışsa</b> doldurulur; boş bırakılırsa belgenin sağ üstündeki <i>Avans Muhasebe Birimi ve Tarihi</i> hücresi de <b>boş kalır</b>. Kişi <b>ayrıldığı yerden</b> avans alıp <b>gittiği yerde</b> bu hesaplama yapılmış olabilir; bu durumda avansın alındığı muhasebe birimi, belgeyi düzenleyen muhasebe biriminden farklıdır. Bu yüzden alan <b>serbesttir</b>: birim adını ve avans tarihini birlikte yazarsınız (örn. <i>Reyhanlı Muhasebe Müdürlüğü - 20.07.2026</i>) ve belgeye <b>aynen</b> basılır. Veri girişinde <b>Önceden Avans Almışsa Aldığı Brüt Tutar</b> kutusunun hemen altındadır. <b>Varsayılan olarak <i>"Almamıştır"</i> yazılı gelir</b>; avans yoksa dokunmanıza gerek yoktur. Kutuyu tamamen boşaltırsanız belgedeki hücre de boş kalır. Hazır seçenekler kutuya tıklayınca açılır. <b>Not:</b> Buraya yazdığınız tarih hesaba girmez; Bütçe Yılı ve damga vergisi oranı yine soldaki <b>Muhasebe Tarihi</b>ne göre belirlenir</td></tr>
       <tr><td>Bilgi İçin</td><td><b>Sabittir</b> (Mehmet TOKTAŞ), değiştirilemez. Belgenin altında görünür</td></tr>
       <tr><td>Not Girişi</td><td>Belgenin altına <b>(**) Not:</b> olarak basılır. İmza altındaki <b>(*)</b> açıklamasıyla karışmaması için iki yıldızlıdır. <b>Boş bırakırsan "(**) Not:" ibaresi de basılmaz</b> — ne önizlemede ne kağıtta görünür.<br>Kutunun içindeki <b>silik örnek</b> ne yazılacağını gösterir: <i>"Ankara/Mamak-Tekirdağ/Hayrabolu arası 660 km olup bir kişilik yolcu ücreti Mamak/Aşti 40 TL Ankara/Tekirdağ 1.450,00 ₺ Tekirdağ/Hayrabolu arası 60 ₺ olmak üzere 1.550,00 ₺ dir."</i></td></tr>
     </table>
@@ -8936,17 +8954,18 @@ function renderSheet5(){
     <div class="kg-qa"><b>S: Telefonda sayfa bilgisayardakinden farklı görünüyor, normal mi?</b><br>Evet. Telefon ekranı dar olduğu için alanlar okunaklı olsun diye alt alta dizilir. Bilgisayardaki düzeni istiyorsanız üstteki mor <b>"🖥 Bilgisayar görünümü"</b> düğmesine basın — sayfa birebir aynı görünür, parmakla yakınlaştırarak kullanırsınız. Tercihiniz hatırlanır.</div>
     <div class="kg-qa"><b>S: Elimdeki dosya güncel mi, nasıl anlarım?</b><br>Sağ alt köşedeki <b>Sürüm</b> rozetine tıklayın; çevrimiçi sürüm açılır. Oradaki rozetin tarihi sizinkinden yeniyse dosyanız eskimiş demektir. En pratiği, <a href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener">diyanetyolluk.github.io/Yolluk</a> adresini sık kullanılanlara ekleyip her zaman oradan açmaktır — böylece güncelleme derdi olmaz.</div>
     <div class="kg-qa"><b>S: Linki WhatsApp'tan gönderdiğimde ne görünüyor?</b><br>Başlık ("Yolluk Hesaplama — Diyanet İşleri Başkanlığı"), kısa bir açıklama ve bir görsel çıkar; karşı taraf tıklamadan ne olduğunu anlar. Bu bilgiler dosyanın içinde görünmez etiketler olarak durur, sayfanın görüntüsünü etkilemez.</div>
-    <div class="kg-qa"><b>S: Avanstan damga vergisi kesilir mi?</b><br>Evet. 488 sayılı Damga Vergisi Kanunu'na ekli (1) sayılı tablonun <b>IV/1-b</b> bendinde "…<b>harcırah</b>… ve benzeri her ne adla olursa olsun hizmet karşılığı alınan paralar <b>(avans olarak ödenenler dahil)</b>" denilmektedir. Bu yüzden avans ödenirken de damga vergisi kesilir. Mükerrer vergi olmaması için, kesin ödemede (mahsupta) damga vergisi <b>avans düşüldükten sonra kalan tutar</b> üzerinden hesaplanır. Program da <b>Excel'in yaptığını birebir</b> yapar: avans <b>GENEL TOPLAM'ın içinden</b> düşülür (R28 = SUM(R10:R27) − R3), damga vergisi bu kalan tutardan hesaplanır. Örnek: satır toplamı 48.775,00 · avans 5.000,00 → GENEL TOPLAM <b>43.775,00</b> · damga <b>332,25</b> · net ödenen <b>43.442,75</b>. Ödeme Emri Belgesi'nde Brüt Tutar 43.775,00, Kesinti 332,25, Net Tutar 43.442,75, Mahsup Edilen Ön Ödeme Tutarı 5.000,00 ve Ödenmesi Gereken Tutar 43.442,75 olarak çıkar — Excel ile aynıdır.</div>
+    <div class="kg-qa"><b>S: Avanstan damga vergisi kesilir mi?</b><br>Evet. 488 sayılı Damga Vergisi Kanunu'na ekli (1) sayılı tablonun <b>IV/1-b</b> bendinde "…<b>harcırah</b>… ve benzeri her ne adla olursa olsun hizmet karşılığı alınan paralar <b>(avans olarak ödenenler dahil)</b>" denilmektedir. Bu yüzden avans ödenirken de damga vergisi kesilir. Mükerrer vergi olmaması için, kesin ödemede (mahsupta) damga vergisi <b>avans düşüldükten sonra kalan tutar</b> üzerinden hesaplanır. Program da <b>Excel'in yaptığını birebir</b> yapar: avans <b>GENEL TOPLAM'ın içinden</b> düşülür (R22 = SUM(R10:R21) − R3), damga vergisi bu kalan tutardan hesaplanır. Örnek: satır toplamı 48.775,00 · avans 5.000,00 → GENEL TOPLAM <b>43.775,00</b> · damga <b>332,25</b> · net ödenen <b>43.442,75</b>. Ödeme Emri Belgesi'nde Brüt Tutar 43.775,00, Kesinti 332,25, Net Tutar 43.442,75, Mahsup Edilen Ön Ödeme Tutarı 5.000,00 ve Ödenmesi Gereken Tutar 43.442,75 olarak çıkar — Excel ile aynıdır.</div>
     <div class="kg-qa"><b>S: Yazdırınca belge ikinci sayfaya taşıyor / sağı kesiliyor.</b><br>Tarayıcının yazdırma penceresinde <b>Ölçek</b> ve <b>Kenar Boşlukları</b> ayarlarını <i>Varsayılan</i> bırakın; belge zaten kağıda sığacak ölçekte hazırlanıyor. <b>Kağıt boyutu A4</b> ve <b>Yaprak başına sayfa 1</b> olmalı. <b>Önizle</b> ekranında görünen, kağıttan çıkacak olanın birebir aynısıdır — orada tek sayfa görünüyorsa çıktı da tek sayfa olur.</div>
     <div class="kg-qa"><b>S: "Nereden Nereye Gidildiği" kutusuna ekleri yazmalı mıyım?</b><br>Hayır. İki yeri arasına <b>tire</b> koyup eksiz yaz: <i>Ankara/Mamak-Kırıkkale/Merkez</i>. Program hem <b>belge tablosundaki sütunda</b> (<i>Ankara/Mamak'tan-Kırıkkale/Merkez'e</i>) hem <b>tahakkuk cümlesinde</b> (<i>Ankara/Mamak'tan Kırıkkale/Merkez'e</i>) ekleri kendisi getirir. Alışkanlıktan ekleri kendin yazarsan da bir şey bozulmaz — metnine dokunulmaz.</div>
     <div class="kg-qa"><b>S: Taşıt türünde neden sadece Otobüs ve Uçak yok?</b><br>Liste, Diyanet'in Excel dosyasındaki veri doğrulama listesinin birebir aynısı yapıldı: <b>Otobüs, Tren, Vapur, Otomobil, Taksi, Uçak</b>. Sütun başlığı da Excel'deki gibi <b>"Türü"</b>dür.</div>
+    <div class="kg-qa"><b>S: Belge eskiden daha uzundu, satır sayısı mı azaldı?</b><br>Evet. Manisa'dan gelen <b>08.09.2026 tarihli Excel</b>'de yazıcı çıktısını kısaltmak için bildirim tablosu daraltıldı: <b>kendisi + 17 aile ferdi (18 satır)</b> yerine artık <b>kendisi + 11 aile ferdi (12 satır)</b> basılıyor, baskı alanı da <i>E1:R38</i> yerine <i>E1:R32</i>. Program 15.09.2026 sürümünde Excel'le eşitlendi. Hesaplamada hiçbir değişiklik yoktur; yalnızca kağıda basılan boş satır sayısı azaldı. Daha da kısaltmak isterseniz turuncu <b>"Boş satırları gizle"</b> düğmesini kullanabilirsiniz.</div>
     <div class="kg-qa"><b>S: Belgedeki boş satırlar kalabalık duruyor, kaldırabilir miyim?</b><br>Evet. Üstteki turuncu <b>"Boş satırları gizle"</b> düğmesine basın; veri girilmemiş form satırları saklanır, <b>dolu satırlar aynen kalır</b>. Tekrar basınca geri gelirler. Seçiminiz hatırlanır, önizleme ve çıktı da aynı şekilde davranır.</div>
     <div class="kg-qa"><b>S: İmza için yer bırakılmış mı?</b><br>Evet. Görev adı (<b>Birim Harcama Yetkilisi</b> / <b>Bildirim Sahibi</b>) üstündeki tarihe bitişik yazılır; hemen altındaki boşluk <b>ıslak imza</b> içindir. Ad ve unvan bu boşluğun altında yer alır. Ekranda, önizlemede ve kağıtta düzen aynıdır.</div>
     <div class="kg-qa"><b>S: Kırmızı "NET ÖDENEN" bandı neyi gösteriyor?</b><br>Damga vergisi düşülmüş, <b>kişinin eline geçecek net tutarı</b>. Varsa avans da düşülmüştür. Brüt (genel toplam) tutarı tablonun "GENEL TOPLAM" satırında görürsünüz.</div>
     <div class="kg-qa"><b>S: Ünvan seçtim ama belgeye eksik yazıldı, hata mı?</b><br>Hayır. Ek gösterge tablosundaki "Memur Yükseköğrenim", "İmam Hatip Diğer Öğrenim" gibi adların sonundaki ek <b>öğrenim durumudur, unvanın parçası değildir</b>. Belgeye kişinin unvanı yazılır: "Memur", "İmam Hatip". Hesaplama seçtiğiniz tam satıra göre yapılır.</div>
     <div class="kg-qa"><b>S: Gündelik yıl ortasında değişti, tabloya nasıl işlerim?</b><br>Referans Veriler → Gündelik ve Damga Vergisi Oranları'nda <b>"+ Satır Ekle"</b> deyip yeni satırın tarihini değişikliğin yürürlük tarihi yapın (örn. 07.07.2027) ve tutarları girin. Program, hesaplama tarihine göre <b>o tarihe eşit veya ondan önceki en yakın satırı</b> kullanır.</div>
     <div class="kg-qa"><b>S: Not, Veri Giriş Görevlisi, Gerçekleştirme Görevlisi, Muhasebe Birimi — bunlar Örnek No: 28'de yok, neden ekli?</b><br>Çünkü <b>bazı muhasebe müdürlükleri bu bilgilerin belgede yer almasını istiyor</b>; yoksa evrakı iade edebiliyorlar. Örnek No: 28'in aslında bu alanlar zorunlu değildir, bu yüzden programa <b>isteğe bağlı</b> olarak konuldu: <b>doldurursanız belgeye çıkar, boş bırakırsanız belge yönetmelik ekindeki aslıyla birebir aynı kalır.</b> Kendi muhasebe biriminiz istemiyorsa bu alanlara hiç dokunmayın.</div>
-    <div class="kg-qa"><b>S: Belgenin sağ üstündeki "Avans Muhasebe Birimi ve Tarihi" hücresinde "Almamıştır" yazıyor.</b><br>Doğrusu budur — bu iki kutu <b>varsayılan olarak "Almamıştır"</b> gelir (Excel'de de öyledir) ve yalnızca <b>avans alınmışsa</b> doldurulur. Avans varsa, veri girişinde <b>Avans Almışsa Aldığı Brüt Tutar</b> kutusunun hemen altındaki <b>Avansın Alındığı Muhasebe Birimi ve Tarihi</b> alanına birim adını ve tarihi yazın (örn. <i>Reyhanlı Muhasebe Müdürlüğü - 20.07.2026</i>); belgeye aynen basılır. Avans başka bir ilden/muhasebe biriminden alınmış olabileceği için bu alan bilerek serbest bırakılmıştır. Avans yoksa buraya <b>"Avans Almamıştır"</b> gibi bir metin de yazabilirsiniz — kutuya tıklayınca hazır seçenekler açılır.</div>
+    <div class="kg-qa"><b>S: Belgenin sağ üstündeki "Avans Muhasebe Birimi ve Tarihi" hücresinde "Almamıştır" yazıyor.</b><br>Doğrusu budur — bu iki kutu <b>varsayılan olarak "Almamıştır"</b> gelir (Excel'de de öyledir) ve yalnızca <b>avans alınmışsa</b> doldurulur. Avans varsa, veri girişinde <b>Önceden Avans Almışsa Aldığı Brüt Tutar</b> kutusunun hemen altındaki <b>Avansın Alındığı Muhasebe Birimi ve Tarihi</b> alanına birim adını ve tarihi yazın (örn. <i>Reyhanlı Muhasebe Müdürlüğü - 20.07.2026</i>); belgeye aynen basılır. Avans başka bir ilden/muhasebe biriminden alınmış olabileceği için bu alan bilerek serbest bırakılmıştır. Avans yoksa buraya <b>"Avans Almamıştır"</b> gibi bir metin de yazabilirsiniz — kutuya tıklayınca hazır seçenekler açılır.</div>
     <div class="kg-qa"><b>S: Baskı önizlemede yazılar çok küçük görünüyor, büyütebilir miyim?</b><br>Evet. <b>Önizle</b>'yi açtıktan sonra <b>fare tekerleğini yukarı</b> çevirince yaklaşır, <b>aşağı</b> çevirince uzaklaşır — imlecin bulunduğu yere doğru yaklaşır. Üstteki mavi çubuktaki <b>−&nbsp;/&nbsp;+</b> düğmeleri, <b>Sığdır</b> (sayfayı ekran genişliğine oturtur) ve <b>%100</b> (gerçek boyut) düğmeleri de aynı işi yapar; klavyeden <b>+</b>, <b>−</b> ve <b>0</b> tuşları da çalışır. Önizlemede <b>kaydırmak</b> için <b>Shift</b>'e basılı tutarak tekerleği çevirin. Bu yakınlaştırma <b>yalnızca ekranı</b> ilgilendirir: kağıda her zaman aynı ölçekte basılır.</div>
     
     <div class="kg-qa"><b>S: Excel dosyasını güncellersem bu araç da güncellenir mi?</b><br>Hayır, bu araç Excel'den bağımsız çalışır. Ancak oran/katsayı güncellemelerini yukarıdaki gibi doğrudan sayfadan yapabilirsiniz.</div>
@@ -9347,7 +9366,7 @@ checkDraftBanner();
 </div>
 
 <a class="surum-rozet no-print" href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener"
-   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 09.09.2026 · Güncel sürüm ↗</a>
+   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 15.09.2026 · Güncel sürüm ↗</a>
 <script>
 /* Sürüm rozeti: nerede açıldığını bilsin.
    - Masaüstü uygulaması (127.0.0.1) ve yerel dosya: yeni sekmede çevrimiçi sürümü aç (karşılaştırma için).

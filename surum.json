@@ -1,7 +1,7 @@
 {
  "uygulama": "surekli-gorev-yollugu",
- "surum": "2026.09.09",
+ "surum": "2026.09.15",
  "dosya": "index.html",
- "sha256": "91d8a73cdb84dd44f21cbb3985cde625c537dcd53671eeb02765f83ba9af9b9d",
- "notlar": "Ünvan adları Excel ile birebir yapıldı: kısaltmalar (K.K., V.H.K.İ.) ve parantezli yazımlar kaldırıldı. Alt ünvan seçenekleri Excel'deki sırayla listeleniyor (üst öğrenimden alt öğrenime). Eski adlarla kayıtlı hesaplamalar otomatik yeni adlarına taşınıyor. Kullanım kılavuzu güncellendi."
+ "sha256": "c2cf98a63ccd95faba940533d6d6e7b2c6f7e54b484ba44866f84f009fc4449c",
+ "notlar": "Manisa'dan gelen 08.09.2026 tarihli Excel ile eşitlendi: yazdırma tablosu kısaltıldı (kendisi + 17 aile ferdi yerine kendisi + 11), 'Önceden Avans Almışsa Aldığı Brüt Tutar' etiketi güncellendi, yol süresi 0 gün ise taşıt ücreti hesaba katılmıyor (Excel L sütunu kuralı). Referans verilerde değişiklik yok."
 }
