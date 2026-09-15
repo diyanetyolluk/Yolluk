@@ -6939,7 +6939,7 @@ function renderPrintView(c){
          altında kalmış görünüyordu.
          Sütun genişlikleri iç içe bir tabloyla veriliyor: böylece imza sayısı
          2, 3 ya da 4 olsun sütunlar her zaman eşit ve blok aynı yerde biter. */
-      const ETIKET = 10;                    // etiket sütunu (Adı Soyadı / Ünvanı / İmzası)
+      const ETIKET = 10;                    // etiket sütunu (Ad Soyad / Ünvan / İmza)
       const SUTUN  = Math.min(22, Math.floor((100 - ETIKET) / N));  // her imza sütunu
       const BOSLUK = 100 - ETIKET - N*SUTUN;                        // soldaki esnek boşluk
       const kolonlar = `<colgroup><col style="width:${BOSLUK}%"><col style="width:${ETIKET}%">`
@@ -6948,7 +6948,14 @@ function renderPrintView(c){
           <td></td><td class="pv-c">${etiket}</td>
           ${im.map(i => `<td class="pv-c ${sinif||''}">${escapeHtml(String(alan(i)||''))}</td>`).join('')}
         </tr>`;
+      /* (*) dipnotu Excel'de imza bloğunun ÜSTÜNDE, tarih satırının solundadır
+         (10.09.2026 Excel'inde E27'den E26'ya alındı). Bizim imza bloğumuz
+         imza sayısına göre esnediği için dipnot kendi tam genişlikli satırında
+         durur; sırası Excel ile aynı olsun diye bloğun üstüne alındı. */
       return `
+      <tr>
+        <td class="bl br pv-l pv-foot pv-kirmizi" colspan="14">(*) Bu kısım bildirim sahibinin atama işleminden bilgisi olan amir tarafından imzalanacaktır.</td>
+      </tr>
       <tr>
         <td class="bl" colspan="11" style="padding:0;">
           <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
@@ -6956,15 +6963,12 @@ function renderPrintView(c){
             ${satir('', ()=>fmtDateTR(state.muhasebeTarihi))}
             ${satir('', i=>i.rol, 'pv-imza-rol')}
             <tr class="pv-imza-bosluk"><td></td><td></td>${im.map(()=>'<td></td>').join('')}</tr>
-            ${satir('Adı Soyadı', i => i.ad)}
-            ${satir('Ünvanı',     i => i.unvan)}
-            ${satir('İmzası',     () => '.............................................')}
+            ${satir('Ad Soyad', i => i.ad)}
+            ${satir('Ünvan',    i => i.unvan)}
+            ${satir('İmza',     () => '.............................................')}
           </table>
         </td>
         <td colspan="2"></td><td class="br"></td>
-      </tr>
-      <tr>
-        <td class="bl br pv-l pv-foot pv-kirmizi" colspan="14">(*) Bu kısım bildirim sahibinin atama işleminden bilgisi olan amir tarafından imzalanacaktır.</td>
       </tr>`;
     })()}
     <!-- ===== "(**) Not:" — kutu İÇİNDE, "(*) Bu kısım..." satırının hemen altında.
@@ -8842,7 +8846,7 @@ function renderSheet5(){
       <tr><td><b>Önceden Avans Almışsa Aldığı Brüt Tutar</b><br><span style="color:#555;">(belgede: <i>Önceden Avans Almışsa Aldığı Brüt Tutar</i>)</span></td><td>Kişiye ödenen avansın <b>brüt</b> (avans ödenirken kesilen damga vergisinden önceki) tutarını yazarsınız — Excel'in R3 hücresi de budur. Bu kutuya <b>hem sayı hem metin</b> yazabilirsin; ayrıca tıklayınca <b>"Avans Almamıştır" / "Almamıştır"</b> hazır seçenekleri açılır.<br><b>Metin yazarsan</b> (örn. <i>Avans Almamıştır</i>) hesaba hiç karışmaz, belgenin sağ üstündeki <b>Önceden Avans Almışsa Aldığı Brüt Tutar</b> hücresine <b>aynen</b> basılır.<br><b>Varsayılan olarak <i>"Almamıştır"</i> yazılı gelir</b> (Excel'de de öyledir); avans yoksa dokunmana gerek yok. Kutuyu tamamen boşaltırsan belgedeki hücre de boş kalır.<br><b>Sayı yazarsan</b> avans hesabı çalışır: kişiye daha önce yolluk avansı ödendiyse tutarı buraya yaz. <b>Excel'deki gibi</b> (R22 = SUM(R10:R21) − R3) doğrudan <b>GENEL TOPLAM'ın içinden</b> düşülür: belgedeki GENEL TOPLAM, yazıyla tutar ve tahakkuk cümlesi bu <b>düşülmüş</b> tutarı gösterir; damga vergisi de onun üzerinden hesaplanır (bkz. 8. bölüm). Tutarın kendisi belgenin sağ üstündeki <b>"Önceden Avans Almışsa Aldığı Brüt Tutar"</b> hücresinde, Ödeme Emri'nde ise <b>"Mahsup Edilen Ön Ödeme Tutarı"</b> sütununda görünür.<br><b>Avans, tahakkuk eden tutardan fazlaysa</b> belge kendiliğinden <b>iade belgesine</b> döner: GENEL TOPLAM eksi çıkar, damga vergisi ve net ödenen <b>0,00</b> olur ve altta <i>"İlgiliden … TL'nin (…) iade alınması gerekmektedir."</i> yazar (bkz. 8. bölüm)</td></tr>
       <tr><td><b>Harcama Birimi Adı</b></td><td>Türkiye'deki <b>81 il ve 921 ilçe müftülüğü</b> listeden seçilir (toplam 1002 kayıt). Kutuya tıklayınca liste açılır, yazdıkça süzülür. Aynı adlı ilçeler için sağda bağlı olduğu il gösterilir (örn. <i>Gölbaşı İlçe Müftülüğü — Ankara / — Adıyaman</i>). Listede yoksa elle de yazabilirsin</td></tr>
       <tr><td><b>Harcama Yetkilisi Adı Soyadı</b><br><b>Harcama Yetkilisi Ünvanı</b></td><td>İkisi de <b>elle yazılır</b>. Vekâleten imzalanıyorsa unvan kutusuna <b>vekâlet unvanını</b> yazın (örn. <i>İlçe Müftü V.</i>) — belgeye ne yazarsanız o basılır. Bu iki bilgi kurumsal sayıldığı için <b>"Yeni Hesaplama"</b> ile silinmez</td></tr>
-      <tr><td><b>Gerçekleştirme Görevlisi Adı Soyadı</b> (+ Ünvanı)<br><b>Veri Giriş Görevlisi Adı Soyadı</b> (+ Ünvanı)</td><td>Adı ve unvanı elle yazılır. <b>Adı doldurursanız</b> belgenin imza bloğuna ayrı birer sütun olarak eklenir ve o sütunun "Ünvanı" satırına yazdığınız unvan basılır; <b>adı boş bırakırsanız</b> o sütun hiç çıkmaz ve belge M.Y.H.B.Y. Örnek No: 28'in aslıyla birebir aynı kalır. Bu bilgiler kurumsal sayıldığı için <b>"Yeni Hesaplama"</b> ile silinmez</td></tr>
+      <tr><td><b>Gerçekleştirme Görevlisi Adı Soyadı</b> (+ Ünvanı)<br><b>Veri Giriş Görevlisi Adı Soyadı</b> (+ Ünvanı)</td><td>Adı ve unvanı elle yazılır. <b>Adı doldurursanız</b> belgenin imza bloğuna ayrı birer sütun olarak eklenir ve o sütunun "Ünvan" satırına yazdığınız unvan basılır; <b>adı boş bırakırsanız</b> o sütun hiç çıkmaz ve belge M.Y.H.B.Y. Örnek No: 28'in aslıyla birebir aynı kalır. Bu bilgiler kurumsal sayıldığı için <b>"Yeni Hesaplama"</b> ile silinmez</td></tr>
       <tr><td><b>Atama Tarihi</b></td><td><b>Serbest yazılan bir alandır</b>, hiçbir hesaba girmez — ne yazarsanız belgeye o basılır:
         <br>• Yalnız tarih yazarsanız (<i>01.08.2026</i>) belgedeki etiket <b>"Atama Tarihi"</b> olur ve sadece tarih basılır.
         <br>• Tarihten sonra atama onayının sayısını da yazarsanız (<i>01.08.2026-548785</i>) etiket kendiliğinden <b>"Atama Tarihi ve Sayısı"</b> olur ve yazdığınız metin <b>aynen</b> basılır.
@@ -8960,7 +8964,7 @@ function renderSheet5(){
     <div class="kg-qa"><b>S: Taşıt türünde neden sadece Otobüs ve Uçak yok?</b><br>Liste, Diyanet'in Excel dosyasındaki veri doğrulama listesinin birebir aynısı yapıldı: <b>Otobüs, Tren, Vapur, Otomobil, Taksi, Uçak</b>. Sütun başlığı da Excel'deki gibi <b>"Türü"</b>dür.</div>
     <div class="kg-qa"><b>S: Belge eskiden daha uzundu, satır sayısı mı azaldı?</b><br>Evet. Manisa'dan gelen <b>08.09.2026 tarihli Excel</b>'de yazıcı çıktısını kısaltmak için bildirim tablosu daraltıldı: <b>kendisi + 17 aile ferdi (18 satır)</b> yerine artık <b>kendisi + 11 aile ferdi (12 satır)</b> basılıyor, baskı alanı da <i>E1:R38</i> yerine <i>E1:R32</i>. Program 15.09.2026 sürümünde Excel'le eşitlendi. Hesaplamada hiçbir değişiklik yoktur; yalnızca kağıda basılan boş satır sayısı azaldı. Daha da kısaltmak isterseniz turuncu <b>"Boş satırları gizle"</b> düğmesini kullanabilirsiniz.</div>
     <div class="kg-qa"><b>S: Belgedeki boş satırlar kalabalık duruyor, kaldırabilir miyim?</b><br>Evet. Üstteki turuncu <b>"Boş satırları gizle"</b> düğmesine basın; veri girilmemiş form satırları saklanır, <b>dolu satırlar aynen kalır</b>. Tekrar basınca geri gelirler. Seçiminiz hatırlanır, önizleme ve çıktı da aynı şekilde davranır.</div>
-    <div class="kg-qa"><b>S: İmza için yer bırakılmış mı?</b><br>Evet. Görev adı (<b>Birim Harcama Yetkilisi</b> / <b>Bildirim Sahibi</b>) üstündeki tarihe bitişik yazılır; hemen altındaki boşluk <b>ıslak imza</b> içindir. Ad ve unvan bu boşluğun altında yer alır. Ekranda, önizlemede ve kağıtta düzen aynıdır.</div>
+    <div class="kg-qa"><b>S: İmza için yer bırakılmış mı?</b><br>Evet. Görev adı (<b>Birim Harcama Yetkilisi</b> / <b>Bildirim Sahibi</b>) üstündeki tarihe bitişik yazılır; hemen altındaki boşluk <b>ıslak imza</b> içindir. Ad ve unvan bu boşluğun altında yer alır. Ekranda, önizlemede ve kağıtta düzen aynıdır. <b>16.09.2026'dan itibaren</b> satır etiketleri Excel'deki gibi <b>Ad Soyad / Ünvan / İmza</b> yazar ve <b>(*)</b> dipnotu imza bloğunun <b>üstünde</b> durur.</div>
     <div class="kg-qa"><b>S: Kırmızı "NET ÖDENEN" bandı neyi gösteriyor?</b><br>Damga vergisi düşülmüş, <b>kişinin eline geçecek net tutarı</b>. Varsa avans da düşülmüştür. Brüt (genel toplam) tutarı tablonun "GENEL TOPLAM" satırında görürsünüz.</div>
     <div class="kg-qa"><b>S: Ünvan seçtim ama belgeye eksik yazıldı, hata mı?</b><br>Hayır. Ek gösterge tablosundaki "Memur Yükseköğrenim", "İmam Hatip Diğer Öğrenim" gibi adların sonundaki ek <b>öğrenim durumudur, unvanın parçası değildir</b>. Belgeye kişinin unvanı yazılır: "Memur", "İmam Hatip". Hesaplama seçtiğiniz tam satıra göre yapılır.</div>
     <div class="kg-qa"><b>S: Gündelik yıl ortasında değişti, tabloya nasıl işlerim?</b><br>Referans Veriler → Gündelik ve Damga Vergisi Oranları'nda <b>"+ Satır Ekle"</b> deyip yeni satırın tarihini değişikliğin yürürlük tarihi yapın (örn. 07.07.2027) ve tutarları girin. Program, hesaplama tarihine göre <b>o tarihe eşit veya ondan önceki en yakın satırı</b> kullanır.</div>
@@ -9366,7 +9370,7 @@ checkDraftBanner();
 </div>
 
 <a class="surum-rozet no-print" href="https://diyanetyolluk.github.io/Yolluk/" target="_blank" rel="noopener"
-   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 15.09.2026 · Güncel sürüm ↗</a>
+   title="Güncel sürümü aç: diyanetyolluk.github.io/Yolluk">Sürüm: 16.09.2026 · Güncel sürüm ↗</a>
 <script>
 /* Sürüm rozeti: nerede açıldığını bilsin.
    - Masaüstü uygulaması (127.0.0.1) ve yerel dosya: yeni sekmede çevrimiçi sürümü aç (karşılaştırma için).

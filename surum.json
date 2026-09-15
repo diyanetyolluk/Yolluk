@@ -1,7 +1,7 @@
 {
  "uygulama": "surekli-gorev-yollugu",
- "surum": "2026.09.15",
+ "surum": "2026.09.16",
  "dosya": "index.html",
- "sha256": "c2cf98a63ccd95faba940533d6d6e7b2c6f7e54b484ba44866f84f009fc4449c",
- "notlar": "Manisa'dan gelen 08.09.2026 tarihli Excel ile eşitlendi: yazdırma tablosu kısaltıldı (kendisi + 17 aile ferdi yerine kendisi + 11), 'Önceden Avans Almışsa Aldığı Brüt Tutar' etiketi güncellendi, yol süresi 0 gün ise taşıt ücreti hesaba katılmıyor (Excel L sütunu kuralı). Referans verilerde değişiklik yok."
+ "sha256": "37e5f22d9b4a047c8b90f4a92ab2168f1ca54060320106ad236e3f93f47bc531",
+ "notlar": "Manisa'dan gelen 10.09.2026 tarihli Excel ile eşitlendi: imza bloğu satır etiketleri 'Ad Soyad / Ünvan / İmza' oldu, (*) dipnotu imza bloğunun üstüne alındı. Müdür Excel'deki M12/M13/M14 sürükleme hatasını düzeltti; programın hesabı zaten doğruydu, 13 senaryonun tamamı Excel ile birebir. Referans verilerde değişiklik yok."
 }
